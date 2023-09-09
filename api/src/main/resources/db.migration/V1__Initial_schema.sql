@@ -17,8 +17,12 @@ CREATE TABLE sector
 (
     id        bigserial NOT NULL PRIMARY KEY,
     name      text      NOT NULL,
-    "value"   varchar   NOT NULL,
-    parent_id bigint
+    value   varchar   NOT NULL,
+    parent_id bigint,
+    created_by   TEXT,
+    created_at   TIMESTAMP,
+    modified_by  TEXT,
+    modified_at  TIMESTAMP
 );
 
 CREATE TABLE user_sectors
@@ -26,6 +30,10 @@ CREATE TABLE user_sectors
     id         bigserial NOT NULL PRIMARY KEY,
     user_id bigint    NOT NULL,
     sector_id  bigint    NOT NULL,
+    created_by   TEXT,
+    created_at   TIMESTAMP,
+    modified_by  TEXT,
+    modified_at  TIMESTAMP,
     CONSTRAINT user_has_sectors FOREIGN KEY (user_id) REFERENCES "user" (id),
     CONSTRAINT sectors_have_users FOREIGN KEY (sector_id) REFERENCES sector (id)
 );
