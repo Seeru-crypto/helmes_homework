@@ -7,9 +7,11 @@ import TextInput from "../components/TextInput";
 import CustomButton from "../components/Button";
 import {GetRequest, PostRequest} from "../controller/ApiServices";
 import {SectorDto} from "../interfaces/SectorDto";
-import {mapToOptions, validateUserData} from "../utils";
+import {mapToOptions, isUserDataValid} from "../utils";
 import {UserDto} from "../interfaces/UserDto";
-
+import { message } from 'antd';
+import {useMessageStore} from "../zustand/store";
+import {SlugSector, SlugUsers} from "../configs";
 interface LandingProps {
     sectors: SectorDto[];
 }
@@ -33,11 +35,16 @@ export default function Home({sectors}: LandingProps): ReactElement | null  {
     const [selectedSectors, setSelectedSectors] = useState<string[][]>([[]])
     const [agreeToTerms, setAgreeToTerms] = useState<boolean>(false)
     const [options, setOptions] = useState<CascaderOptionProps[]>([])
+    const [messageApi, contextHolder] = message.useMessage();
+    const { setMessageApi } = useMessageStore();
 
     useEffect(() => {
         setOptions(mapToOptions(sectors))
     }, [sectors])
 
+    useEffect(() => {
+        setMessageApi(messageApi)
+    }, [messageApi])
 
     async function submit() {
         const dto: UserDto = {
@@ -46,16 +53,15 @@ export default function Home({sectors}: LandingProps): ReactElement | null  {
             agreeToTerms: agreeToTerms
         }
 
-        if (validateUserData(dto)){
-            const res = await PostRequest('user', dto);
+        if (isUserDataValid(dto, messageApi)){
+            const res = await PostRequest(SlugUsers, dto);
             console.log("res ", res);
         }
-
-
     }
 
     return (
         <HomeStyle>
+            {contextHolder}
             <div className="registration">
                 <div className="left">
                     <TextInput placeholder="username" onChange={setUsername} />
@@ -96,11 +102,10 @@ const HomeStyle = styled.div`
     gap: 4rem;
     width: 100%;
   }
-  
 `
 
 export const getServerSideProps: GetServerSideProps = async () => {
-    const sectors: SectorDto[] = await GetRequest('sectors')
+    const sectors: SectorDto[] = await GetRequest(SlugSector)
     return {props: {sectors}};
 };
 

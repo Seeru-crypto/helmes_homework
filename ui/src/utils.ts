@@ -1,6 +1,7 @@
 import {SectorDto} from "./interfaces/SectorDto";
 import {CascaderOptionProps} from "./components/CascaderInput";
 import {UserDto} from "./interfaces/UserDto";
+import {MessageInstance} from "antd/es/message/interface";
 
 export function mapToOptions(data: SectorDto[]): CascaderOptionProps[] {
     return data.map((sector: SectorDto) => {
@@ -12,20 +13,21 @@ export function mapToOptions(data: SectorDto[]): CascaderOptionProps[] {
     })
 }
 
+export function isUserDataValid(dto: UserDto, messageApi: MessageInstance ) {
 
-export function validateUserData(dto: UserDto) {
     if (!dto.agreeToTerms){
-        // Call toast here
+        messageApi.error("You must agree to the terms and conditions");
         return false;
     }
 
     else if (dto.selectedSectors.length === 0){
-        // Call toast here
+        messageApi.error("You must select at least one sector");
+
         return false;
     }
 
     else if (dto.username.length === 0){
-        // Call toast here
+        messageApi.error("You must enter a username");
         return false;
     }
 

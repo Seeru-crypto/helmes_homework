@@ -35,19 +35,3 @@ export async function PostRequest(slug: string, data: any) {
             return {}
         });
 }
-
-export async function DeleteRequest(slug: string, name: string) {
-    const fullPath = `${api_basepath}/${slug}?name=${name}`
-    return await axios({
-        method: 'delete',
-        url: fullPath,
-        responseType: "json",
-    })
-        .then(function (response) {
-            if (response.status === 200) {
-                return response.data
-            }
-        }).catch(function (error) {
-            return {}
-        });
-}
