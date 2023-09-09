@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(path = "sectors")
+@RequestMapping(path = "/sectors")
 public class SectorController {
     private final SectorService sectorService;
     private final SectorMapper sectorMapper;

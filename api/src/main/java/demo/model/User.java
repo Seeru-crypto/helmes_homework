@@ -9,6 +9,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import static jakarta.persistence.CascadeType.MERGE;
+import static jakarta.persistence.FetchType.LAZY;
+
 @Table
 @Getter
 @Setter
@@ -28,4 +34,13 @@ public class User extends AbstractAuditingEntity<Long> {
     private String name;
 
     private boolean agreeTerms;
+
+    @ManyToMany(fetch = LAZY,
+            cascade = MERGE)
+    @JoinTable(
+            name = "user_sectors",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "sector_id")
+    )
+    Set<Sector> sectors = new HashSet<>();
 }
