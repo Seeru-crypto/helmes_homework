@@ -30,8 +30,11 @@ public class StartupLogger {
             log.info("local profile active");
             log.info("Swagger enabled at http://localhost:8880/api/swagger-ui/index.html#/");
 
-            Sector parent = sectorService.save(null, "parent");
-            sectorService.save(parent.getId(), "child sector");
+            if (sectorService.findAll().isEmpty()){
+                Sector parent = sectorService.save(null, "parent");
+                sectorService.save(parent.getId(), "child 1");
+                sectorService.save(parent.getId(), "child 2");
+            }
 
         }
         else if (profiles.contains("production")){

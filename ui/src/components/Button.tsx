@@ -2,13 +2,14 @@ import { Button } from 'antd';
 import styled from "styled-components";
 
 interface ButtonProps {
-
+    onClick: () => void
+    label: string
 }
 
 const CustomButton = (props: ButtonProps) => {
     return (
         <ButtonStyle>
-            <Button type="primary">submit</Button>
+            <Button onClick={() => props.onClick()} type="primary">{props.label}</Button>
         </ButtonStyle>
     )
 }

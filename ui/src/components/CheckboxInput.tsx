@@ -4,17 +4,19 @@ import { Checkbox } from 'antd';
 import type { CheckboxChangeEvent } from 'antd/es/checkbox';
 
 interface CheckboxProps {
+    checkboxState: (boolean) => void
+    label: string
 }
-
 
 const CheckboxInput = (props: CheckboxProps) => {
 
     const onChange = (e: CheckboxChangeEvent) => {
-        console.log(`checked = ${e.target.checked}`);
+        props.checkboxState(e.target.checked)
     };
+
     return (
         <CheckboxStyle>
-            <Checkbox onChange={onChange}>Checkbox</Checkbox>
+            <Checkbox onChange={onChange}>{props.label}</Checkbox>
         </CheckboxStyle>
     )
 }

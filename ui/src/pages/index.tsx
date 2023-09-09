@@ -1,17 +1,24 @@
 import styled from "styled-components";
 import {GetServerSideProps} from "next";
 import {ReactElement, useEffect, useState} from "react";
-import CascaderInput, {Option} from "../components/CascaderInput";
+import CascaderInput, {CascaderOptionProps} from "../components/CascaderInput";
 import CheckboxInput from "../components/CheckboxInput";
 import TextInput from "../components/TextInput";
 import CustomButton from "../components/Button";
+import {GetRequest, PostRequest} from "../controller/ApiServices";
+import {SectorDto} from "../interfaces/SectorDto";
+import {mapToOptions, validateUserData} from "../utils";
+import {UserDto} from "../interfaces/UserDto";
 
 interface LandingProps {
-    filterHistory: FilterDto;
-    toggleTheme: () => void;
+    sectors: SectorDto[];
 }
 
-export interface FilterDto {
+interface SectorProps extends PaginationWrapper {
+    content: SectorDto[]
+}
+
+export interface PaginationWrapper {
     totalPages: number
     totalElements: number
     size: number
@@ -21,61 +28,42 @@ export interface FilterDto {
     empty: boolean
 }
 
-export default function Home({filterHistory}: LandingProps): ReactElement | null  {
+export default function Home({sectors}: LandingProps): ReactElement | null  {
     const [username, setUsername] = useState('')
-
-
+    const [selectedSectors, setSelectedSectors] = useState<string[][]>([[]])
+    const [agreeToTerms, setAgreeToTerms] = useState<boolean>(false)
+    const [options, setOptions] = useState<CascaderOptionProps[]>([])
 
     useEffect(() => {
-        console.log({username})
-    }, [username])
+        setOptions(mapToOptions(sectors))
+    }, [sectors])
 
 
-    const options: Option[] = [
-        {
-            label: 'Light',
-            value: 'light',
-            children: new Array(20)
-                .fill(null)
-                .map((_, index) => ({ label: `Number ${index}`, value: index })),
-        },
-        {
-            label: 'Bamboo',
-            value: 'bamboo',
-            children: [
-                {
-                    label: 'Little',
-                    value: 'little',
-                    children: [
-                        {
-                            label: 'Toy Fish',
-                            value: 'fish',
-                            disableCheckbox: true,
-                        },
-                        {
-                            label: 'Toy Cards',
-                            value: 'cards',
-                        },
-                        {
-                            label: 'Toy Bird',
-                            value: 'bird',
-                        },
-                    ],
-                },
-            ],
-        },
-    ];
+    async function submit() {
+        const dto: UserDto = {
+            username: username,
+            selectedSectors: selectedSectors[0],
+            agreeToTerms: agreeToTerms
+        }
+
+        if (validateUserData(dto)){
+            const res = await PostRequest('user', dto);
+            console.log("res ", res);
+        }
+
+
+    }
 
     return (
         <HomeStyle>
             <div className="registration">
                 <div className="left">
                     <TextInput placeholder="username" onChange={setUsername} />
-                    <CheckboxInput />
+                    <CheckboxInput label="agree to terms" checkboxState={(newValue: boolean) => setAgreeToTerms(newValue)  } />
                 </div>
                 <div className="right">
-                    <CascaderInput options={options} />
-                    <CustomButton />
+                    <CascaderInput selectedSectorsCallback={(e) => setSelectedSectors(e)} options={options} />
+                    <CustomButton label="submit" onClick={() => submit()} />
                 </div>
             </div>
             <div className="users">
@@ -112,8 +100,8 @@ const HomeStyle = styled.div`
 `
 
 export const getServerSideProps: GetServerSideProps = async () => {
-    // Fetch initial data
-    return {props: {}};
+    const sectors: SectorDto[] = await GetRequest('sectors')
+    return {props: {sectors}};
 };
 
 

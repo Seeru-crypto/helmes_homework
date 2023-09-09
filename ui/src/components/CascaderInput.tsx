@@ -3,27 +3,29 @@ import React from "react";
 import {Cascader} from 'antd';
 
 interface CascaderProps {
-    options: Option[]
+    options: CascaderOptionProps[]
+    selectedSectorsCallback: (value: string[][]) => void
 }
 
-export interface Option {
+export interface CascaderOptionProps {
     value: string | number;
     label: string;
-    children?: Option[];
+    children?: CascaderOptionProps[];
     disableCheckbox?: boolean;
 }
 
 const CascaderInput = (props: CascaderProps) => {
     const onChange = (value: string[][]) => {
-        console.log(value);
+        props.selectedSectorsCallback(value)
     };
 
     return (
         <CascaderStyle>
             <Cascader
-                style={{ width: '100%' }}
+                style={{width: '100%'}}
                 options={props.options}
                 onChange={onChange}
+                showSearch={true}
                 multiple
                 maxTagCount="responsive"
             />
@@ -31,9 +33,8 @@ const CascaderInput = (props: CascaderProps) => {
     )
 }
 
-
 export default CascaderInput
 
 const CascaderStyle = styled.div`
-width: 100%;
+  width: 100%;
 `
