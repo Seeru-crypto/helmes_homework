@@ -1,13 +1,12 @@
-package controller;
+package demo.controller;
 
-
-import controller.dto.SectorDto;
+import demo.controller.dto.SectorDto;
 import lombok.RequiredArgsConstructor;
-import mapper.SectorMapper;
+import demo.mapper.SectorMapper;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import service.SectorService;
+import demo.service.SectorService;
 
 import java.util.List;
 

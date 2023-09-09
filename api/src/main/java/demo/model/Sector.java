@@ -1,4 +1,4 @@
-package model;
+package demo.model;
 
 
 import jakarta.persistence.*;
@@ -16,8 +16,8 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @Getter
 @Setter
 @Entity
-@ToString
 @Table
+@ToString
 public class Sector extends AbstractAuditingEntity<Long> {
 
     @Id
@@ -33,6 +33,6 @@ public class Sector extends AbstractAuditingEntity<Long> {
     private Long parentId;
 
     @OneToMany(cascade = ALL, orphanRemoval = true)
-    @JoinColumn(name = "parent_id")
+    @JoinColumn(name = "parentId")
     private List<Sector> children = new ArrayList<>();
 }

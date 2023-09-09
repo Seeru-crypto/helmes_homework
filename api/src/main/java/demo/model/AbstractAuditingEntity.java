@@ -1,4 +1,4 @@
-package model;
+package demo.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
@@ -13,10 +13,10 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.Instant;
 
-@MappedSuperclass
-@EntityListeners(AuditingEntityListener.class)
 @Getter
 @Setter
+@MappedSuperclass
+@EntityListeners(AuditingEntityListener.class)
 public abstract class AbstractAuditingEntity<T> {
     public abstract T getId();
 

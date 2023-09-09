@@ -5,7 +5,7 @@ spring:
       hibernate:
         format_sql: true
   datasource:
-    url: jdbc:postgresql://localhost:8881/default_db
+    url: jdbc:postgresql://localhost:8881/demo_db
     username: root
     password: root
 logging:

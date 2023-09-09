@@ -1,4 +1,4 @@
-package controller.dto;
+package demo.controller.dto;
 
 import lombok.Getter;
 import lombok.Setter;

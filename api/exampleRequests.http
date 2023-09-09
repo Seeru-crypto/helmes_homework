@@ -1,0 +1,4 @@
+###____________________________ SECTORS
+GET localhost:8880/api/sectors
+
+

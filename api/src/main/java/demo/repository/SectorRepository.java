@@ -1,6 +1,6 @@
-package repository;
+package demo.repository;
 
-import model.Sector;
+import demo.model.Sector;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

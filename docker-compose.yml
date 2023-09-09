@@ -6,7 +6,7 @@ services:
     environment:
       - POSTGRES_USER=root
       - POSTGRES_PASSWORD=root
-      - POSTGRES_DB=default_db
+      - POSTGRES_DB=demo_db
       - POSTGRES_HOST_AUTH_METHOD=trust
     ports:
       - 8881:5432

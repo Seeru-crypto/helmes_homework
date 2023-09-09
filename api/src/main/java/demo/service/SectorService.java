@@ -1,11 +1,12 @@
-package service;
+package demo.service;
 
+import demo.model.Sector;
+import demo.repository.SectorRepository;
 import jakarta.transaction.Transactional;
-import model.Sector;
 import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
-import repository.SectorRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -16,5 +17,14 @@ public class SectorService {
     @Transactional
     public List<Sector> findAll() {
         return sectorRepository.findAllByParentId(null);
+    }
+
+
+    public Sector save(Long parentId, String name){
+        return sectorRepository.save(new Sector()
+                .setName(name)
+                .setParentId(parentId)
+                .setChildren(new ArrayList<>())
+        );
     }
 }
