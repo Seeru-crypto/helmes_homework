@@ -1,0 +1,14 @@
+spring:
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+  datasource:
+    url: jdbc:postgresql://localhost:8881/default_db
+    username: root
+    password: root
+logging:
+  level:
+    root: info
+    org.springframework.security: DEBUG

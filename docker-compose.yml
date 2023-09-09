@@ -1,0 +1,17 @@
+version: '3.7'
+services:
+  db:
+    image: postgres:14.1
+    container_name: helmes_db
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=default_db
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    ports:
+      - 8881:5432
+    networks:
+      - helmes_network
+
+networks:
+  helmes_network:

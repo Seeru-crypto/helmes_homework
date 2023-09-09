@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: api
+  profiles:
+    active: local
+server:
+  port: 8880
+  servlet:
+    context-path: /api
