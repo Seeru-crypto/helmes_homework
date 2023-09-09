@@ -3,7 +3,6 @@ import NavLink from "./NavLink";
 import {links} from "../../configs";
 
 const Navbar = () => {
-
     return (
         <NavbarStyle>
             {links.map((link) => (
