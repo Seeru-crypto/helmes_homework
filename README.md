@@ -3,10 +3,13 @@
 ## setup via docker
 - navigate to /api
 - Build gradle project with either gradle build or gradle assemble
-- navigate to /
-- run docker-compose up -d
+- navigate to project root
+- run ``docker-compose up -d``
 - application should be available at http://localhost:8880/
     - swagger should be available at http://localhost:8880/api/swagger-ui/index.html
+
+NB: When running UI in docker, during the first render an error might occur. I could not figure out why this happens, but it does not affect the functionality of the application.
+If it occurs just reload the browser. 
 
 ## Stack
 - back-end: I used spring boot java with swagger for API documentation and testcontainers for in-depth integration testing.
@@ -26,10 +29,3 @@
    3.2. Store all input data to the database (Name, Sectors, Agree to terms)
    3.3. Refill the form using stored data
    3.4. Allow the user to edit his/her own data during the session
-
-
-## TODO
-- add update integration tests
-- add update functionality to UI
-- add docker support
-- add nginx reverse-proxy

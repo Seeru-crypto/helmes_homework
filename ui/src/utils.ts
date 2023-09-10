@@ -4,6 +4,7 @@ import {SaveUserDto} from "./interfaces/SaveUserDto";
 import {MessageInstance} from "antd/es/message/interface";
 
 export function mapToOptions(data: SectorDto[]): CascaderOptionProps[] {
+    if (!data) return ([] as CascaderOptionProps[]);
     return data.map((sector: SectorDto) => {
         return {
             value: sector.name,
