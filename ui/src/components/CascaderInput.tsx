@@ -22,7 +22,6 @@ const CascaderInput = (props: CascaderProps) => {
     return (
         <CascaderStyle>
             <Cascader
-                style={{width: '100%'}}
                 options={props.options}
                 onChange={onChange}
                 showSearch={true}
@@ -36,5 +35,9 @@ const CascaderInput = (props: CascaderProps) => {
 export default CascaderInput
 
 const CascaderStyle = styled.div`
-  width: 100%;
+  width: 50%;
+  
+  .ant-cascader{
+    width: 100%
+  }
 `

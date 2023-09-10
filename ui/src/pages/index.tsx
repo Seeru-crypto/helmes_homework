@@ -57,9 +57,10 @@ export default function Home({sectors, existingUsers}: LandingProps): ReactEleme
     }, [messageApi])
 
     async function submit() {
+
         const dto: SaveUserDto = {
             name: username,
-            sectors: selectedSectors[0],
+            sectors: selectedSectors.flat(),
             agreeToTerms: agreeToTerms
         }
 
@@ -116,9 +117,8 @@ const HomeStyle = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: ${({theme}) => theme.size.$100};
-  gap: ${({theme}) => theme.size.$100};
   width: 100%;
+  margin-top: 8rem;
 
   .registration {
     display: flex;
@@ -126,11 +126,14 @@ const HomeStyle = styled.div`
     justify-content: space-between;
     gap: 4rem;
     width: 100%;
+    margin-bottom: 4rem;
   }
 
   .left, .right {
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    align-items: center;
     gap: 4rem;
     width: 100%;
   }
@@ -140,6 +143,13 @@ const HomeStyle = styled.div`
     flex-direction: row;
     gap: 4rem;
     flex-wrap: wrap;
+  }
+  
+  .users {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
   }
 `
 

@@ -16,4 +16,5 @@ const TextInput = (props: TextInputProps) => {
 
 export default TextInput
 
-const TextInputStyle = styled.div``
+const TextInputStyle = styled.div`
+width: 50%`

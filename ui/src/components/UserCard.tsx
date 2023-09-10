@@ -15,9 +15,9 @@ const UserCard = (props: UserCardProps) => {
         <UserCardStyle>
             <Card size="small" title={props.title} style={{width: 300}}>
                 {
-                    props.sectors.map((sector: SectorDto) => {
+                    props.sectors.map((sector: SectorDto, index) => {
                         return (
-                            <Tag key={sector.name} color="geekblue">{sector.name}</Tag>
+                            <Tag key={index} color="geekblue">{sector.name}</Tag>
                         )
                     }
                     )
@@ -28,4 +28,6 @@ const UserCard = (props: UserCardProps) => {
 }
 export default UserCard
 
-const UserCardStyle = styled.div``
+const UserCardStyle = styled.div`
+
+`
