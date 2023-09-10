@@ -5,7 +5,7 @@ import CascaderInput, {CascaderOptionProps} from "../components/CascaderInput";
 import CheckboxInput from "../components/CheckboxInput";
 import TextInput from "../components/TextInput";
 import CustomButton from "../components/Button";
-import {GetRequest, PostRequest} from "../controller/ApiServices";
+import {GetRequest, PostRequest, PutRequest} from "../controller/ApiServices";
 import {SectorDto} from "../interfaces/SectorDto";
 import {isUserDataValid, mapToOptions} from "../utils";
 import {SaveUserDto} from "../interfaces/SaveUserDto";
@@ -18,10 +18,6 @@ import {UserDto} from "../interfaces/UserDto";
 interface LandingProps {
     sectors: SectorDto[];
     existingUsers: UserProps;
-}
-
-interface SectorProps extends PaginationWrapper {
-    content: SectorDto[]
 }
 
 interface UserProps extends PaginationWrapper {
@@ -44,6 +40,7 @@ export default function Home({sectors, existingUsers}: LandingProps): ReactEleme
     const [agreeToTerms, setAgreeToTerms] = useState<boolean>(false)
     const [sectorOptions, setSectorOptions] = useState<CascaderOptionProps[]>([])
     const [users, setUsers] = useState<UserDto[]>([])
+    const [userId, setUserId] = useState<number>(0)
     const [messageApi, contextHolder] = message.useMessage();
     const {setMessageApi} = useMessageStore();
 
@@ -52,7 +49,6 @@ export default function Home({sectors, existingUsers}: LandingProps): ReactEleme
     }, [sectors])
 
     useEffect(() => {
-        console.log("existingUsers ", existingUsers.content)
         setUsers(existingUsers.content)
     }, [existingUsers])
 
@@ -67,8 +63,17 @@ export default function Home({sectors, existingUsers}: LandingProps): ReactEleme
             agreeToTerms: agreeToTerms
         }
 
-        if (isUserDataValid(dto, messageApi)) {
-            const res = await PostRequest(SlugUsers, dto, messageApi, "user created successfully")
+        if (!isUserDataValid(dto, messageApi)) return
+
+        if (userId == 0) {
+            const createdUser : UserDto = await PostRequest(SlugUsers, dto, messageApi, "user created successfully")
+            setUserId(createdUser.id)
+            const updatedUSers: UserProps = await GetRequest(SlugUsers)
+            setUsers(updatedUSers.content)
+        }
+        else {
+            const slug = SlugUsers + "/" + userId
+            await PutRequest(slug, dto, messageApi, "user updated successfully")
             const updatedUSers: UserProps = await GetRequest(SlugUsers)
             setUsers(updatedUSers.content)
         }
@@ -93,12 +98,12 @@ export default function Home({sectors, existingUsers}: LandingProps): ReactEleme
                 <div className="user-card-list">
                     {
                         users.length > 0 ?
-                        users.map((user: UserDto) => {
-                                return (
-                                    <UserCard key={user.name} title={user.name} size={"small"} sectors={user.sectors}/>
-                                )
-                            }
-                        ) : <p>no users</p>
+                            users.map((user: UserDto) => {
+                                    return (
+                                        <UserCard key={user.name} title={user.name} size={"small"} sectors={user.sectors}/>
+                                    )
+                                }
+                            ) : <p>no users</p>
                     }
                 </div>
             </div>
@@ -113,7 +118,7 @@ const HomeStyle = styled.div`
   justify-content: center;
   padding: ${({theme}) => theme.size.$100};
   gap: ${({theme}) => theme.size.$100};
-  width: 80%;
+  width: 100%;
 
   .registration {
     display: flex;
@@ -129,8 +134,8 @@ const HomeStyle = styled.div`
     gap: 4rem;
     width: 100%;
   }
-  
-  .user-card-list{
+
+  .user-card-list {
     display: flex;
     flex-direction: row;
     gap: 4rem;

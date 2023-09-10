@@ -26,3 +26,10 @@
    3.2. Store all input data to the database (Name, Sectors, Agree to terms)
    3.3. Refill the form using stored data
    3.4. Allow the user to edit his/her own data during the session
+
+
+## TODO
+- add update integration tests
+- add update functionality to UI
+- add docker support
+- add nginx reverse-proxy

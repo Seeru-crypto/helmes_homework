@@ -3,7 +3,7 @@ import {MessageInstance} from "antd/es/message/interface";
 
 const api_basepath = process.env.NEXT_PUBLIC_API_URL;
 
-export async function GetRequest(slug: string, messageApi?: MessageInstance  ) {
+export async function GetRequest(slug: string, messageApi?: MessageInstance) {
     const fullPath = `${api_basepath}/${slug}`
     return await axios({
         method: 'get',
@@ -16,12 +16,11 @@ export async function GetRequest(slug: string, messageApi?: MessageInstance  ) {
             }
         }).catch(function (error) {
             if (messageApi) messageApi.error(error.message);
-            // Filter incomming message to a user friendly format
             return {}
         });
 }
 
-export async function PostRequest(slug: string, data: any, messageApi: MessageInstance, successMessage: string  ) {
+export async function PostRequest(slug: string, data: any, messageApi: MessageInstance, successMessage: string) {
     const fullUrl = `${api_basepath}/${slug}`;
 
     return await axios({
@@ -36,7 +35,26 @@ export async function PostRequest(slug: string, data: any, messageApi: MessageIn
                 return response.data
             }
         }).catch(function (error) {
-            // Filter incomming message to a user friendly format
+            messageApi.error(error.message);
+            return {}
+        });
+}
+
+export async function PutRequest(slug: string, data: any, messageApi: MessageInstance, successMessage: string) {
+    const fullUrl = `${api_basepath}/${slug}`;
+
+    return await axios({
+        method: 'put',
+        url: fullUrl,
+        responseType: "json",
+        data: data
+    })
+        .then(function (response) {
+            if (response.status === 200) {
+                messageApi.success(successMessage);
+                return response.data
+            }
+        }).catch(function (error) {
             messageApi.error(error.message);
             return {}
         });

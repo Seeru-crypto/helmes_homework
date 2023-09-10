@@ -50,8 +50,6 @@ public class UserController {
     public ResponseEntity<UserDto> update(@Valid @RequestBody SaveUserDto dto, @PathVariable Long userId) {
         log.info("REST request to update user " + dto);
         User updatedUser = userService.update(userMapper.toEntity(dto), dto.getSectors(), userId);
-        return created(URI.create("/api/users/%s"
-                .formatted(updatedUser.getId())))
-                .body(userMapper.toDto(updatedUser));
+        return ResponseEntity.ok(userMapper.toDto(updatedUser));
     }
 }
