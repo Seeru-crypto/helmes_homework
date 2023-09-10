@@ -12,3 +12,4 @@ logging:
   level:
     root: info
     org.springframework.security: DEBUG
+corsAllowedOrigin: http://localhost:3000

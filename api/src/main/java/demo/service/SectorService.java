@@ -27,4 +27,8 @@ public class SectorService {
                 .setChildren(new ArrayList<>())
         );
     }
+
+    public Sector getSectorByName (String name) {
+        return sectorRepository.findByName(name);
+    }
 }

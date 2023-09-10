@@ -1,8 +1,9 @@
 import axios from "axios";
+import {MessageInstance} from "antd/es/message/interface";
 
 const api_basepath = process.env.NEXT_PUBLIC_API_URL;
 
-export async function GetRequest(slug: string) {
+export async function GetRequest(slug: string, messageApi?: MessageInstance  ) {
     const fullPath = `${api_basepath}/${slug}`
     return await axios({
         method: 'get',
@@ -14,11 +15,13 @@ export async function GetRequest(slug: string) {
                 return response.data
             }
         }).catch(function (error) {
+            if (messageApi) messageApi.error(error.message);
+            // Filter incomming message to a user friendly format
             return {}
         });
 }
 
-export async function PostRequest(slug: string, data: any) {
+export async function PostRequest(slug: string, data: any, messageApi: MessageInstance  ) {
     const fullUrl = `${api_basepath}/${slug}`;
 
     return await axios({
@@ -32,6 +35,8 @@ export async function PostRequest(slug: string, data: any) {
                 return response.data
             }
         }).catch(function (error) {
+            // Filter incomming message to a user friendly format
+            messageApi.error(error.message);
             return {}
         });
 }

@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.util.Set;
+import java.util.List;
 
 @Getter
 @Setter
@@ -12,5 +12,5 @@ import java.util.Set;
 public class UserDto {
     private String name;
     private boolean agreeToTerms;
-    private Set<SectorDto> sectors;
+    private List<SectorDto> sectors;
 }

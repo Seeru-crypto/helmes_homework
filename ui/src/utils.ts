@@ -20,13 +20,13 @@ export function isUserDataValid(dto: UserDto, messageApi: MessageInstance ) {
         return false;
     }
 
-    else if (dto.selectedSectors.length === 0){
+    else if (dto.sectorNames.length === 0){
         messageApi.error("You must select at least one sector");
 
         return false;
     }
 
-    else if (dto.username.length === 0){
+    else if (dto.name.length === 0){
         messageApi.error("You must enter a username");
         return false;
     }

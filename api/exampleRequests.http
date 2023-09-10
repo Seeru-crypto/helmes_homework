@@ -2,3 +2,15 @@
 GET localhost:8880/api/sectors
 
 
+###____________________________ USERS
+GET localhost:8880/api/users
+
+
+
+
+###
+
+POST localhost:8880/api/users
+Content-Type: application/json
+
+{"name":"tete5","sectorNames":["child 2"],"agreeToTerms":true}

@@ -10,4 +10,6 @@ import java.util.List;
 public interface SectorRepository extends JpaRepository<Sector, Long> {
 
     List<Sector> findAllByParentId(Long parentId);
+
+    Sector findByName (String name);
 }

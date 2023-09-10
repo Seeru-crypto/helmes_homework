@@ -48,13 +48,13 @@ export default function Home({sectors}: LandingProps): ReactElement | null  {
 
     async function submit() {
         const dto: UserDto = {
-            username: username,
-            selectedSectors: selectedSectors[0],
+            name: username,
+            sectorNames: selectedSectors[0],
             agreeToTerms: agreeToTerms
         }
 
         if (isUserDataValid(dto, messageApi)){
-            const res = await PostRequest(SlugUsers, dto);
+            const res = await PostRequest(SlugUsers, dto, messageApi);
             console.log("res ", res);
         }
     }
