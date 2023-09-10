@@ -28,7 +28,7 @@ public class SectorService {
         );
     }
 
-    public Sector getSectorByName (String name) {
+    public Sector findByName(String name) {
         return sectorRepository.findByName(name);
     }
 }

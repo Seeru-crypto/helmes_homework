@@ -1,7 +1,8 @@
 package demo;
 
-
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import demo.controller.dto.SaveUserDto;
 import demo.service.SectorService;
 import demo.service.UserService;
 import jakarta.persistence.EntityManager;
@@ -56,6 +57,9 @@ public abstract class BaseIntegrationTest {
         CriteriaQuery<T> all = cq.select(rootEntry);
         TypedQuery<T> allQuery = entityManager.createQuery(all);
         return allQuery.getResultList();
+    }
+    protected byte[] getBytes( SaveUserDto dto ) throws JsonProcessingException {
+        return objectMapper.writeValueAsBytes(dto);
     }
 
     @BeforeEach

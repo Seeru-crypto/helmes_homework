@@ -35,9 +35,9 @@ public class UserService {
     }
 
     @Transactional
-    public User save(User user, List<SectorDto> sectorNames) {
+    public User save(User user, List<String> sectorNames) {
         validateUserData(user);
-        List<Sector> sectors = sectorNames.stream().map(sectorDto -> sectorService.getSectorByName( sectorDto.getName() )).toList();
+        List<Sector> sectors = sectorNames.stream().map(sectorService::findByName).toList();
         user.setSectors(sectors);
         return userRepository.save(user);
     }
@@ -58,10 +58,10 @@ public class UserService {
     }
 
     @Transactional
-    public User update(User entity, List<SectorDto> sectorNames, Long userId) {
+    public User update(User entity, List<String> sectorNames, Long userId) {
         validateUserData(entity);
         User user = userRepository.getReferenceById(userId);
-        List<Sector> sectors = sectorNames.stream().map(sectorDto -> sectorService.getSectorByName( sectorDto.getName() )).toList();
+        List<Sector> sectors = sectorNames.stream().map(sectorService::findByName).toList();
         return user
                 .setName(entity.getName())
                 .setSectors(sectors);

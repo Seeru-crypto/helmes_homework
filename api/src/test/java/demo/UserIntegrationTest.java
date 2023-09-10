@@ -1,13 +1,16 @@
 package demo;
 
+import demo.controller.dto.SaveUserDto;
 import demo.controller.dto.SectorDto;
 import demo.model.Sector;
 import org.junit.jupiter.api.Test;
+import org.springframework.http.MediaType;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -18,12 +21,12 @@ class UserIntegrationTest extends ContextIntegrationTest {
     void findAll_shouldReturnPaginatedUsers() throws Exception {
         Sector sector_a = createSector("sector_a", null);
         createSector("sector_b", sector_a.getId());
-        createUser("user_a", true, List.of(new SectorDto().setName("sector_a")));
-        createUser("user_b", true, List.of(new SectorDto().setName("sector_a"),new SectorDto().setName("sector_b")));
+        createUser("user_a", true, List.of("sector_a"));
+        createUser("user_b", true, List.of("sector_a", "sector_b"));
 
         mockMvc.perform(get("/users")
-                .param("pageNumber", "0")
-                .param("pageSize", "1"))
+                        .param("pageNumber", "0")
+                        .param("pageSize", "1"))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(jsonPath("$.content.length()").value(1))
@@ -44,5 +47,25 @@ class UserIntegrationTest extends ContextIntegrationTest {
                 .andExpect(jsonPath("$.content[1].sectors.length()").value(2))
                 .andExpect(jsonPath("$.pageable.pageNumber").value(0))
                 .andExpect(jsonPath("$.pageable.pageSize").value(10));
+    }
+
+    @Test
+    void save_shouldSaveANewUSer() throws Exception {
+        Sector sector_a = createSector("sector_a", null);
+        createSector("sector_b", sector_a.getId());
+
+        SaveUserDto dto = new SaveUserDto()
+                .setSectors(List.of("sector_a", "sector_b"))
+                .setName("new user")
+                .setAgreeToTerms(true);
+        byte[] bytes = getBytes(dto);
+        mockMvc.perform(post("/users")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(bytes))
+                .andExpect(status().isCreated())
+                .andDo(print())
+                .andExpect(jsonPath("$.name").value("new user"))
+                .andExpect(jsonPath("$.agreeToTerms").value(true))
+                .andExpect(jsonPath("$.sectors.length()").value(2));
     }
 }

@@ -18,7 +18,7 @@ public class ContextIntegrationTest extends BaseIntegrationTest {
         return sector;
     }
 
-    protected User createUser(String name, boolean agreeToTerms, List<SectorDto> sectorNames) {
+    protected User createUser(String name, boolean agreeToTerms, List<String> sectorNames) {
         User user = userService.save(new User().setName(name).setAgreeToTerms(agreeToTerms), sectorNames);
         entityManager.persist(user);
         return user;
