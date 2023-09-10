@@ -68,13 +68,13 @@ export default function Home({sectors, existingUsers}: LandingProps): ReactEleme
         if (userId == 0) {
             const createdUser : UserDto = await PostRequest(SlugUsers, dto, messageApi, "user created successfully")
             setUserId(createdUser.id)
-            const updatedUSers: UserProps = await GetRequest(SlugUsers)
+            const updatedUSers: UserProps = await GetRequest(SlugUsers, 'outer')
             setUsers(updatedUSers.content)
         }
         else {
             const slug = SlugUsers + "/" + userId
             await PutRequest(slug, dto, messageApi, "user updated successfully")
-            const updatedUSers: UserProps = await GetRequest(SlugUsers)
+            const updatedUSers: UserProps = await GetRequest(SlugUsers, 'outer')
             setUsers(updatedUSers.content)
         }
     }
@@ -144,8 +144,9 @@ const HomeStyle = styled.div`
 `
 
 export const getServerSideProps: GetServerSideProps = async () => {
-    const sectors: SectorDto[] = await GetRequest(SlugSector)
-    const existingUsers: UserProps = await GetRequest(SlugUsers)
+    const sectors: SectorDto[] = await GetRequest(SlugSector, 'inner' )
+    const existingUsers: UserProps = await GetRequest(SlugUsers, 'inner')
+    console.log("res ", existingUsers.size);
     return {props: {sectors, existingUsers}};
 };
 

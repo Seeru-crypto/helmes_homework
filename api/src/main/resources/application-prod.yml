@@ -1,0 +1,7 @@
+# Added here for demo purposes, in actual production environment, this file would be ignored by git
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:8881/default_db
+    username: root
+    password: root
+corsAllowedOrigin: http://localhost:8880

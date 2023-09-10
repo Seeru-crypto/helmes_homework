@@ -2,7 +2,7 @@ version: '3.7'
 services:
   db:
     image: postgres:14.1
-    container_name: helmes_db
+    container_name: db
     environment:
       - POSTGRES_USER=root
       - POSTGRES_PASSWORD=root
@@ -11,7 +11,46 @@ services:
     ports:
       - 8881:5432
     networks:
-      - helmes_network
+      - docker_network
+  api:
+    build:
+      context: ./api
+      dockerfile: ./docker/Dockerfile
+      args:
+        SPRING_DB_PATH: db:5432/demo_db
+    environment:
+      'spring.datasource.url': jdbc:postgresql://db:5432/demo_db
+      'corsAllowedOrigin': http://localhost:8880
+    container_name: api
+    stdin_open: true
+    depends_on:
+      - db
+    networks:
+      - docker_network
+  ui:
+    build:
+      context: ./ui
+      dockerfile: ./docker/Dockerfile
+    restart: always
+    container_name: ui
+    depends_on:
+      - db
+      - api
+    networks:
+      - docker_network
+  proxy:
+    image: nginx
+    container_name: proxy
+    ports:
+      - 8880:80
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - ui
+      - api
+    restart: unless-stopped
+    networks:
+      - docker_network
 
 networks:
-  helmes_network:
+  docker_network:

@@ -3,8 +3,11 @@ import {MessageInstance} from "antd/es/message/interface";
 
 const api_basepath = process.env.NEXT_PUBLIC_API_URL;
 
-export async function GetRequest(slug: string, messageApi?: MessageInstance) {
-    const fullPath = `${api_basepath}/${slug}`
+export type RequestType = 'inner' | 'outer';
+
+export async function GetRequest(slug: string, type: RequestType, messageApi?: MessageInstance) {
+
+    const fullPath = type === 'outer' ? `${api_basepath}/${slug}` : `${process.env.NEXT_PUBLIC_INNER_API_URL}/${slug}`;
     return await axios({
         method: 'get',
         url: fullPath,

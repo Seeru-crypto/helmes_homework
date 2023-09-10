@@ -28,19 +28,18 @@ interface NavLinkProps {
     children: React.ReactNode;
 }
 
-const NavLink: React.FC<NavLinkProps> = ({ href, children }) => {
+const NavLink: React.FC<NavLinkProps> = ({href, children}) => {
     const router = useRouter();
     const currentRoute = router.pathname;
     const [isActive, setIsActive] = React.useState(false);
 
     useEffect(() => {
         if (currentRoute == href) {
-            setIsActive(true );
+            setIsActive(true);
         } else {
             setIsActive(false);
         }
     }, [currentRoute, href]);
-
 
     return (
         <StyledLink>

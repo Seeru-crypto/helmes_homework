@@ -25,17 +25,31 @@ public class StartupLogger {
     public void initApplication() {
         List<String> profiles = Arrays.asList(env.getActiveProfiles());
 
+        if (sectorService.findAll().isEmpty()){
+            Sector manufacturing = sectorService.save(null, "Manufacturing");
+            sectorService.save(manufacturing.getId(), "Construction materials");
+            sectorService.save(manufacturing.getId(), "Electronics and optics");
+
+            Sector bakery = sectorService.save(manufacturing.getId(), "Food and Beverage");
+            sectorService.save(bakery.getId(), "bakery & confectionery products");
+            sectorService.save(bakery.getId(), "Beverages");
+            sectorService.save(bakery.getId(), "Fish & fish products");
+
+            Sector furniture = sectorService.save(manufacturing.getId(), "Furniture");
+            sectorService.save(furniture.getId(), "Bathroom/sauna");
+            sectorService.save(furniture.getId(), "Bedroom");
+            sectorService.save(furniture.getId(), "Children's room");
+
+            Sector service = sectorService.save(null, "Service");
+            sectorService.save(service.getId(), "Business services");
+            sectorService.save(service.getId(), "Engineering");
+            sectorService.save(service.getId(), "Telecommunications");
+        }
+
         if (profiles.contains("local")) {
             log.info("App hosted at " + "http://localhost:" + env.getProperty("server.port"));
             log.info("local profile active");
             log.info("Swagger enabled at http://localhost:8880/api/swagger-ui/index.html#/");
-
-            if (sectorService.findAll().isEmpty()){
-                Sector parent = sectorService.save(null, "parent");
-                sectorService.save(parent.getId(), "child 1");
-                sectorService.save(parent.getId(), "child 2");
-            }
-
         }
         else if (profiles.contains("production")){
             log.info("production profile active");
