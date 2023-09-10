@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import {Card} from "antd";
+import {Card, Tag} from "antd";
 import {CardSize} from "antd/es/card/Card";
 import {SectorDto} from "../interfaces/SectorDto";
 
@@ -11,14 +11,17 @@ interface UserCardProps {
 }
 
 const UserCard = (props: UserCardProps) => {
-    function formatSectorsToStringArray(sectors: SectorDto[]): string[] {
-        return sectors.map(sector => sector.name)
-    }
-
     return (
         <UserCardStyle>
             <Card size="small" title={props.title} style={{width: 300}}>
-                <p> { formatSectorsToStringArray(props.sectors).join(', ') }  </p>
+                {
+                    props.sectors.map((sector: SectorDto) => {
+                        return (
+                            <Tag key={sector.name} color="geekblue">{sector.name}</Tag>
+                        )
+                    }
+                    )
+                }
             </Card>
         </UserCardStyle>
     )

@@ -8,11 +8,12 @@ import CustomButton from "../components/Button";
 import {GetRequest, PostRequest} from "../controller/ApiServices";
 import {SectorDto} from "../interfaces/SectorDto";
 import {isUserDataValid, mapToOptions} from "../utils";
-import {UserDto} from "../interfaces/UserDto";
+import {SaveUserDto} from "../interfaces/SaveUserDto";
 import {message} from 'antd';
 import {useMessageStore} from "../zustand/store";
 import {SlugSector, SlugUsers} from "../configs";
 import UserCard from "../components/UserCard";
+import {UserDto} from "../interfaces/UserDto";
 
 interface LandingProps {
     sectors: SectorDto[];
@@ -60,7 +61,7 @@ export default function Home({sectors, existingUsers}: LandingProps): ReactEleme
     }, [messageApi])
 
     async function submit() {
-        const dto: UserDto = {
+        const dto: SaveUserDto = {
             name: username,
             sectors: selectedSectors[0],
             agreeToTerms: agreeToTerms
@@ -94,7 +95,7 @@ export default function Home({sectors, existingUsers}: LandingProps): ReactEleme
                         users.length > 0 ?
                         users.map((user: UserDto) => {
                                 return (
-                                    <UserCard title={user.name} size={"small"} sectors={user.sectors}/>
+                                    <UserCard key={user.name} title={user.name} size={"small"} sectors={user.sectors}/>
                                 )
                             }
                         ) : <p>no users</p>

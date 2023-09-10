@@ -1,5 +1,7 @@
+import {SectorDto} from "./SectorDto";
+
 export interface UserDto {
     name: string;
-    sectors: string[];
+    sectors: SectorDto[];
     agreeToTerms: boolean;
 }
