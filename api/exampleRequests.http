@@ -14,3 +14,9 @@ POST localhost:8880/api/users
 Content-Type: application/json
 
 {"name":"tete5","sectorNames":["child 2"],"agreeToTerms":true}
+
+###
+PUT localhost:8880/api/users/3
+Content-Type: application/json
+
+{"name":"AB5","sectorNames":["child 2"],"agreeToTerms":true}

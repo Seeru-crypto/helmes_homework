@@ -34,9 +34,9 @@ public class UserService {
     }
 
     @Transactional
-    public User save(User user, List<String> sectorsNames) {
+    public User save(User user, List<String> sectorNames) {
         validateUserData(user);
-        List<Sector> sectors = sectorsNames.stream().map(sectorService::getSectorByName).toList();
+        List<Sector> sectors = sectorNames.stream().map(sectorService::getSectorByName).toList();
         user.setSectors(sectors);
         return userRepository.save(user);
     }
@@ -54,5 +54,15 @@ public class UserService {
         }
         Pageable pageable = PageRequest.of(pageNumber, sizeOfPage, Sort.by(Sort.Direction.ASC, sortBy));
         return userRepository.findAll(pageable);
+    }
+
+    @Transactional
+    public User update(User entity, List<String> sectorNames, Long userId) {
+        validateUserData(entity);
+        User user = userRepository.getReferenceById(userId);
+        List<Sector> sectors = sectorNames.stream().map(sectorService::getSectorByName).toList();
+        return user
+                .setName(entity.getName())
+                .setSectors(sectors);
     }
 }
