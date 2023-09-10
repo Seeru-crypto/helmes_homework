@@ -21,7 +21,7 @@ export async function GetRequest(slug: string, messageApi?: MessageInstance  ) {
         });
 }
 
-export async function PostRequest(slug: string, data: any, messageApi: MessageInstance  ) {
+export async function PostRequest(slug: string, data: any, messageApi: MessageInstance, successMessage: string  ) {
     const fullUrl = `${api_basepath}/${slug}`;
 
     return await axios({
@@ -31,7 +31,8 @@ export async function PostRequest(slug: string, data: any, messageApi: MessageIn
         data: data
     })
         .then(function (response) {
-            if (response.status === 200) {
+            if (response.status === 201) {
+                messageApi.success(successMessage);
                 return response.data
             }
         }).catch(function (error) {

@@ -20,7 +20,7 @@ export function isUserDataValid(dto: UserDto, messageApi: MessageInstance ) {
         return false;
     }
 
-    else if (dto.sectorNames.length === 0){
+    else if (dto.sectors.length === 0){
         messageApi.error("You must select at least one sector");
 
         return false;

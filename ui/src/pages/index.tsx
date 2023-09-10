@@ -7,18 +7,24 @@ import TextInput from "../components/TextInput";
 import CustomButton from "../components/Button";
 import {GetRequest, PostRequest} from "../controller/ApiServices";
 import {SectorDto} from "../interfaces/SectorDto";
-import {mapToOptions, isUserDataValid} from "../utils";
+import {isUserDataValid, mapToOptions} from "../utils";
 import {UserDto} from "../interfaces/UserDto";
 import {message} from 'antd';
 import {useMessageStore} from "../zustand/store";
 import {SlugSector, SlugUsers} from "../configs";
+import UserCard from "../components/UserCard";
 
 interface LandingProps {
     sectors: SectorDto[];
+    existingUsers: UserProps;
 }
 
 interface SectorProps extends PaginationWrapper {
     content: SectorDto[]
+}
+
+interface UserProps extends PaginationWrapper {
+    content: UserDto[]
 }
 
 export interface PaginationWrapper {
@@ -31,17 +37,23 @@ export interface PaginationWrapper {
     empty: boolean
 }
 
-export default function Home({sectors}: LandingProps): ReactElement | null {
+export default function Home({sectors, existingUsers}: LandingProps): ReactElement | null {
     const [username, setUsername] = useState('')
     const [selectedSectors, setSelectedSectors] = useState<string[][]>([[]])
     const [agreeToTerms, setAgreeToTerms] = useState<boolean>(false)
-    const [options, setOptions] = useState<CascaderOptionProps[]>([])
+    const [sectorOptions, setSectorOptions] = useState<CascaderOptionProps[]>([])
+    const [users, setUsers] = useState<UserDto[]>([])
     const [messageApi, contextHolder] = message.useMessage();
     const {setMessageApi} = useMessageStore();
 
     useEffect(() => {
-        setOptions(mapToOptions(sectors))
+        setSectorOptions(mapToOptions(sectors))
     }, [sectors])
+
+    useEffect(() => {
+        console.log("existingUsers ", existingUsers.content)
+        setUsers(existingUsers.content)
+    }, [existingUsers])
 
     useEffect(() => {
         setMessageApi(messageApi)
@@ -50,13 +62,14 @@ export default function Home({sectors}: LandingProps): ReactElement | null {
     async function submit() {
         const dto: UserDto = {
             name: username,
-            sectorNames: selectedSectors[0],
+            sectors: selectedSectors[0],
             agreeToTerms: agreeToTerms
         }
 
-        if (isUserDataValid(dto, messageApi)){
+        if (isUserDataValid(dto, messageApi)) {
             const res = await PostRequest(SlugUsers, dto, messageApi, "user created successfully")
-            console.log("res ", res);
+            const updatedUSers: UserProps = await GetRequest(SlugUsers)
+            setUsers(updatedUSers.content)
         }
     }
 
@@ -70,12 +83,23 @@ export default function Home({sectors}: LandingProps): ReactElement | null {
                                    checkboxState={(newValue: boolean) => setAgreeToTerms(newValue)}/>
                 </div>
                 <div className="right">
-                    <CascaderInput selectedSectorsCallback={(e) => setSelectedSectors(e)} options={options}/>
+                    <CascaderInput selectedSectorsCallback={(e) => setSelectedSectors(e)} options={sectorOptions}/>
                     <CustomButton label="submit" onClick={() => submit()}/>
                 </div>
             </div>
             <div className="users">
                 <h2>Users</h2>
+                <div className="user-card-list">
+                    {
+                        users.length > 0 ?
+                        users.map((user: UserDto) => {
+                                return (
+                                    <UserCard title={user.name} size={"small"} sectors={user.sectors}/>
+                                )
+                            }
+                        ) : <p>no users</p>
+                    }
+                </div>
             </div>
         </HomeStyle>
     )
@@ -86,7 +110,7 @@ const HomeStyle = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: ${({theme}) => theme.size.$100};;
+  padding: ${({theme}) => theme.size.$100};
   gap: ${({theme}) => theme.size.$100};
   width: 80%;
 
@@ -104,11 +128,19 @@ const HomeStyle = styled.div`
     gap: 4rem;
     width: 100%;
   }
+  
+  .user-card-list{
+    display: flex;
+    flex-direction: row;
+    gap: 4rem;
+    flex-wrap: wrap;
+  }
 `
 
 export const getServerSideProps: GetServerSideProps = async () => {
     const sectors: SectorDto[] = await GetRequest(SlugSector)
-    return {props: {sectors}};
+    const existingUsers: UserProps = await GetRequest(SlugUsers)
+    return {props: {sectors, existingUsers}};
 };
 
 

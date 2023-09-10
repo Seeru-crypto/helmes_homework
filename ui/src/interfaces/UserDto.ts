@@ -1,5 +1,5 @@
 export interface UserDto {
     name: string;
-    sectorNames: string[];
+    sectors: string[];
     agreeToTerms: boolean;
 }

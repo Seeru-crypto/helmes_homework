@@ -10,8 +10,6 @@ import java.util.List;
 @Setter
 @ToString
 public class SectorDto {
-    private Long id;
     private String name;
-    private Long parentId;
     private List<SectorDto> children = new ArrayList<>();
 }

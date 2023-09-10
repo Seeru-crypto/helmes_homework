@@ -11,6 +11,6 @@ import java.util.List;
 @ToString
 public class SaveUserDto {
     private String name;
-    private List<String> sectorNames;
+    private List<SectorDto> sectors;
     private boolean agreeToTerms;
 }

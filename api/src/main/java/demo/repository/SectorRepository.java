@@ -11,5 +11,7 @@ public interface SectorRepository extends JpaRepository<Sector, Long> {
 
     List<Sector> findAllByParentId(Long parentId);
 
+    List<Sector> findAllByNameIn(List<String> names);
+
     Sector findByName (String name);
 }

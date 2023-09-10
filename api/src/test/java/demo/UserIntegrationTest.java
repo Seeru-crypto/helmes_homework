@@ -1,5 +1,6 @@
 package demo;
 
+import demo.controller.dto.SectorDto;
 import demo.model.Sector;
 import org.junit.jupiter.api.Test;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,8 +18,8 @@ class UserIntegrationTest extends ContextIntegrationTest {
     void findAll_shouldReturnPaginatedUsers() throws Exception {
         Sector sector_a = createSector("sector_a", null);
         createSector("sector_b", sector_a.getId());
-        createUser("user_a", true, List.of("sector_a"));
-        createUser("user_b", true, List.of("sector_a","sector_b"));
+        createUser("user_a", true, List.of(new SectorDto().setName("sector_a")));
+        createUser("user_b", true, List.of(new SectorDto().setName("sector_a"),new SectorDto().setName("sector_b")));
 
         mockMvc.perform(get("/users")
                 .param("pageNumber", "0")
@@ -30,7 +31,6 @@ class UserIntegrationTest extends ContextIntegrationTest {
                 .andExpect(jsonPath("$.content[0].agreeToTerms").value(true))
                 .andExpect(jsonPath("$.content[0].sectors.length()").value(1))
                 .andExpect(jsonPath("$.content[0].sectors[0].name").value("sector_a"))
-                .andExpect(jsonPath("$.content[0].sectors[0].parentId").isEmpty())
                 .andExpect(jsonPath("$.content[0].sectors[0].children").isEmpty())
                 .andExpect(jsonPath("$.pageable.pageNumber").value(0))
                 .andExpect(jsonPath("$.pageable.pageSize").value(1));

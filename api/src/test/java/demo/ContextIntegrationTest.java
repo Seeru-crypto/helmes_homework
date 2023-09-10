@@ -1,5 +1,6 @@
 package demo;
 
+import demo.controller.dto.SectorDto;
 import demo.model.Sector;
 import demo.model.User;
 import jakarta.persistence.EntityManager;
@@ -17,7 +18,7 @@ public class ContextIntegrationTest extends BaseIntegrationTest {
         return sector;
     }
 
-    protected User createUser(String name, boolean agreeToTerms, List<String> sectorNames) {
+    protected User createUser(String name, boolean agreeToTerms, List<SectorDto> sectorNames) {
         User user = userService.save(new User().setName(name).setAgreeToTerms(agreeToTerms), sectorNames);
         entityManager.persist(user);
         return user;

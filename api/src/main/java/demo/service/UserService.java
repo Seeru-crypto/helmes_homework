@@ -1,5 +1,6 @@
 package demo.service;
 
+import demo.controller.dto.SectorDto;
 import demo.exception.BusinessException;
 import demo.model.Sector;
 import demo.model.User;
@@ -34,9 +35,9 @@ public class UserService {
     }
 
     @Transactional
-    public User save(User user, List<String> sectorNames) {
+    public User save(User user, List<SectorDto> sectorNames) {
         validateUserData(user);
-        List<Sector> sectors = sectorNames.stream().map(sectorService::getSectorByName).toList();
+        List<Sector> sectors = sectorNames.stream().map(sectorDto -> sectorService.getSectorByName( sectorDto.getName() )).toList();
         user.setSectors(sectors);
         return userRepository.save(user);
     }
@@ -57,10 +58,10 @@ public class UserService {
     }
 
     @Transactional
-    public User update(User entity, List<String> sectorNames, Long userId) {
+    public User update(User entity, List<SectorDto> sectorNames, Long userId) {
         validateUserData(entity);
         User user = userRepository.getReferenceById(userId);
-        List<Sector> sectors = sectorNames.stream().map(sectorService::getSectorByName).toList();
+        List<Sector> sectors = sectorNames.stream().map(sectorDto -> sectorService.getSectorByName( sectorDto.getName() )).toList();
         return user
                 .setName(entity.getName())
                 .setSectors(sectors);

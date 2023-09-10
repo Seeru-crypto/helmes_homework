@@ -17,7 +17,6 @@ class SectorIntegrationTest extends ContextIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(1))
                 .andExpect(jsonPath("$[0].name").value("A"))
-                .andExpect(jsonPath("$[0].parentId").isEmpty())
                 .andExpect(jsonPath("$[0].children").isEmpty());
     }
 }
