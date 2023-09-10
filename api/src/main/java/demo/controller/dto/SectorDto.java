@@ -1,5 +1,6 @@
 package demo.controller.dto;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -10,6 +11,9 @@ import java.util.List;
 @Setter
 @ToString
 public class SectorDto {
+
+    @NotNull
     private String name;
+
     private List<SectorDto> children = new ArrayList<>();
 }

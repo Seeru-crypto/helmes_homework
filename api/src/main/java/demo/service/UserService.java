@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 import static demo.exception.BusinessException.USER_NAME_EXISTS;
+import static demo.exception.BusinessException.USER_TOS;
 import static demo.service.UserService.OperationType.SAVE;
 import static demo.service.UserService.OperationType.UPDATE;
 
@@ -34,6 +35,11 @@ public class UserService {
     }
 
     protected void validateUserData(User user, OperationType operationType, Long userId) {
+
+        if (!user.getAgreeToTerms()) {
+            throw new BusinessException(USER_TOS) {
+            };
+        }
 
         if (operationType == SAVE) {
             if (userRepository.existsByName(user.getName())) {

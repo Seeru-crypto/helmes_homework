@@ -3,14 +3,14 @@ package demo;
 import demo.controller.dto.SaveUserDto;
 import demo.controller.dto.SectorDto;
 import demo.model.Sector;
+import demo.model.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -67,5 +67,27 @@ class UserIntegrationTest extends ContextIntegrationTest {
                 .andExpect(jsonPath("$.name").value("new user"))
                 .andExpect(jsonPath("$.agreeToTerms").value(true))
                 .andExpect(jsonPath("$.sectors.length()").value(2));
+    }
+
+    @Test
+    void update_shouldUpdateExistingUser() throws Exception {
+        Sector sector_a = createSector("sector_a", null);
+        createSector("sector_b", sector_a.getId());
+        User createdUser = createUser("user_a", true, List.of("sector_a", "sector_b"));
+
+        SaveUserDto dto = new SaveUserDto()
+                .setSectors(List.of("sector_b"))
+                .setName("new user 2")
+                .setAgreeToTerms(true);
+        byte[] bytes = getBytes(dto);
+
+        mockMvc.perform(put(String.format("/users/%s", createdUser.getId()))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(bytes))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andExpect(jsonPath("$.name").value("new user 2"))
+                .andExpect(jsonPath("$.agreeToTerms").value(true))
+                .andExpect(jsonPath("$.sectors.length()").value(1));
     }
 }

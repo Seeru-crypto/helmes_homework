@@ -2,6 +2,7 @@ package demo.model;
 
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -34,6 +35,7 @@ public class User extends AbstractAuditingEntity<Long> {
     private String name;
 
     @NotNull
+    @AssertTrue
     @Column(name = "agree_terms", nullable = false)
     private Boolean agreeToTerms;
 
