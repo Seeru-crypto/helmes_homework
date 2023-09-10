@@ -33,7 +33,9 @@ public class User extends AbstractAuditingEntity<Long> {
     @Size(max = 200)
     private String name;
 
-    private boolean agreeTerms;
+    @NotNull
+    @Column(name = "agree_terms", nullable = false)
+    private Boolean agreeToTerms;
 
     @ManyToMany(fetch = LAZY,
             cascade = MERGE)

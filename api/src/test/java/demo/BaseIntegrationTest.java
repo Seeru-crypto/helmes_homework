@@ -1,8 +1,9 @@
 package demo;
 
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import demo.service.SectorService;
+import demo.service.UserService;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaBuilder;
@@ -35,6 +36,12 @@ public abstract class BaseIntegrationTest {
 
     @Autowired
     private WebApplicationContext webApplicationContext;
+
+    @Autowired
+    protected UserService userService;
+
+    @Autowired
+    protected SectorService sectorService;
 
     @Autowired
     protected MockMvc mockMvc;

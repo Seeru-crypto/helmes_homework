@@ -9,9 +9,10 @@ import {GetRequest, PostRequest} from "../controller/ApiServices";
 import {SectorDto} from "../interfaces/SectorDto";
 import {mapToOptions, isUserDataValid} from "../utils";
 import {UserDto} from "../interfaces/UserDto";
-import { message } from 'antd';
+import {message} from 'antd';
 import {useMessageStore} from "../zustand/store";
 import {SlugSector, SlugUsers} from "../configs";
+
 interface LandingProps {
     sectors: SectorDto[];
 }
@@ -30,13 +31,13 @@ export interface PaginationWrapper {
     empty: boolean
 }
 
-export default function Home({sectors}: LandingProps): ReactElement | null  {
+export default function Home({sectors}: LandingProps): ReactElement | null {
     const [username, setUsername] = useState('')
     const [selectedSectors, setSelectedSectors] = useState<string[][]>([[]])
     const [agreeToTerms, setAgreeToTerms] = useState<boolean>(false)
     const [options, setOptions] = useState<CascaderOptionProps[]>([])
     const [messageApi, contextHolder] = message.useMessage();
-    const { setMessageApi } = useMessageStore();
+    const {setMessageApi} = useMessageStore();
 
     useEffect(() => {
         setOptions(mapToOptions(sectors))
@@ -54,7 +55,7 @@ export default function Home({sectors}: LandingProps): ReactElement | null  {
         }
 
         if (isUserDataValid(dto, messageApi)){
-            const res = await PostRequest(SlugUsers, dto, messageApi);
+            const res = await PostRequest(SlugUsers, dto, messageApi, "user created successfully")
             console.log("res ", res);
         }
     }
@@ -64,12 +65,13 @@ export default function Home({sectors}: LandingProps): ReactElement | null  {
             {contextHolder}
             <div className="registration">
                 <div className="left">
-                    <TextInput placeholder="username" onChange={setUsername} />
-                    <CheckboxInput label="agree to terms" checkboxState={(newValue: boolean) => setAgreeToTerms(newValue)  } />
+                    <TextInput placeholder="username" onChange={setUsername}/>
+                    <CheckboxInput label="agree to terms"
+                                   checkboxState={(newValue: boolean) => setAgreeToTerms(newValue)}/>
                 </div>
                 <div className="right">
-                    <CascaderInput selectedSectorsCallback={(e) => setSelectedSectors(e)} options={options} />
-                    <CustomButton label="submit" onClick={() => submit()} />
+                    <CascaderInput selectedSectorsCallback={(e) => setSelectedSectors(e)} options={options}/>
+                    <CustomButton label="submit" onClick={() => submit()}/>
                 </div>
             </div>
             <div className="users">
@@ -84,10 +86,10 @@ const HomeStyle = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: ${({ theme }) => theme.size.$100};;
-  gap:  ${({ theme }) => theme.size.$100};
+  padding: ${({theme}) => theme.size.$100};;
+  gap: ${({theme}) => theme.size.$100};
   width: 80%;
-  
+
   .registration {
     display: flex;
     flex-direction: row;
@@ -95,7 +97,7 @@ const HomeStyle = styled.div`
     gap: 4rem;
     width: 100%;
   }
-  
+
   .left, .right {
     display: flex;
     flex-direction: column;
