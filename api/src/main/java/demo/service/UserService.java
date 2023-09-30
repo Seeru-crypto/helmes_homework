@@ -35,7 +35,7 @@ public class UserService {
     }
 
     protected void validateUserData(User user, OperationType operationType, Long userId) {
-
+        // TODO võiks olla kaks funktsiooni, update ja save
         if (!user.getAgreeToTerms()) {
             throw new BusinessException(USER_TOS) {
             };
@@ -65,7 +65,6 @@ public class UserService {
     }
 
     public Page<User> findAll(String sortBy, Integer pageNumber, Integer sizeOfPage) {
-
         if (pageNumber == null) {
             pageNumber = DEFAULT_PAGE_NUMBER;
         }

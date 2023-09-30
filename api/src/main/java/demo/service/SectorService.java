@@ -20,6 +20,7 @@ public class SectorService {
     }
 
 
+    // vüiks kasutada lombok builderit, kuna siis ei initisaliseeri
     public Sector save(Long parentId, String name){
         return sectorRepository.save(new Sector()
                 .setName(name)

@@ -24,7 +24,8 @@ public class StartupLogger {
     @PostConstruct
     public void initApplication() {
         List<String> profiles = Arrays.asList(env.getActiveProfiles());
-
+        // TODO: oleks pidanud kõiki sektoreid dünaamiliselt sisse lugeda
+        // TODO: Andmed ja kood võiks olla pigem lahus
         if (sectorService.findAll().isEmpty()){
             Sector manufacturing = sectorService.save(null, "Manufacturing");
             sectorService.save(manufacturing.getId(), "Construction materials");

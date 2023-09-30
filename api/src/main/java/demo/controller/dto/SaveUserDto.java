@@ -13,7 +13,7 @@ import java.util.List;
 @Setter
 @ToString
 public class SaveUserDto {
-
+// TODO: Hea tava on ikka panna max length´d, et DB´dei saa lõhki lasta
     @NotNull
     private String name;
 

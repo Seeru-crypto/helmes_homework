@@ -8,10 +8,8 @@ import java.util.List;
 
 @Repository
 public interface SectorRepository extends JpaRepository<Sector, Long> {
-
     List<Sector> findAllByParentId(Long parentId);
 
-    List<Sector> findAllByNameIn(List<String> names);
-
+    // võiks kasutada JQUERIT
     Sector findByName (String name);
 }

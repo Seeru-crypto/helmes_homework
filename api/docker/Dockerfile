@@ -1,4 +1,5 @@
 FROM openjdk:17-jdk-alpine
+# TOOD: mitte jdk vaid jre-17
 
 ARG SPRING_DB_PATH
 ENV SPRING_DB_PATH = ${SPRING_DB_PATH}

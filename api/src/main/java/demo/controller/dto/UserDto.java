@@ -15,6 +15,8 @@ import java.util.List;
 public class UserDto {
     // Had to add ID, since on the UI, I could not extract it from the location header.
     // In live prod, this would be a security issue. Since every ID would be exposed.
+
+    // UUID, would be a better choice, but then I would have to change the DB schema.
     private Long id;
 
     @NotNull
