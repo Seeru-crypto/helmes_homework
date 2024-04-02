@@ -128,4 +128,23 @@ class UserIntegrationTest extends ContextIntegrationTest {
                 .andExpect(jsonPath("$.agreeToTerms").value(true))
                 .andExpect(jsonPath("$.sectors.length()").value(1));
     }
+
+    @Test
+    void update_shouldThrowError_ifUserDoesNotExist() throws Exception {
+        Sector sector_a = createSector("sector_a", null);
+        createSector("sector_b", sector_a.getId());
+
+        SaveUserDto dto = new SaveUserDto()
+                .setSectors(List.of("sector_b"))
+                .setName("new@user 2")
+                .setAgreeToTerms(true);
+        byte[] bytes = getBytes(dto);
+
+        mockMvc.perform(put("/users/99")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(bytes))
+                .andExpect(status().isBadRequest())
+                .andDo(print())
+                .andExpect(jsonPath("$").value("given user does not exist"));
+    }
 }

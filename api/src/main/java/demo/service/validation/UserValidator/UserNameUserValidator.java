@@ -1,7 +1,8 @@
-package demo.service.validation;
+package demo.service.validation.UserValidator;
 
 import demo.model.User;
 import demo.repository.UserRepository;
+import demo.service.validation.ValidationResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -9,12 +10,12 @@ import static demo.model.User.USER_MAX_NAME_LENGTH;
 import static demo.model.User.USER_MIN_NAME_LENGTH;
 
 @Component
-public class UserNameValidator implements Validator {
+public class UserNameUserValidator implements UserValidator {
 
   private final UserRepository userRepository;
 
   @Autowired
-  public UserNameValidator(UserRepository userRepository) {
+  public UserNameUserValidator(UserRepository userRepository) {
     this.userRepository = userRepository;
   }
 

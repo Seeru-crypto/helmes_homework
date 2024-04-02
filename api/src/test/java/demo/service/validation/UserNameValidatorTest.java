@@ -2,6 +2,7 @@ package demo.service.validation;
 
 import demo.model.User;
 import demo.repository.UserRepository;
+import demo.service.validation.UserValidator.UserNameUserValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -17,12 +18,12 @@ class UserNameValidatorTest {
   @Mock
   private UserRepository userRepository;
 
-  private UserNameValidator userNameValidator;
+  private UserNameUserValidator userNameValidator;
 
   @BeforeEach
   void setUp() {
     MockitoAnnotations.openMocks(this);
-    userNameValidator = new UserNameValidator(userRepository);
+    userNameValidator = new UserNameUserValidator(userRepository);
   }
 
   @Test

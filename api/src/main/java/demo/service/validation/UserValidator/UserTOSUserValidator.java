@@ -1,12 +1,13 @@
-package demo.service.validation;
+package demo.service.validation.UserValidator;
 
 import demo.model.User;
+import demo.service.validation.ValidationResult;
 import org.springframework.stereotype.Component;
 
 import static demo.exception.BusinessException.USER_TOS;
 
 @Component
-public class UserTOSValidator implements Validator {
+public class UserTOSUserValidator implements UserValidator {
 
   @Override
   public ValidationResult validate(User data) {
