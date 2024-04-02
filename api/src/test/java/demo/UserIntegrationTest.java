@@ -21,8 +21,8 @@ class UserIntegrationTest extends ContextIntegrationTest {
     void findAll_shouldReturnPaginatedUsers() throws Exception {
         Sector sector_a = createSector("sector_a", null);
         createSector("sector_b", sector_a.getId());
-        createUser("user_a", true, List.of("sector_a"));
-        createUser("user_b", true, List.of("sector_a", "sector_b"));
+        createUser("user_a_@", true, List.of("sector_a"));
+        createUser("user_b_@", true, List.of("sector_a", "sector_b"));
 
         mockMvc.perform(get("/users")
                         .param("pageNumber", "0")
@@ -30,7 +30,7 @@ class UserIntegrationTest extends ContextIntegrationTest {
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(jsonPath("$.content.length()").value(1))
-                .andExpect(jsonPath("$.content[0].name").value("user_a"))
+                .andExpect(jsonPath("$.content[0].name").value("user_a_@"))
                 .andExpect(jsonPath("$.content[0].agreeToTerms").value(true))
                 .andExpect(jsonPath("$.content[0].sectors.length()").value(1))
                 .andExpect(jsonPath("$.content[0].sectors[0].name").value("sector_a"))
@@ -42,7 +42,7 @@ class UserIntegrationTest extends ContextIntegrationTest {
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(jsonPath("$.content.length()").value(2))
-                .andExpect(jsonPath("$.content[1].name").value("user_b"))
+                .andExpect(jsonPath("$.content[1].name").value("user_b_@"))
                 .andExpect(jsonPath("$.content[1].agreeToTerms").value(true))
                 .andExpect(jsonPath("$.content[1].sectors.length()").value(2))
                 .andExpect(jsonPath("$.pageable.pageNumber").value(0))
@@ -56,28 +56,66 @@ class UserIntegrationTest extends ContextIntegrationTest {
 
         SaveUserDto dto = new SaveUserDto()
                 .setSectors(List.of("sector_a", "sector_b"))
-                .setName("new user")
+                .setName("new@user")
                 .setAgreeToTerms(true);
         byte[] bytes = getBytes(dto);
         mockMvc.perform(post("/users")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(bytes))
-                .andExpect(status().isCreated())
                 .andDo(print())
-                .andExpect(jsonPath("$.name").value("new user"))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.name").value("new@user"))
                 .andExpect(jsonPath("$.agreeToTerms").value(true))
                 .andExpect(jsonPath("$.sectors.length()").value(2));
+    }
+
+    @Test
+    void save_shouldThrowError_ifNameIncorrect() throws Exception {
+        Sector sector_a = createSector("sector_a", null);
+        createSector("sector_b", sector_a.getId());
+
+        SaveUserDto dto = new SaveUserDto()
+                .setSectors(List.of("sector_a", "sector_b"))
+                .setName("Aasdasdas")
+                .setAgreeToTerms(true);
+        byte[] bytes = getBytes(dto);
+        mockMvc.perform(post("/users")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(bytes))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$").value("does not contain @"));
+    }
+
+    @Test
+    void save_shouldThrowError_ifNameExists() throws Exception {
+        Sector sector_a = createSector("sector_a", null);
+        createSector("sector_b", sector_a.getId());
+        createUser("user_a_@", true, List.of("sector_a", "sector_b"));
+
+        SaveUserDto dto = new SaveUserDto()
+                .setSectors(List.of("sector_a", "sector_b"))
+                .setName("user_a_@")
+                .setAgreeToTerms(true);
+
+        byte[] bytes = getBytes(dto);
+        mockMvc.perform(post("/users")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(bytes))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$").value("Name is not unique"));
     }
 
     @Test
     void update_shouldUpdateExistingUser() throws Exception {
         Sector sector_a = createSector("sector_a", null);
         createSector("sector_b", sector_a.getId());
-        User createdUser = createUser("user_a", true, List.of("sector_a", "sector_b"));
+        User createdUser = createUser("user_a_@", true, List.of("sector_a", "sector_b"));
 
         SaveUserDto dto = new SaveUserDto()
                 .setSectors(List.of("sector_b"))
-                .setName("new user 2")
+                .setName("new@user 2")
                 .setAgreeToTerms(true);
         byte[] bytes = getBytes(dto);
 
@@ -86,7 +124,7 @@ class UserIntegrationTest extends ContextIntegrationTest {
                         .content(bytes))
                 .andExpect(status().isOk())
                 .andDo(print())
-                .andExpect(jsonPath("$.name").value("new user 2"))
+                .andExpect(jsonPath("$.name").value("new@user 2"))
                 .andExpect(jsonPath("$.agreeToTerms").value(true))
                 .andExpect(jsonPath("$.sectors.length()").value(1));
     }

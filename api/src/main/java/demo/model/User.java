@@ -23,6 +23,8 @@ import static jakarta.persistence.FetchType.LAZY;
 @AllArgsConstructor
 @Table(name = "\"user\"")
 public class User extends AbstractAuditingEntity<Long> {
+    public static final int USER_MAX_NAME_LENGTH = 200;
+    public static final int USER_MIN_NAME_LENGTH = 2;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,8 +32,8 @@ public class User extends AbstractAuditingEntity<Long> {
     private Long id;
 
     @NotNull
-    @Size(min = 2)
-    @Size(max = 200)
+    @Size(min = USER_MIN_NAME_LENGTH)
+    @Size(max = USER_MAX_NAME_LENGTH)
     private String name;
 
     @NotNull
