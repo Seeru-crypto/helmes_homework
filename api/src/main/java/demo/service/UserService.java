@@ -8,6 +8,7 @@ import demo.service.validation.ValidationResult;
 import demo.service.validation.Validator;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -19,6 +20,7 @@ import java.util.List;
 import static demo.exception.BusinessException.USER_NAME_EXISTS;
 import static demo.exception.BusinessException.USER_NAME_VALIDATION_FAILED;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -38,6 +40,7 @@ public class UserService {
             .orElse(new ValidationResult().setResult(true)); // If no validation failure, return a successful result
 
     if (!validationResult.isResult()) {
+      log.warn("user validation failed: {}", validationResult.getMessage());
       throw new BusinessException(USER_NAME_VALIDATION_FAILED) {
         // Override getMessage() to provide a custom error message
         @Override
