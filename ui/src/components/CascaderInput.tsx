@@ -15,9 +15,10 @@ export interface CascaderOptionProps {
 }
 
 const CascaderInput = (props: CascaderProps) => {
-    const onChange = (value: string[][]) => {
+
+    function onChange (value: string[][]) {
         props.selectedSectorsCallback(value)
-    };
+    }
 
     return (
         <CascaderStyle>

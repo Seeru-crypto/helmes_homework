@@ -1,13 +1,12 @@
 import styled from "styled-components";
 import {Card, Tag} from "antd";
 import {CardSize} from "antd/es/card/Card";
-import {SectorDto} from "../interfaces/SectorDto";
 
 
 interface UserCardProps {
     size?: CardSize;
     title: string;
-    sectors: SectorDto[];
+    sectors: string[];
 }
 
 const UserCard = (props: UserCardProps) => {
@@ -15,9 +14,9 @@ const UserCard = (props: UserCardProps) => {
         <UserCardStyle>
             <Card size="small" title={props.title} style={{width: 300}}>
                 { props.sectors.length > 0 &&
-                    props.sectors.map((sector: SectorDto, index) => {
+                    props.sectors.map((sector: string, index) => {
                         return (
-                            <Tag key={index} color="geekblue">{sector.name}</Tag>
+                            <Tag key={index} color="geekblue">{sector}</Tag>
                         )
                     }
                     )

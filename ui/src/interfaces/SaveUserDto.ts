@@ -1,5 +1,5 @@
 export interface SaveUserDto {
     name: string;
-    sectors: string[];
+    sectorIds: number[];
     agreeToTerms: boolean;
 }

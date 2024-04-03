@@ -34,3 +34,13 @@ export function isUserDataValid(dto: SaveUserDto, messageApi: MessageInstance ) 
 
     return true;
 }
+
+export function mapSectorsToIds(sectors: string[][]): number[] {
+    var result;
+    result = sectors.flat().map((sector: string) => {
+        return parseInt(sector)
+    })
+    console.log(result)
+
+    return result;
+}

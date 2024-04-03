@@ -7,7 +7,7 @@ import TextInput from "../components/TextInput";
 import CustomButton from "../components/Button";
 import {GetRequest, PostRequest, PutRequest} from "../controller/ApiServices";
 import {SectorDto} from "../interfaces/SectorDto";
-import {isUserDataValid, mapToOptions} from "../utils";
+import {isUserDataValid, mapSectorsToIds, mapToOptions} from "../utils";
 import {SaveUserDto} from "../interfaces/SaveUserDto";
 import {message} from 'antd';
 import {useMessageStore} from "../zustand/store";
@@ -56,7 +56,10 @@ export default function Home({sectors, existingUsers}: LandingProps): ReactEleme
         setMessageApi(messageApi)
     }, [messageApi])
 
+
     async function submit() {
+        console.log("selectedSectors ", selectedSectors)
+        mapSectorsToIds(selectedSectors)
 
         const dto: SaveUserDto = {
             name: username,
@@ -100,7 +103,7 @@ export default function Home({sectors, existingUsers}: LandingProps): ReactEleme
                         users.length > 0 ?
                             users.map((user: UserDto) => {
                                     return (
-                                        <UserCard key={user.name} title={user.name} size={"small"} sectors={[]}/>
+                                        <UserCard key={user.name} title={user.name} size={"small"} sectors={user.sectors}/>
                                     )
                                 }
                             ) : <p>no users</p>
@@ -155,7 +158,7 @@ const HomeStyle = styled.div`
 export const getServerSideProps: GetServerSideProps = async () => {
     const sectors: SectorDto[] = await GetRequest(SlugSector, 'inner' )
     const existingUsers: UserProps = await GetRequest(SlugUsers, 'inner')
-    console.log("existingUsers ", existingUsers)
+    console.log("sectors ", sectors)
     return {props: {sectors, existingUsers}};
 };
 

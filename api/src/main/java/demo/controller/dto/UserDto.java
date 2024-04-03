@@ -26,5 +26,5 @@ public class UserDto {
     private boolean agreeToTerms;
 
     @Size(min=1)
-    private List<Long> sectorIds;
+    private List<String> sectors;
 }

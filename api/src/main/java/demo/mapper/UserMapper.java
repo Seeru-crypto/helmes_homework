@@ -20,11 +20,11 @@ public interface UserMapper {
     @Mapping(target = "sectors", source = "sectorIds")
     User toEntity(SaveUserDto saveUserDto);
 
-    @Mapping(target  = "sectorIds", source = "sectors", qualifiedByName = "mapSectors")
+    @Mapping(target  = "sectors", source = "sectors", qualifiedByName = "mapSectors")
     UserDto toDto(User user);
 
     @Named("mapSectors")
-    default List<Long> mapSectors(List<Sector> value) {
-        return value.stream().map(Sector::getId).toList();
+    default List<String> mapSectors(List<Sector> value) {
+        return value.stream().map(Sector::getName).toList();
     }
 }
