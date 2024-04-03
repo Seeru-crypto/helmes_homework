@@ -17,6 +17,7 @@ public class SaveUserDto {
     @NotNull
     private String name;
 
+    @NotNull
     @Size(min=1)
     private List<Long> sectorIds;
 

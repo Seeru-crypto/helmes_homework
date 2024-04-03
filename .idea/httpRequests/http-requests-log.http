@@ -1,5 +1,156 @@
 POST http://localhost:8880/api/users
 Content-Type: application/json
+Content-Length: 69
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "name":"tetqe25",
+  "sectorIds":[15, 70],
+  "agreeToTerms":true
+}
+
+<> 2024-04-03T183808.201.json
+
+###
+
+POST http://localhost:8880/api/users
+Content-Type: application/json
+Content-Length: 68
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "name":"tetqe5",
+  "sectorIds":[15, 70],
+  "agreeToTerms":true
+}
+
+<> 2024-04-03T183801.400.json
+
+###
+
+POST http://localhost:8880/api/users
+Content-Type: application/json
+Content-Length: 69
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "name":"tetqe5",
+  "sectorIdss":[15, 70],
+  "agreeToTerms":true
+}
+
+<> 2024-04-03T183753.400.json
+
+###
+
+POST http://localhost:8880/api/users
+Content-Type: application/json
+Content-Length: 69
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "name":"tetqe5",
+  "sectorIdss":[15, 70],
+  "agreeToTerms":true
+}
+
+<> 2024-04-03T183737.400.json
+
+###
+
+POST http://localhost:8880/api/users
+Content-Type: application/json
+Content-Length: 69
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "name":"tetqe5",
+  "sectorIdss":[15, 70],
+  "agreeToTerms":true
+}
+
+<> 2024-04-03T183721.400.json
+
+###
+
+POST http://localhost:8880/api/users
+Content-Type: application/json
+Content-Length: 69
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "name":"tetqe5",
+  "sectorIdss":[15, 70],
+  "agreeToTerms":true
+}
+
+<> 2024-04-03T183620.400.json
+
+###
+
+POST http://localhost:8880/api/users
+Content-Type: application/json
+Content-Length: 69
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "name":"tetqe5",
+  "sectorIdss":[15, 70],
+  "agreeToTerms":true
+}
+
+###
+
+POST http://localhost:8880/api/users
+Content-Type: application/json
+Content-Length: 70
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "name":"tetqe5",
+  "sectorNames":[15, 70],
+  "agreeToTerms":true
+}
+
+<> 2024-04-03T183200.400.json
+
+###
+
+POST http://localhost:8880/api/users
+Content-Type: application/json
+Content-Length: 70
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "name":"tet2e5",
+  "sectorNames":[15, 70],
+  "agreeToTerms":true
+}
+
+<> 2024-04-03T183155.400.json
+
+###
+
+POST http://localhost:8880/api/users
+Content-Type: application/json
 Content-Length: 70
 Connection: Keep-Alive
 User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)

@@ -2,6 +2,7 @@ package demo.exception;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -15,6 +16,12 @@ public class RestResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleThrowableException( Throwable ex ) {
         log.warn(ex.toString());
         return ResponseEntity.internalServerError().build();
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    protected ResponseEntity<Object> handleMethodArgumentNotValidException( MethodArgumentNotValidException ex ) {
+        log.warn(ex.toString());
+        return ResponseEntity.badRequest().body(List.of(ex.getBody().getDetail()));
     }
 
     @ExceptionHandler(RuntimeException.class)
