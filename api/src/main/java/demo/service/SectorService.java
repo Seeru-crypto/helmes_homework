@@ -1,16 +1,14 @@
 package demo.service;
 
-import demo.exception.BusinessException;
 import demo.model.Sector;
 import demo.repository.SectorRepository;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import lombok.RequiredArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -32,18 +30,4 @@ public class SectorService {
             .setChildren(new ArrayList<>())
     );
   }
-
-  public Sector findByName(String name) {
-    return sectorRepository.findByName(name);
-  }
-
-  public Sector findById(Long id) {
-    return sectorRepository.findById(id).orElseThrow(() -> {
-      log.warn("sector findById exception: given sector does not exist {}", id);
-      return new BusinessException("given user does not exist") {
-      };
-    });
-  }
-
-
 }

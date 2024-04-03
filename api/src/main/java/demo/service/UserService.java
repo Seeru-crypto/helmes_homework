@@ -1,7 +1,6 @@
 package demo.service;
 
 import demo.exception.BusinessException;
-import demo.model.Sector;
 import demo.model.User;
 import demo.repository.UserRepository;
 import demo.service.validation.ValidationResult;
@@ -22,7 +21,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserService {
   private final UserRepository userRepository;
-  private final SectorService sectorService;
 
   private static final String USER_ID = "id";
   private static final int DEFAULT_PAGE_NUMBER = 0;

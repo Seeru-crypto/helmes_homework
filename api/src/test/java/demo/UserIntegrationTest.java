@@ -86,58 +86,58 @@ class UserIntegrationTest extends ContextIntegrationTest {
             .andExpect(jsonPath("$").value(NAME_DOESNT_CONTAIN_Q.getKood()));
   }
 
-    @Test
-    void save_shouldThrowError_ifNameExists() throws Exception {
-        Sector sector_a = createSector("sector_a", null, 1);
-        var sector_b = createSector("sector_b", sector_a.getId(), 2);
-        createUser("user_a_@", true, List.of(sector_a, sector_b));
+  @Test
+  void save_shouldThrowError_ifNameExists() throws Exception {
+    Sector sector_a = createSector("sector_a", null, 1);
+    var sector_b = createSector("sector_b", sector_a.getId(), 2);
+    createUser("user_a_q", true, List.of(sector_a, sector_b));
 
-        SaveUserDto dto = new SaveUserDto()
-                .setSectorIds(List.of(sector_a.getId(), sector_b.getId()))
-                .setName("user_a_@")
-                .setAgreeToTerms(true);
+    SaveUserDto dto = new SaveUserDto()
+            .setSectorIds(List.of(sector_a.getId(), sector_b.getId()))
+            .setName("user_a_q")
+            .setAgreeToTerms(true);
 
-        byte[] bytes = getBytes(dto);
-        mockMvc.perform(post("/users")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(bytes))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$").value(NAME_NOT_UNIQUE.getKood()));
-    }
+    byte[] bytes = getBytes(dto);
+    mockMvc.perform(post("/users")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(bytes))
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$").value(NAME_NOT_UNIQUE.getKood()));
+  }
 
-    @Test
-    void update_shouldUpdateExistingUser() throws Exception {
-        Sector sector_a = createSector("sector_a", null, 1);
-      Sector sector_b  = createSector("sector_b", sector_a.getId(), 2);
-        User createdUser = createUser("user_a_@", true, List.of(sector_b, sector_a));
+  @Test
+  void update_shouldUpdateExistingUser() throws Exception {
+    Sector sector_a = createSector("sector_a", null, 1);
+    Sector sector_b = createSector("sector_b", sector_a.getId(), 2);
+    User createdUser = createUser("user_a_q", true, List.of(sector_b, sector_a));
 
-        SaveUserDto dto = new SaveUserDto()
-                .setSectorIds(List.of(1L))
-                .setName("new@user 2")
-                .setAgreeToTerms(true);
-        byte[] bytes = getBytes(dto);
+    SaveUserDto dto = new SaveUserDto()
+            .setSectorIds(List.of(1L))
+            .setName("newquser 2")
+            .setAgreeToTerms(true);
+    byte[] bytes = getBytes(dto);
 
-        mockMvc.perform(put(String.format("/users/%s", createdUser.getId()))
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(bytes))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name").value("new@user 2"))
-                .andExpect(jsonPath("$.agreeToTerms").value(true))
-                .andExpect(jsonPath("$.sectorIds.length()").value(1));
-    }
+    mockMvc.perform(put(String.format("/users/%s", createdUser.getId()))
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(bytes))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.name").value("newquser 2"))
+            .andExpect(jsonPath("$.agreeToTerms").value(true))
+            .andExpect(jsonPath("$.sectorIds.length()").value(1));
+  }
 
-    @Test
-    void update_shouldThrowError_ifUserDoesNotExist() throws Exception {
-        SaveUserDto dto = new SaveUserDto()
-                .setSectorIds(List.of(3L))
-                .setName("new@user 2")
-                .setAgreeToTerms(true);
-        byte[] bytes = getBytes(dto);
+  @Test
+  void update_shouldThrowError_ifUserDoesNotExist() throws Exception {
+    SaveUserDto dto = new SaveUserDto()
+            .setSectorIds(List.of(3L))
+            .setName("new@user 2")
+            .setAgreeToTerms(true);
+    byte[] bytes = getBytes(dto);
 
-        mockMvc.perform(put("/users/99")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(bytes))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$").value("given user does not exist"));
-    }
+    mockMvc.perform(put("/users/99")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(bytes))
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$").value("given user does not exist"));
+  }
 }

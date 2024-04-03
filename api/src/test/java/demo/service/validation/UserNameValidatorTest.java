@@ -30,30 +30,30 @@ class UserNameValidatorTest {
 
   @Test
   void testValidate_ValidUser() {
-    User user = new User().setName("valid@username");
+    User user = new User().setName("validqusername");
     when(userRepository.existsByName(anyString())).thenReturn(false);
 
     ValidationResult result = userNameValidator.validate(user);
 
     assertTrue(result.isValid());
     assertNull(result.getMessage());
-    verify(userRepository, times(1)).existsByName("valid@username");
+    verify(userRepository, times(1)).existsByName("validqusername");
   }
 
   @Test
   void testValidate_NonUniqueName() {
-    User user = new User().setName("duplicate@username");
+    User user = new User().setName("duplicatequsername");
     when(userRepository.existsByName(anyString())).thenReturn(true);
 
     ValidationResult result = userNameValidator.validate(user);
 
     assertFalse(result.isValid());
     assertEquals(NAME_NOT_UNIQUE, result.getMessage());
-    verify(userRepository, times(1)).existsByName("duplicate@username");
+    verify(userRepository, times(1)).existsByName("duplicatequsername");
   }
 
   @ParameterizedTest
-  @ValueSource(strings = {"valid@username", "another@example.com"})
+  @ValueSource(strings = {"validqusername", "anotherqexample.com"})
   void testValidate_ValidUserName(String userName) {
     User user = new User().setName(userName);
     when(userRepository.existsByName(userName)).thenReturn(false);
