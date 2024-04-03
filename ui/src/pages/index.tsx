@@ -57,8 +57,6 @@ export default function Home({sectors, existingUsers}: LandingProps): ReactEleme
     }, [messageApi])
 
     async function submit() {
-        console.log("selectedSectors ", selectedSectors)
-
         const dto: SaveUserDto = {
             name: username,
             sectorIds: mapSectorsToIds(selectedSectors, sectors),
@@ -68,20 +66,14 @@ export default function Home({sectors, existingUsers}: LandingProps): ReactEleme
         if (!isUserDataValid(dto, messageApi)) return
 
         const userId = sessionStorage.getItem("USER_ID");
-        console.log("userId ", userId)
-
         if (userId === null) {
-            console.log("creating")
-
             await PostRequest(SlugUsers, dto, messageApi, "user created successfully").then(async (res) => {
-                console.log(res)
                 sessionStorage.setItem("USER_ID", res.id.toString());
                 const updatedUSers: UserProps = await GetRequest(SlugUsers, 'outer')
                 setUsers(updatedUSers.content)
             })
 
         } else {
-            console.log("updating")
             const slug = SlugUsers + "/" + userId
             await PutRequest(slug, dto, messageApi, "user updated successfully")
             const updatedUSers: UserProps = await GetRequest(SlugUsers, 'outer')
@@ -165,8 +157,6 @@ const HomeStyle = styled.div`
 export const getServerSideProps: GetServerSideProps = async () => {
     const sectors: SectorDto[] = await GetRequest(SlugSector, 'inner' )
     const existingUsers: UserProps = await GetRequest(SlugUsers, 'inner')
-    console.log({existingUsers})
-    console.log("sectors ", sectors)
     return {props: {sectors, existingUsers}};
 };
 
