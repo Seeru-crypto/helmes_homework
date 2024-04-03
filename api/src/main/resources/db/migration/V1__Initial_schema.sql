@@ -26,9 +26,9 @@ CREATE TABLE sector
 
 CREATE TABLE user_sectors
 (
-    id          bigserial NOT NULL PRIMARY KEY,
-    user_id     bigint    NOT NULL,
-    sector_id   bigint    NOT NULL,
+    id        bigserial NOT NULL PRIMARY KEY,
+    user_id   bigint    NOT NULL,
+    sector_id bigint    NOT NULL,
     CONSTRAINT user_has_sectors FOREIGN KEY (user_id) REFERENCES "user" (id),
     CONSTRAINT sectors_have_users FOREIGN KEY (sector_id) REFERENCES sector (id)
 );
