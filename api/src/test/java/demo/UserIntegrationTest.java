@@ -30,11 +30,12 @@ class UserIntegrationTest extends ContextIntegrationTest {
                     .param("pageNumber", "0")
                     .param("pageSize", "1"))
             .andExpect(status().isOk())
+            .andDo(print())
             .andExpect(jsonPath("$.content.length()").value(1))
             .andExpect(jsonPath("$.content[0].name").value("user_a_q"))
             .andExpect(jsonPath("$.content[0].agreeToTerms").value(true))
-            .andExpect(jsonPath("$.content[0].sectorIds.length()").value(1))
-            .andExpect(jsonPath("$.content[0].sectorIds[0]").value(1))
+            .andExpect(jsonPath("$.content[0].sectors.length()").value(1))
+            .andExpect(jsonPath("$.content[0].sectors[0]").value("sector_a"))
             .andExpect(jsonPath("$.pageable.pageNumber").value(0))
             .andExpect(jsonPath("$.pageable.pageSize").value(1));
 
@@ -44,7 +45,7 @@ class UserIntegrationTest extends ContextIntegrationTest {
             .andExpect(jsonPath("$.content.length()").value(2))
             .andExpect(jsonPath("$.content[1].name").value("user_b_q"))
             .andExpect(jsonPath("$.content[1].agreeToTerms").value(true))
-            .andExpect(jsonPath("$.content[1].sectorIds.length()").value(2))
+            .andExpect(jsonPath("$.content[1].sectors.length()").value(2))
             .andExpect(jsonPath("$.pageable.pageNumber").value(0))
             .andExpect(jsonPath("$.pageable.pageSize").value(10));
   }
@@ -66,7 +67,7 @@ class UserIntegrationTest extends ContextIntegrationTest {
             .andDo(print())
             .andExpect(jsonPath("$.name").value("newquser"))
             .andExpect(jsonPath("$.agreeToTerms").value(true))
-            .andExpect(jsonPath("$.sectorIds.length()").value(2));
+            .andExpect(jsonPath("$.sectors.length()").value(2));
   }
 
   @Test
@@ -121,9 +122,11 @@ class UserIntegrationTest extends ContextIntegrationTest {
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(bytes))
             .andExpect(status().isOk())
+            .andDo(print())
             .andExpect(jsonPath("$.name").value("newquser 2"))
             .andExpect(jsonPath("$.agreeToTerms").value(true))
-            .andExpect(jsonPath("$.sectorIds.length()").value(1));
+            .andExpect(jsonPath("$.id").value(createdUser.getId()))
+            .andExpect(jsonPath("$.sectors.length()").value(1));
   }
 
   @Test

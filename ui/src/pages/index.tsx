@@ -40,7 +40,6 @@ export default function Home({sectors, existingUsers}: LandingProps): ReactEleme
     const [agreeToTerms, setAgreeToTerms] = useState<boolean>(false)
     const [sectorOptions, setSectorOptions] = useState<CascaderOptionProps[]>([])
     const [users, setUsers] = useState<UserDto[]>([])
-    const [userId, setUserId] = useState<number>(0)
     const [messageApi, contextHolder] = message.useMessage();
     const {setMessageApi} = useMessageStore();
 
@@ -67,12 +66,21 @@ export default function Home({sectors, existingUsers}: LandingProps): ReactEleme
 
         if (!isUserDataValid(dto, messageApi)) return
 
-        if (userId == 0) {
-            const createdUser: UserDto = await PostRequest(SlugUsers, dto, messageApi, "user created successfully")
-            setUserId(createdUser.id)
-            const updatedUSers: UserProps = await GetRequest(SlugUsers, 'outer')
-            setUsers(updatedUSers.content)
+        const userId = sessionStorage.getItem("USER_ID");
+        console.log("userId ", userId)
+
+        if (userId === null) {
+            console.log("creating")
+
+            await PostRequest(SlugUsers, dto, messageApi, "user created successfully").then(async (res) => {
+                console.log(res)
+                sessionStorage.setItem("USER_ID", res.id.toString());
+                const updatedUSers: UserProps = await GetRequest(SlugUsers, 'outer')
+                setUsers(updatedUSers.content)
+            })
+
         } else {
+            console.log("updating")
             const slug = SlugUsers + "/" + userId
             await PutRequest(slug, dto, messageApi, "user updated successfully")
             const updatedUSers: UserProps = await GetRequest(SlugUsers, 'outer')

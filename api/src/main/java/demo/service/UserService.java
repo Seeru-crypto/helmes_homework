@@ -69,13 +69,15 @@ public class UserService {
 
   @Transactional
   public User update(User entity, Long userId) {
-    userRepository.findById(userId)
+    User existingUser = userRepository.findById(userId)
             .orElseThrow(() -> {
               log.warn("update validation exception: given user does not exist {}", userId);
               return new BusinessException("given user does not exist"){};
             });
     validateSaveData_v2(entity);
 
-    return userRepository.save(entity);
+    return existingUser
+            .setName(entity.getName())
+            .setSectors(entity.getSectors());
   }
 }
