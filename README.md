@@ -1,6 +1,6 @@
 # Helmes homework
 
-## setup via docker
+## Setup via docker
 - navigate to /api
 - Build gradle project with either gradle build or gradle assemble
 - navigate to project root
@@ -17,8 +17,8 @@ If it occurs just reload the browser.
 - front-end: decided to use next.js with axios for HTTP requests and zustand for a lightweight state managment and ant UI library
 - reverse-proxy: A simple ngnix reverse-proxy, which proxys all /api requests to the back-end, while forwarding all next.js API calls to back-end as well
 
-## task
-1. Correct all of the deficiencies in index.html (located in root folder)
+## Task
+1. Correct all the deficiencies in index.html (located in root folder)
 
 2. "Sectors" selectbox:
    2.1. Add all the entries from the "Sectors" selectbox to database
@@ -29,3 +29,10 @@ If it occurs just reload the browser.
    3.2. Store all input data to the database (Name, Sectors, Agree to terms)
    3.3. Refill the form using stored data
    3.4. Allow the user to edit his/her own data during the session
+
+## TODO
+- [ ] Add full CRUD functionality for user
+- [ ] Add email and phone numbers to users
+- [ ] add proper automatic docker functionality
+- [ ] Fix cors config in java/demo/ApiApplication.java
+- [ ] Add functionality to add/ change and remove sectors
