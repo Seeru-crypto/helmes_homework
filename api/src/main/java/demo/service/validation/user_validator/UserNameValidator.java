@@ -8,14 +8,17 @@ import org.springframework.stereotype.Component;
 
 import static demo.model.User.USER_MAX_NAME_LENGTH;
 import static demo.model.User.USER_MIN_NAME_LENGTH;
+import static demo.service.validation.user_validator.UserErrors.INCORRECT_LENGTH;
+import static demo.service.validation.user_validator.UserErrors.NAME_DOESNT_CONTAIN_Q;
+import static demo.service.validation.user_validator.UserErrors.NAME_NOT_UNIQUE;
 
 @Component
-public class UserNameUserValidator implements UserValidator {
+public class UserNameValidator implements UserValidator {
 
   private final UserRepository userRepository;
 
   @Autowired
-  public UserNameUserValidator(UserRepository userRepository) {
+  public UserNameValidator(UserRepository userRepository) {
     this.userRepository = userRepository;
   }
 
@@ -23,15 +26,15 @@ public class UserNameUserValidator implements UserValidator {
   public ValidationResult validate(User data) {
     ValidationResult result = new ValidationResult();
     if (!(USER_MIN_NAME_LENGTH <= data.getName().length() && data.getName().length() < USER_MAX_NAME_LENGTH)) {
-      return result.setValid(false).setMessage("incorrect length");
+      return result.setValid(false).setMessage(INCORRECT_LENGTH);
     }
 
     if (!(data.getName().contains("@"))) {
-      return result.setValid(false).setMessage("does not contain @");
+      return result.setValid(false).setMessage(NAME_DOESNT_CONTAIN_Q);
     }
 
     if (!isNameUnique(data.getName())) {
-      return result.setValid(false).setMessage("Name is not unique");
+      return result.setValid(false).setMessage(NAME_NOT_UNIQUE);
     }
     return result.setValid(true);
   }

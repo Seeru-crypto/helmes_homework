@@ -42,7 +42,7 @@ public class UserService {
         // Override getMessage() to provide a custom error message
         @Override
         public String getMessage() {
-          return validationResult.getMessage();
+          return validationResult.getMessage().getKood();
         }
       };
     }

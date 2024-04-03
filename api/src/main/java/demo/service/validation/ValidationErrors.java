@@ -1,5 +1,5 @@
 package demo.service.validation;
 
-public interface EnumInterface {
+public interface ValidationErrors {
     String getKood();
 }

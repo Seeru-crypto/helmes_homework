@@ -10,6 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static demo.service.validation.user_validator.UserErrors.NAME_DOESNT_CONTAIN_Q;
+import static demo.service.validation.user_validator.UserErrors.NAME_NOT_UNIQUE;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -84,7 +86,7 @@ class UserIntegrationTest extends ContextIntegrationTest {
                         .content(bytes))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$").value("does not contain @"));
+                .andExpect(jsonPath("$").value(NAME_DOESNT_CONTAIN_Q.getKood()));
     }
 
     @Test
@@ -104,7 +106,7 @@ class UserIntegrationTest extends ContextIntegrationTest {
                         .content(bytes))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$").value("Name is not unique"));
+                .andExpect(jsonPath("$").value(NAME_NOT_UNIQUE.getKood()));
     }
 
     @Test
