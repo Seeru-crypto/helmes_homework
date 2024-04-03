@@ -11,5 +11,7 @@ import java.util.List;
 public interface SectorMapper {
     List<SectorDto> toDtos(List<Sector> sectors);
 
-    List<Sector> toEntities(List<String> sectors);
+    List<Sector> toEntity(List<SectorDto> dtos);
+
+    Sector toEntity (Long id);
 }

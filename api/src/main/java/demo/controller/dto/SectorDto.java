@@ -15,5 +15,8 @@ public class SectorDto {
     @NotNull
     private String name;
 
+    @NotNull
+    private Long id;
+
     private List<SectorDto> children = new ArrayList<>();
 }

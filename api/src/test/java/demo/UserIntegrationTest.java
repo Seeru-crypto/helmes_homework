@@ -19,80 +19,81 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @Transactional
 class UserIntegrationTest extends ContextIntegrationTest {
-    @Test
-    void findAll_shouldReturnPaginatedUsers() throws Exception {
-        Sector sector_a = createSector("sector_a", null);
-        createSector("sector_b", sector_a.getId());
-        createUser("user_a_@", true, List.of("sector_a"));
-        createUser("user_b_@", true, List.of("sector_a", "sector_b"));
+  @Test
+  void findAll_shouldReturnPaginatedUsers() throws Exception {
+    Sector sector_a = createSector("sector_a", null, 1);
+    Sector sector_b = createSector("sector_b", sector_a.getId(), 2);
+    createUser("user_a_q", true, List.of(sector_a));
+    createUser("user_b_q", true, List.of(sector_a, sector_b));
 
-        mockMvc.perform(get("/users")
-                        .param("pageNumber", "0")
-                        .param("pageSize", "1"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.content.length()").value(1))
-                .andExpect(jsonPath("$.content[0].name").value("user_a_@"))
-                .andExpect(jsonPath("$.content[0].agreeToTerms").value(true))
-                .andExpect(jsonPath("$.content[0].sectors.length()").value(1))
-                .andExpect(jsonPath("$.content[0].sectors[0].name").value("sector_a"))
-                .andExpect(jsonPath("$.content[0].sectors[0].children").isEmpty())
-                .andExpect(jsonPath("$.pageable.pageNumber").value(0))
-                .andExpect(jsonPath("$.pageable.pageSize").value(1));
+    mockMvc.perform(get("/users")
+                    .param("pageNumber", "0")
+                    .param("pageSize", "1"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.content.length()").value(1))
+            .andExpect(jsonPath("$.content[0].name").value("user_a_q"))
+            .andExpect(jsonPath("$.content[0].agreeToTerms").value(true))
+            .andExpect(jsonPath("$.content[0].sectorIds.length()").value(1))
+            .andExpect(jsonPath("$.content[0].sectorIds[0]").value(1))
+            .andExpect(jsonPath("$.pageable.pageNumber").value(0))
+            .andExpect(jsonPath("$.pageable.pageSize").value(1));
 
-        mockMvc.perform(get("/users"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.content.length()").value(2))
-                .andExpect(jsonPath("$.content[1].name").value("user_b_@"))
-                .andExpect(jsonPath("$.content[1].agreeToTerms").value(true))
-                .andExpect(jsonPath("$.content[1].sectors.length()").value(2))
-                .andExpect(jsonPath("$.pageable.pageNumber").value(0))
-                .andExpect(jsonPath("$.pageable.pageSize").value(10));
-    }
+    mockMvc.perform(get("/users"))
+            .andExpect(status().isOk())
+            .andDo(print())
+            .andExpect(jsonPath("$.content.length()").value(2))
+            .andExpect(jsonPath("$.content[1].name").value("user_b_q"))
+            .andExpect(jsonPath("$.content[1].agreeToTerms").value(true))
+            .andExpect(jsonPath("$.content[1].sectorIds.length()").value(2))
+            .andExpect(jsonPath("$.pageable.pageNumber").value(0))
+            .andExpect(jsonPath("$.pageable.pageSize").value(10));
+  }
 
-    @Test
-    void save_shouldSaveANewUSer() throws Exception {
-        Sector sector_a = createSector("sector_a", null);
-        createSector("sector_b", sector_a.getId());
+  @Test
+  void save_shouldSaveANewUser() throws Exception {
+    Sector sector_a = createSector("sector_a", null, 1);
+    createSector("sector_b", sector_a.getId(), 2);
 
-        SaveUserDto dto = new SaveUserDto()
-                .setSectors(List.of("sector_a", "sector_b"))
-                .setName("new@user")
-                .setAgreeToTerms(true);
-        byte[] bytes = getBytes(dto);
-        mockMvc.perform(post("/users")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(bytes))
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.name").value("new@user"))
-                .andExpect(jsonPath("$.agreeToTerms").value(true))
-                .andExpect(jsonPath("$.sectors.length()").value(2));
-    }
+    SaveUserDto dto = new SaveUserDto()
+            .setSectorIds(List.of(1L, 2L))
+            .setName("newquser")
+            .setAgreeToTerms(true);
+    byte[] bytes = getBytes(dto);
+    mockMvc.perform(post("/users")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(bytes))
+            .andExpect(status().isCreated())
+            .andDo(print())
+            .andExpect(jsonPath("$.name").value("newquser"))
+            .andExpect(jsonPath("$.agreeToTerms").value(true))
+            .andExpect(jsonPath("$.sectorIds.length()").value(2));
+  }
 
-    @Test
-    void save_shouldThrowError_ifNameIncorrect() throws Exception {
-        Sector sector_a = createSector("sector_a", null);
-        createSector("sector_b", sector_a.getId());
+  @Test
+  void save_shouldThrowError_ifNameIncorrect() throws Exception {
+    Sector sector_a = createSector("sector_a", null, 1);
+    createSector("sector_b", sector_a.getId(), 2);
 
-        SaveUserDto dto = new SaveUserDto()
-                .setSectors(List.of("sector_a", "sector_b"))
-                .setName("Aasdasdas")
-                .setAgreeToTerms(true);
-        byte[] bytes = getBytes(dto);
-        mockMvc.perform(post("/users")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(bytes))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$").value(NAME_DOESNT_CONTAIN_Q.getKood()));
-    }
+    SaveUserDto dto = new SaveUserDto()
+            .setSectorIds(List.of(1L, 2L))
+            .setName("Aasdasdas")
+            .setAgreeToTerms(true);
+    byte[] bytes = getBytes(dto);
+    mockMvc.perform(post("/users")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(bytes))
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$").value(NAME_DOESNT_CONTAIN_Q.getKood()));
+  }
 
     @Test
     void save_shouldThrowError_ifNameExists() throws Exception {
-        Sector sector_a = createSector("sector_a", null);
-        createSector("sector_b", sector_a.getId());
-        createUser("user_a_@", true, List.of("sector_a", "sector_b"));
+        Sector sector_a = createSector("sector_a", null, 1);
+        var sector_b = createSector("sector_b", sector_a.getId(), 2);
+        createUser("user_a_@", true, List.of(sector_a, sector_b));
 
         SaveUserDto dto = new SaveUserDto()
-                .setSectors(List.of("sector_a", "sector_b"))
+                .setSectorIds(List.of(sector_a.getId(), sector_b.getId()))
                 .setName("user_a_@")
                 .setAgreeToTerms(true);
 
@@ -106,12 +107,12 @@ class UserIntegrationTest extends ContextIntegrationTest {
 
     @Test
     void update_shouldUpdateExistingUser() throws Exception {
-        Sector sector_a = createSector("sector_a", null);
-        createSector("sector_b", sector_a.getId());
-        User createdUser = createUser("user_a_@", true, List.of("sector_a", "sector_b"));
+        Sector sector_a = createSector("sector_a", null, 1);
+      Sector sector_b  = createSector("sector_b", sector_a.getId(), 2);
+        User createdUser = createUser("user_a_@", true, List.of(sector_b, sector_a));
 
         SaveUserDto dto = new SaveUserDto()
-                .setSectors(List.of("sector_b"))
+                .setSectorIds(List.of(1L))
                 .setName("new@user 2")
                 .setAgreeToTerms(true);
         byte[] bytes = getBytes(dto);
@@ -122,16 +123,13 @@ class UserIntegrationTest extends ContextIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value("new@user 2"))
                 .andExpect(jsonPath("$.agreeToTerms").value(true))
-                .andExpect(jsonPath("$.sectors.length()").value(1));
+                .andExpect(jsonPath("$.sectorIds.length()").value(1));
     }
 
     @Test
     void update_shouldThrowError_ifUserDoesNotExist() throws Exception {
-        Sector sector_a = createSector("sector_a", null);
-        createSector("sector_b", sector_a.getId());
-
         SaveUserDto dto = new SaveUserDto()
-                .setSectors(List.of("sector_b"))
+                .setSectorIds(List.of(3L))
                 .setName("new@user 2")
                 .setAgreeToTerms(true);
         byte[] bytes = getBytes(dto);

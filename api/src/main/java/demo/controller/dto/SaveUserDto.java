@@ -18,7 +18,7 @@ public class SaveUserDto {
     private String name;
 
     @Size(min=1)
-    private List<String> sectors;
+    private List<Long> sectorIds;
 
     @AssertTrue
     private boolean agreeToTerms;

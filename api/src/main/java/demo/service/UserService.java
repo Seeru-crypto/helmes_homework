@@ -49,10 +49,9 @@ public class UserService {
   }
 
   @Transactional
-  public User save(User user, List<String> sectorNames) {
+  public User save(User user) {
     validateSaveData_v2(user);
-    List<Sector> sectors = sectorNames.stream().map(sectorService::findByName).toList();
-    user.setSectors(sectors);
+//    List<Sector> sectors = sectorNames.stream().map(sectorService::findByName).toList();
     return userRepository.save(user);
   }
 
@@ -71,17 +70,14 @@ public class UserService {
   }
 
   @Transactional
-  public User update(User entity, List<String> sectorNames, Long userId) {
-    User user = userRepository.findById(userId)
+  public User update(User entity, Long userId) {
+    userRepository.findById(userId)
             .orElseThrow(() -> {
               log.warn("update validation exception: given user does not exist {}", userId);
               return new BusinessException("given user does not exist"){};
             });
     validateSaveData_v2(entity);
 
-    List<Sector> sectors = sectorNames.stream().map(sectorService::findByName).toList();
-    return user
-            .setName(entity.getName())
-            .setSectors(sectors);
+    return userRepository.save(entity);
   }
 }

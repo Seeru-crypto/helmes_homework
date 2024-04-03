@@ -29,7 +29,7 @@ public class UserNameValidator implements UserValidator {
       return result.setValid(false).setMessage(INCORRECT_LENGTH);
     }
 
-    if (!(data.getName().contains("@"))) {
+    if (!(data.getName().contains("q"))) {
       return result.setValid(false).setMessage(NAME_DOESNT_CONTAIN_Q);
     }
 

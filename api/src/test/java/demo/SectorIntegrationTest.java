@@ -11,7 +11,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class SectorIntegrationTest extends ContextIntegrationTest {
     @Test
     void findAll_shouldReturnAllSectors() throws Exception {
-        createSector("A", null);
+        createSector("A", null, 1);
 
         mockMvc.perform(get("/sectors"))
                 .andExpect(status().isOk())

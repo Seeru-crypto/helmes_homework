@@ -40,7 +40,8 @@ public class UserController {
     @PostMapping
     public ResponseEntity<UserDto> save(@Valid @RequestBody SaveUserDto dto) {
         log.info("REST request to save user " + dto);
-        User createdUser = userService.save(userMapper.toEntity(dto), dto.getSectors());
+        User tempUser = userMapper.toEntity(dto);
+        User createdUser = userService.save(tempUser);
         return created(URI.create("/api/users/%s"
                 .formatted(createdUser.getId())))
                 .body(userMapper.toDto(createdUser));
@@ -49,7 +50,7 @@ public class UserController {
     @PutMapping(path = "/{userId}")
     public ResponseEntity<UserDto> update(@Valid @RequestBody SaveUserDto dto, @PathVariable Long userId) {
         log.info("REST request to update user " + dto);
-        User updatedUser = userService.update(userMapper.toEntity(dto), dto.getSectors(), userId);
+        User updatedUser = userService.update(userMapper.toEntity(dto), userId);
         return ResponseEntity.ok(userMapper.toDto(updatedUser));
     }
 }
