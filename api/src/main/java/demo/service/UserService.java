@@ -24,7 +24,7 @@ public class UserService {
 
   private static final String USER_ID = "id";
   private static final int DEFAULT_PAGE_NUMBER = 0;
-  private static final int DEFAULT_SIZE_OF_PAGE = 10;
+  private static final int DEFAULT_SIZE_OF_PAGE = 100;
   private final List<UserValidator> userValidators;
 
   protected void validateSaveData_v2(User user) {

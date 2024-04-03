@@ -45,6 +45,7 @@ export default function Home({sectors, existingUsers}: LandingProps): ReactEleme
 
     useEffect(() => {
         setSectorOptions(mapToOptions(sectors))
+        sessionStorage.clear();
     }, [sectors])
 
     useEffect(() => {
@@ -164,6 +165,7 @@ const HomeStyle = styled.div`
 export const getServerSideProps: GetServerSideProps = async () => {
     const sectors: SectorDto[] = await GetRequest(SlugSector, 'inner' )
     const existingUsers: UserProps = await GetRequest(SlugUsers, 'inner')
+    console.log({existingUsers})
     console.log("sectors ", sectors)
     return {props: {sectors, existingUsers}};
 };
