@@ -100,7 +100,7 @@ export default function Home({sectors, existingUsers}: LandingProps): ReactEleme
                         users.length > 0 ?
                             users.map((user: UserDto) => {
                                     return (
-                                        <UserCard key={user.name} title={user.name} size={"small"} sectors={user.sectors}/>
+                                        <UserCard key={user.name} title={user.name} size={"small"} sectors={[]}/>
                                     )
                                 }
                             ) : <p>no users</p>

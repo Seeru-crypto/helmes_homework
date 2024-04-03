@@ -32,6 +32,7 @@ public class UserController {
             @RequestParam(name = "pageNumber", required = false) Integer pageNumber,
             @RequestParam(name = "pageSize", required = false) Integer pageSize
     ) {
+        log.info("REST request to get all users ");
         Page<User> users = userService.findAll(sortBy, pageNumber, pageSize);
         Page<UserDto> dto = users.map(userMapper::toDto);
         return ResponseEntity.ok(dto);

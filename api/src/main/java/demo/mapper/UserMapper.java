@@ -4,7 +4,6 @@ import demo.controller.dto.SaveUserDto;
 import demo.controller.dto.UserDto;
 import demo.model.Sector;
 import demo.model.User;
-import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
@@ -28,6 +27,4 @@ public interface UserMapper {
     default List<Long> mapSectors(List<Sector> value) {
         return value.stream().map(Sector::getId).toList();
     }
-
-
 }
