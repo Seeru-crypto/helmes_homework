@@ -30,7 +30,6 @@ class UserIntegrationTest extends ContextIntegrationTest {
                         .param("pageNumber", "0")
                         .param("pageSize", "1"))
                 .andExpect(status().isOk())
-                .andDo(print())
                 .andExpect(jsonPath("$.content.length()").value(1))
                 .andExpect(jsonPath("$.content[0].name").value("user_a_@"))
                 .andExpect(jsonPath("$.content[0].agreeToTerms").value(true))
@@ -42,7 +41,6 @@ class UserIntegrationTest extends ContextIntegrationTest {
 
         mockMvc.perform(get("/users"))
                 .andExpect(status().isOk())
-                .andDo(print())
                 .andExpect(jsonPath("$.content.length()").value(2))
                 .andExpect(jsonPath("$.content[1].name").value("user_b_@"))
                 .andExpect(jsonPath("$.content[1].agreeToTerms").value(true))
@@ -64,7 +62,6 @@ class UserIntegrationTest extends ContextIntegrationTest {
         mockMvc.perform(post("/users")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(bytes))
-                .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.name").value("new@user"))
                 .andExpect(jsonPath("$.agreeToTerms").value(true))
@@ -84,7 +81,6 @@ class UserIntegrationTest extends ContextIntegrationTest {
         mockMvc.perform(post("/users")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(bytes))
-                .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$").value(NAME_DOESNT_CONTAIN_Q.getKood()));
     }
@@ -104,7 +100,6 @@ class UserIntegrationTest extends ContextIntegrationTest {
         mockMvc.perform(post("/users")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(bytes))
-                .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$").value(NAME_NOT_UNIQUE.getKood()));
     }
@@ -125,7 +120,6 @@ class UserIntegrationTest extends ContextIntegrationTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(bytes))
                 .andExpect(status().isOk())
-                .andDo(print())
                 .andExpect(jsonPath("$.name").value("new@user 2"))
                 .andExpect(jsonPath("$.agreeToTerms").value(true))
                 .andExpect(jsonPath("$.sectors.length()").value(1));
@@ -146,7 +140,6 @@ class UserIntegrationTest extends ContextIntegrationTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(bytes))
                 .andExpect(status().isBadRequest())
-                .andDo(print())
                 .andExpect(jsonPath("$").value("given user does not exist"));
     }
 }
