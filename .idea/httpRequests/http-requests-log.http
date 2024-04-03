@@ -1,3 +1,12 @@
+GET http://localhost:8880/api/sectors
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.10)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2024-04-03T212927.200.json
+
+###
+
 GET http://localhost:8880/api/users
 Connection: Keep-Alive
 User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.10)
@@ -656,19 +665,6 @@ User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
 Accept-Encoding: br,deflate,gzip,x-gzip
 
 {"name":"tete","sectors":["parent"],"agreeToTerms":true}
-
-###
-
-POST http://localhost:8880/api/sectors
-Content-Type: application/json
-Content-Length: 56
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.7)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-{"name":"tete","sectors":["parent"],"agreeToTerms":true}
-
-<> 2023-09-10T121900.405.json
 
 ###
 

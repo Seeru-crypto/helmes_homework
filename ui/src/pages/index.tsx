@@ -56,14 +56,12 @@ export default function Home({sectors, existingUsers}: LandingProps): ReactEleme
         setMessageApi(messageApi)
     }, [messageApi])
 
-
     async function submit() {
         console.log("selectedSectors ", selectedSectors)
-        mapSectorsToIds(selectedSectors)
 
         const dto: SaveUserDto = {
             name: username,
-            sectors: selectedSectors.flat(),
+            sectorIds: mapSectorsToIds(selectedSectors, sectors),
             agreeToTerms: agreeToTerms
         }
 
