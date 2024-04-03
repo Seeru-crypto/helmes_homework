@@ -38,3 +38,4 @@ If it occurs just reload the browser.
 - [ ] Add functionality to add/ change and remove sectors
 - [ ] Add new page with table, where user can see all registered users and their sectors
 - [ ] Add dynamic filter for that table
+- [ ] Implementeeri DFS ja BFS otsingu algoritmid
