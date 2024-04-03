@@ -29,6 +29,8 @@ public class Sector extends AbstractAuditingEntity<Long> {
     @Column(nullable = false)
     private String name;
 
+    private int value;
+
     @Column
     private Long parentId;
 

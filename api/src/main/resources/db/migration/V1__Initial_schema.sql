@@ -17,6 +17,7 @@ CREATE TABLE sector
 (
     id          bigserial NOT NULL PRIMARY KEY,
     name        text      NOT NULL,
+    value        int NOT NULL unique,
     parent_id   bigint,
     created_by  TEXT,
     created_at  TIMESTAMP,
