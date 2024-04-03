@@ -1,4 +1,4 @@
-package demo.service.validation.UserValidator;
+package demo.service.validation.user_validator;
 
 import demo.model.User;
 import demo.service.validation.ValidationResult;
@@ -13,8 +13,8 @@ public class UserTOSUserValidator implements UserValidator {
   public ValidationResult validate(User data) {
     ValidationResult result = new ValidationResult();
     if (Boolean.TRUE.equals(data.getAgreeToTerms())) {
-      return result.setResult(true);
+      return result.setValid(true);
     }
-    return result.setResult(false).setMessage(USER_TOS);
+    return result.setValid(false).setMessage(USER_TOS);
   }
 }

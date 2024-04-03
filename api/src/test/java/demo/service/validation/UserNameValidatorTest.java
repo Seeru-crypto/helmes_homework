@@ -2,7 +2,7 @@ package demo.service.validation;
 
 import demo.model.User;
 import demo.repository.UserRepository;
-import demo.service.validation.UserValidator.UserNameUserValidator;
+import demo.service.validation.user_validator.UserNameUserValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -33,7 +33,7 @@ class UserNameValidatorTest {
 
     ValidationResult result = userNameValidator.validate(user);
 
-    assertTrue(result.isResult());
+    assertTrue(result.isValid());
     assertNull(result.getMessage());
     verify(userRepository, times(1)).existsByName("valid@username");
   }
@@ -45,7 +45,7 @@ class UserNameValidatorTest {
 
     ValidationResult result = userNameValidator.validate(user);
 
-    assertFalse(result.isResult());
+    assertFalse(result.isValid());
     assertEquals("Name is not unique", result.getMessage());
     verify(userRepository, times(1)).existsByName("duplicate@username");
   }
@@ -58,7 +58,7 @@ class UserNameValidatorTest {
 
     ValidationResult result = userNameValidator.validate(user);
 
-    assertTrue(result.isResult());
+    assertTrue(result.isValid());
     assertEquals(null, result.getMessage());
   }
 
@@ -69,7 +69,7 @@ class UserNameValidatorTest {
 
     ValidationResult result = userNameValidator.validate(user);
 
-    assertFalse(result.isResult());
+    assertFalse(result.isValid());
     assertEquals("does not contain @", result.getMessage());
   }
 }

@@ -1,4 +1,4 @@
-package demo.service.validation.UserValidator;
+package demo.service.validation.user_validator;
 
 import demo.model.User;
 import demo.repository.UserRepository;
@@ -23,16 +23,16 @@ public class UserNameUserValidator implements UserValidator {
   public ValidationResult validate(User data) {
     ValidationResult result = new ValidationResult();
     if (!(USER_MIN_NAME_LENGTH <= data.getName().length() && data.getName().length() < USER_MAX_NAME_LENGTH)) {
-      return result.setResult(false).setMessage("incorrect length");
+      return result.setValid(false).setMessage("incorrect length");
     }
 
     if (!(data.getName().contains("@"))) {
-      return result.setResult(false).setMessage("does not contain @");
+      return result.setValid(false).setMessage("does not contain @");
     }
     if (!isNameUnique(data.getName())) {
-      return result.setResult(false).setMessage("Name is not unique");
+      return result.setValid(false).setMessage("Name is not unique");
     }
-    return result.setResult(true);
+    return result.setValid(true);
   }
 
   private boolean isNameUnique(String name) {

@@ -4,7 +4,7 @@ import demo.exception.BusinessException;
 import demo.model.Sector;
 import demo.model.User;
 import demo.repository.UserRepository;
-import demo.service.validation.UserValidator.UserValidator;
+import demo.service.validation.user_validator.UserValidator;
 import demo.service.validation.ValidationResult;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -34,11 +34,11 @@ public class UserService {
   protected void validateSaveData_v2(User user) {
     ValidationResult validationResult = userValidators.stream()
             .map(userValidator -> userValidator.validate(user))
-            .filter(result -> !result.isResult())
+            .filter(result -> !result.isValid())
             .findFirst()
-            .orElse(new ValidationResult().setResult(true)); // If no validation failure, return a successful result
+            .orElse(new ValidationResult().setValid(true)); // If no validation failure, return a successful result
 
-    if (!validationResult.isResult()) {
+    if (!validationResult.isValid()) {
       log.warn("user validation failed: {}", validationResult.getMessage());
       throw new BusinessException(USER_NAME_VALIDATION_FAILED) {
         // Override getMessage() to provide a custom error message
