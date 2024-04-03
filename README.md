@@ -36,3 +36,6 @@ If it occurs just reload the browser.
 - [ ] add proper automatic docker functionality
 - [ ] Fix cors config in java/demo/ApiApplication.java
 - [ ] Add functionality to add/ change and remove sectors
+- [ ] Add new page with table, where user can see all registered users and their sectors
+- [ ] Add dynamic filter for that table
+- [ ] Implementeeri DFS ja BFS otsingu algoritmid
