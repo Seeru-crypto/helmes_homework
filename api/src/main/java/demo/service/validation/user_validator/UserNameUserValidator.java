@@ -29,6 +29,7 @@ public class UserNameUserValidator implements UserValidator {
     if (!(data.getName().contains("@"))) {
       return result.setValid(false).setMessage("does not contain @");
     }
+
     if (!isNameUnique(data.getName())) {
       return result.setValid(false).setMessage("Name is not unique");
     }

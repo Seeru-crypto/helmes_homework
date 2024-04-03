@@ -4,8 +4,8 @@ import demo.exception.BusinessException;
 import demo.model.Sector;
 import demo.model.User;
 import demo.repository.UserRepository;
-import demo.service.validation.user_validator.UserValidator;
 import demo.service.validation.ValidationResult;
+import demo.service.validation.user_validator.UserValidator;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,8 +16,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-
-import static demo.exception.BusinessException.USER_NAME_VALIDATION_FAILED;
 
 @Slf4j
 @Service
@@ -40,7 +38,7 @@ public class UserService {
 
     if (!validationResult.isValid()) {
       log.warn("user validation failed: {}", validationResult.getMessage());
-      throw new BusinessException(USER_NAME_VALIDATION_FAILED) {
+      throw new BusinessException("DEFAULT_ERROR") {
         // Override getMessage() to provide a custom error message
         @Override
         public String getMessage() {

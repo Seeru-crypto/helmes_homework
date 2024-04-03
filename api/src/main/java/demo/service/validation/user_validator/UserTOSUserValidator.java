@@ -4,10 +4,10 @@ import demo.model.User;
 import demo.service.validation.ValidationResult;
 import org.springframework.stereotype.Component;
 
-import static demo.exception.BusinessException.USER_TOS;
-
 @Component
 public class UserTOSUserValidator implements UserValidator {
+  public static final String USER_TOS = "User must agree to terms of service";
+
 
   @Override
   public ValidationResult validate(User data) {
