@@ -22,6 +22,10 @@ public class UserDto {
     @NotNull
     private String name;
 
+    private String email;
+
+    private String phoneNumber;
+
     @AssertTrue
     private boolean agreeToTerms;
 

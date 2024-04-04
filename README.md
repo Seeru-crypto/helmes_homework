@@ -31,7 +31,7 @@ If it occurs just reload the browser.
    3.4. Allow the user to edit his/her own data during the session
 
 ## TODO
-- [ ] Add full CRUD functionality for user
+- [x] Add full CRUD functionality for user
 - [ ] Add email and phone numbers to users
 - [ ] add proper automatic docker functionality
 - [ ] Fix cors config in java/demo/ApiApplication.java

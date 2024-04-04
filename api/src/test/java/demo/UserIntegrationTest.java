@@ -62,6 +62,8 @@ class UserIntegrationTest extends ContextIntegrationTest {
     SaveUserDto dto = new SaveUserDto()
             .setSectorIds(List.of(1L, 2L))
             .setName("newquser")
+            .setEmail("tere@gmail.com")
+            .setPhoneNumber("+372 1234567")
             .setAgreeToTerms(true);
     byte[] bytes = getBytes(dto);
     mockMvc.perform(post("/users")
@@ -71,6 +73,8 @@ class UserIntegrationTest extends ContextIntegrationTest {
             .andDo(print())
             .andExpect(jsonPath("$.name").value("newquser"))
             .andExpect(jsonPath("$.agreeToTerms").value(true))
+            .andExpect(jsonPath("$.phoneNumber").value("+372 1234567"))
+            .andExpect(jsonPath("$.email").value("tere@gmail.com"))
             .andExpect(jsonPath("$.sectors.length()").value(2));
   }
 
@@ -83,6 +87,7 @@ class UserIntegrationTest extends ContextIntegrationTest {
             .setSectorIds(List.of(1L, 2L))
             .setName("Aasdasdas")
             .setAgreeToTerms(true);
+
     byte[] bytes = getBytes(dto);
     mockMvc.perform(post("/users")
                     .contentType(MediaType.APPLICATION_JSON)

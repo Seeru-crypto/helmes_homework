@@ -4,7 +4,7 @@ import demo.exception.BusinessException;
 import demo.model.User;
 import demo.repository.UserRepository;
 import demo.service.validation.ValidationResult;
-import demo.service.validation.user_validator.UserDeleteValidator;
+import demo.service.validation.user_validator.UserIdValidator;
 import demo.service.validation.user_validator.UserValidator;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -27,9 +27,9 @@ public class UserService {
   private static final int DEFAULT_PAGE_NUMBER = 0;
   private static final int DEFAULT_SIZE_OF_PAGE = 100;
   private final List<UserValidator> userValidators;
-  private final List<UserDeleteValidator> userDeleteValidators;
+  private final List<UserIdValidator> userIdValidators;
 
-  protected void validateSaveData_v2(User user) {
+  protected void validateUserData(User user) {
     ValidationResult validationResult = userValidators.stream()
             .map(userValidator -> userValidator.validate(user))
             .filter(result -> !result.isValid())
@@ -39,8 +39,8 @@ public class UserService {
     validationCleanup(validationResult);
   }
 
-  protected void validateDeleteDataData(Long id) {
-    ValidationResult validationResult = userDeleteValidators.stream()
+  protected void validateUserId(Long id) {
+    ValidationResult validationResult = userIdValidators.stream()
             .map(userValidator -> userValidator.validate(id))
             .filter(result -> !result.isValid())
             .findFirst()
@@ -64,7 +64,7 @@ public class UserService {
 
   @Transactional
   public User save(User user) {
-    validateSaveData_v2(user);
+    validateUserData(user);
     return userRepository.save(user);
   }
 
@@ -89,7 +89,7 @@ public class UserService {
               log.warn("update validation exception: given user does not exist {}", userId);
               return new BusinessException("given user does not exist"){};
             });
-    validateSaveData_v2(entity);
+    validateUserData(entity);
 
     return existingUser
             .setName(entity.getName())
@@ -97,8 +97,7 @@ public class UserService {
   }
 
   public void delete( Long id ) {
-    validateDeleteDataData(id);
-
+    validateUserId(id);
     userRepository.deleteById(id);
   }
 }

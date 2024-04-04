@@ -4,20 +4,22 @@ DROP TABLE IF EXISTS "user" CASCADE;
 
 CREATE TABLE IF NOT EXISTS "user"
 (
-    id          BIGSERIAL NOT NULL PRIMARY KEY,
-    name        CHARACTER VARYING COLLATE pg_catalog."default",
-    agree_terms BOOLEAN,
-    created_by  TEXT,
-    created_at  TIMESTAMP,
-    modified_by TEXT,
-    modified_at TIMESTAMP
+    id           BIGSERIAL NOT NULL PRIMARY KEY,
+    name         CHARACTER VARYING COLLATE pg_catalog."default",
+    agree_terms  BOOLEAN,
+    email        VARCHAR(20),
+    phone_number VARCHAR(100) UNIQUE,
+    created_by   TEXT,
+    created_at   TIMESTAMP,
+    modified_by  TEXT,
+    modified_at  TIMESTAMP
 );
 
 CREATE TABLE sector
 (
     id          bigserial NOT NULL PRIMARY KEY,
     name        text      NOT NULL,
-    value        int NOT NULL unique,
+    value       int       NOT NULL unique,
     parent_id   bigint,
     created_by  TEXT,
     created_at  TIMESTAMP,
