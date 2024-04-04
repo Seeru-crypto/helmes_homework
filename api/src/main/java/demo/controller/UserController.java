@@ -54,4 +54,11 @@ public class UserController {
         User updatedUser = userService.update(userMapper.toEntity(dto), userId);
         return ResponseEntity.ok(userMapper.toDto(updatedUser));
     }
+
+    @DeleteMapping(path = "/{userId}")
+    @Operation(summary = "Delete an existing user")
+    public void delete(@PathVariable Long userId) {
+        log.info("REST request to delete user " + userId);
+        userService.delete(userId);
+    }
 }

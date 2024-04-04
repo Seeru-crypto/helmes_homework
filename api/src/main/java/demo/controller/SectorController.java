@@ -21,5 +21,4 @@ public class SectorController {
     public List<SectorDto> findAll() {
         return sectorMapper.toDtos(sectorService.findAll());
     }
-
 }

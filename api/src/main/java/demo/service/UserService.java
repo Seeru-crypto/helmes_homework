@@ -4,6 +4,7 @@ import demo.exception.BusinessException;
 import demo.model.User;
 import demo.repository.UserRepository;
 import demo.service.validation.ValidationResult;
+import demo.service.validation.user_validator.UserDeleteValidator;
 import demo.service.validation.user_validator.UserValidator;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +27,7 @@ public class UserService {
   private static final int DEFAULT_PAGE_NUMBER = 0;
   private static final int DEFAULT_SIZE_OF_PAGE = 100;
   private final List<UserValidator> userValidators;
+  private final List<UserDeleteValidator> userDeleteValidators;
 
   protected void validateSaveData_v2(User user) {
     ValidationResult validationResult = userValidators.stream()
@@ -34,6 +36,20 @@ public class UserService {
             .findFirst()
             .orElse(new ValidationResult().setValid(true)); // If no validation failure, return a successful result
 
+    validationCleanup(validationResult);
+  }
+
+  protected void validateDeleteDataData(Long id) {
+    ValidationResult validationResult = userDeleteValidators.stream()
+            .map(userValidator -> userValidator.validate(id))
+            .filter(result -> !result.isValid())
+            .findFirst()
+            .orElse(new ValidationResult().setValid(true)); // If no validation failure, return a successful result
+
+    validationCleanup(validationResult);
+  }
+
+  private void validationCleanup(ValidationResult validationResult) {
     if (!validationResult.isValid()) {
       log.warn("user validation failed: {}", validationResult.getMessage());
       throw new BusinessException("DEFAULT_ERROR") {
@@ -49,7 +65,6 @@ public class UserService {
   @Transactional
   public User save(User user) {
     validateSaveData_v2(user);
-//    List<Sector> sectors = sectorNames.stream().map(sectorService::findByName).toList();
     return userRepository.save(user);
   }
 
@@ -79,5 +94,11 @@ public class UserService {
     return existingUser
             .setName(entity.getName())
             .setSectors(entity.getSectors());
+  }
+
+  public void delete( Long id ) {
+    validateDeleteDataData(id);
+
+    userRepository.deleteById(id);
   }
 }

@@ -4,6 +4,7 @@ import demo.controller.dto.SaveUserDto;
 import demo.controller.dto.SectorDto;
 import demo.model.Sector;
 import demo.model.User;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,6 +13,8 @@ import java.util.List;
 
 import static demo.service.validation.user_validator.UserErrors.NAME_DOESNT_CONTAIN_Q;
 import static demo.service.validation.user_validator.UserErrors.NAME_NOT_UNIQUE;
+import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -19,6 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @Transactional
 class UserIntegrationTest extends ContextIntegrationTest {
+
   @Test
   void findAll_shouldReturnPaginatedUsers() throws Exception {
     Sector sector_a = createSector("sector_a", null, 1);
@@ -47,7 +51,7 @@ class UserIntegrationTest extends ContextIntegrationTest {
             .andExpect(jsonPath("$.content[1].agreeToTerms").value(true))
             .andExpect(jsonPath("$.content[1].sectors.length()").value(2))
             .andExpect(jsonPath("$.pageable.pageNumber").value(0))
-            .andExpect(jsonPath("$.pageable.pageSize").value(10));
+            .andExpect(jsonPath("$.pageable.pageSize").value(100));
   }
 
   @Test
@@ -142,5 +146,27 @@ class UserIntegrationTest extends ContextIntegrationTest {
                     .content(bytes))
             .andExpect(status().isBadRequest())
             .andExpect(jsonPath("$").value("given user does not exist"));
+  }
+
+  @Test
+  void delete_shouldDeleteUser_byId() throws Exception {
+    Sector sector_a = createSector("sector_a", null, 1);
+    User existingUser = createUser("user_a_q", true, List.of(sector_a));
+
+    mockMvc.perform(delete(String.format("/users/%s", existingUser.getId())))
+            .andExpect(status().isOk())
+    ;
+    List<User> existingUsers = findAll(User.class);
+    assertEquals(0, existingUsers.size());
+  }
+
+  @Test
+  void delete_shouldThrowError_ifUserDoesNotExist() throws Exception {
+
+    mockMvc.perform(delete(String.format("/users/%s", 99)))
+            .andDo(print())
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$").value("USER_NOT_EXIST"));
+
   }
 }
