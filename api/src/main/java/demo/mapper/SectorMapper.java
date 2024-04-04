@@ -14,4 +14,6 @@ public interface SectorMapper {
     List<Sector> toEntity(List<SectorDto> dtos);
 
     Sector toEntity (Long id);
+
+    SectorDto toDto (Sector sector);
 }

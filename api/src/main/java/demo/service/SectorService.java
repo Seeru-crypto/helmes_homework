@@ -30,4 +30,8 @@ public class SectorService {
             .setChildren(new ArrayList<>())
     );
   }
+
+  public Sector findById(Long id) {
+    return sectorRepository.findById(id).orElse(null);
+  }
 }
