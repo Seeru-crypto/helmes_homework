@@ -32,7 +32,7 @@ If it occurs just reload the browser.
 
 ## TODO
 - [x] Add full CRUD functionality for user
-- [ ] Add email and phone numbers to users
+- [x] Add email and phone numbers to users
 - [ ] add proper automatic docker functionality
 - [ ] Fix cors config in java/demo/ApiApplication.java
 - [ ] Add functionality to add/ change and remove sectors

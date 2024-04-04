@@ -47,7 +47,6 @@ class UserIntegrationTest extends ContextIntegrationTest {
                     .param("pageNumber", "0")
                     .param("sortBy", "id")
                     .param("pageSize", "10"))
-            .andDo(print())
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.content.length()").value(2))
             .andExpect(jsonPath("$.content[1].name").value("user_b_q"))
@@ -80,7 +79,6 @@ class UserIntegrationTest extends ContextIntegrationTest {
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(bytes))
             .andExpect(status().isCreated())
-            .andDo(print())
             .andExpect(jsonPath("$.name").value("newquser"))
             .andExpect(jsonPath("$.agreeToTerms").value(true))
             .andExpect(jsonPath("$.phoneNumber").value("+372 1234567"))
@@ -141,7 +139,6 @@ class UserIntegrationTest extends ContextIntegrationTest {
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(bytes))
             .andExpect(status().isOk())
-            .andDo(print())
             .andExpect(jsonPath("$.name").value("newquser 2"))
             .andExpect(jsonPath("$.agreeToTerms").value(true))
             .andExpect(jsonPath("$.id").value(createdUser.getId()))
@@ -178,9 +175,7 @@ class UserIntegrationTest extends ContextIntegrationTest {
   @Test
   void delete_shouldThrowError_ifUserDoesNotExist() throws Exception {
     mockMvc.perform(delete(String.format("/users/%s", 99)))
-            .andDo(print())
             .andExpect(status().isBadRequest())
             .andExpect(jsonPath("$").value("USER_NOT_EXIST"));
-
   }
 }
