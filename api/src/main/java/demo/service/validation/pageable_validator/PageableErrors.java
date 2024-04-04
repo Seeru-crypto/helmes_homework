@@ -1,7 +1,6 @@
 package demo.service.validation.pageable_validator;
 
 import demo.service.validation.ValidationErrors;
-import demo.service.validation.user_validator.UserErrors;
 
 public enum PageableErrors implements ValidationErrors {
   SIZE_OF_PAGE_INVALID,

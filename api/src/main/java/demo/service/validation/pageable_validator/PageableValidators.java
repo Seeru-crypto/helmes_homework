@@ -6,6 +6,8 @@ import org.springframework.stereotype.Component;
 
 import static demo.service.validation.pageable_validator.PageableErrors.PAGE_NUMBER_INVALID;
 import static demo.service.validation.pageable_validator.PageableErrors.SIZE_OF_PAGE_INVALID;
+import static demo.service.validation.pageable_validator.PageableErrors.SORT_BY_INVALID;
+import static demo.service.validation.pageable_validator.ValidSortByValues.isStringInEnumList;
 
 @Component
 public class PageableValidators implements PageableValidator {
@@ -24,6 +26,10 @@ public class PageableValidators implements PageableValidator {
 
     if (pageableProps.getPageNumber() < PAGE_NR_MIN ) {
       return result.setValid(false).setMessage(PAGE_NUMBER_INVALID);
+    }
+
+    if (!isStringInEnumList(pageableProps.getSortBy())) {
+      return result.setValid(false).setMessage(SORT_BY_INVALID);
     }
 
     return result.setValid(true);
