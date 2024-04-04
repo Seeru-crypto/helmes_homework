@@ -1,10 +1,8 @@
 package demo;
 
 import demo.controller.dto.SaveUserDto;
-import demo.controller.dto.SectorDto;
 import demo.model.Sector;
 import demo.model.User;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,9 +11,11 @@ import java.util.List;
 
 import static demo.service.validation.user_validator.UserErrors.NAME_DOESNT_CONTAIN_Q;
 import static demo.service.validation.user_validator.UserErrors.NAME_NOT_UNIQUE;
-import static org.junit.Assert.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -167,7 +167,6 @@ class UserIntegrationTest extends ContextIntegrationTest {
 
   @Test
   void delete_shouldThrowError_ifUserDoesNotExist() throws Exception {
-
     mockMvc.perform(delete(String.format("/users/%s", 99)))
             .andDo(print())
             .andExpect(status().isBadRequest())

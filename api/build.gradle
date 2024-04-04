@@ -36,7 +36,6 @@ dependencies {
 	annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
 
 	testImplementation 'org.junit.jupiter:junit-jupiter-params:5.9.2'
-
 }
 
 tasks.named('test') {

@@ -93,6 +93,8 @@ public class UserService {
 
     return existingUser
             .setName(entity.getName())
+            .setEmail(entity.getEmail())
+            .setPhoneNumber(entity.getPhoneNumber())
             .setSectors(entity.getSectors());
   }
 
