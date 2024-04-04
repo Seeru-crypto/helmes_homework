@@ -3,10 +3,7 @@ GET localhost:8880/api/sectors
 
 
 ###____________________________ USERS
-GET localhost:8880/api/users
-
-
-
+GET localhost:8880/api/users?sortBy=id&pageNumber=0&pageSize=2
 
 ###
 
@@ -20,7 +17,6 @@ PUT localhost:8880/api/users/3
 Content-Type: application/json
 
 {"name":"AB5","sectorNames":["child 2"],"agreeToTerms":true}
-
 
 ###
 

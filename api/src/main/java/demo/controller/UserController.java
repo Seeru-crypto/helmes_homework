@@ -3,6 +3,7 @@ package demo.controller;
 import demo.controller.dto.SaveUserDto;
 import demo.controller.dto.UserDto;
 import demo.mapper.UserMapper;
+import demo.model.PageableProps;
 import demo.model.User;
 import demo.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -22,43 +23,47 @@ import static org.springframework.http.ResponseEntity.created;
 @RequiredArgsConstructor
 @RequestMapping(path = "/users")
 public class UserController {
-    private final UserService userService;
-    private final UserMapper userMapper;
+  private final UserService userService;
+  private final UserMapper userMapper;
 
-    @GetMapping
-    @Operation(summary = "Get paginated list of all created users")
-    public ResponseEntity<Page<UserDto>> findAll(
-            @RequestParam(name = "sortBy", required = false) String sortBy,
-            @RequestParam(name = "pageNumber", required = false) Integer pageNumber,
-            @RequestParam(name = "pageSize", required = false) Integer pageSize
-    ) {
-        log.info("REST request to get all users ");
-        Page<User> users = userService.findAll(sortBy, pageNumber, pageSize);
-        Page<UserDto> dto = users.map(userMapper::toDto);
-        return ResponseEntity.ok(dto);
-    }
+  @GetMapping
+  @Operation(summary = "Get paginated list of all created users")
+  public ResponseEntity<Page<UserDto>> findAll(
+          @RequestParam(name = "sortBy") String sortBy,
+          @RequestParam(name = "pageNumber") Integer pageNumber,
+          @RequestParam(name = "pageSize") Integer pageSize
+  ) {
+    PageableProps pageableProps = new PageableProps()
+            .setPageNumber(pageNumber)
+            .setSortBy(sortBy)
+            .setSizeOfPage(pageSize);
+    log.info("REST request to get all users: sortBy-{}; pageNumber-{}; pageSize-{}", sortBy, pageNumber, pageSize);
+    Page<User> users = userService.findAll(pageableProps);
+    Page<UserDto> dto = users.map(userMapper::toDto);
+    return ResponseEntity.ok(dto);
+  }
 
-    @PostMapping
-    public ResponseEntity<UserDto> save(@Valid @RequestBody SaveUserDto dto) {
-        log.info("REST request to save user " + dto);
-        User tempUser = userMapper.toEntity(dto);
-        User createdUser = userService.save(tempUser);
-        return created(URI.create("/api/users/%s"
-                .formatted(createdUser.getId())))
-                .body(userMapper.toDto(createdUser));
-    }
+  @PostMapping
+  public ResponseEntity<UserDto> save(@Valid @RequestBody SaveUserDto dto) {
+    log.info("REST request to save user " + dto);
+    User tempUser = userMapper.toEntity(dto);
+    User createdUser = userService.save(tempUser);
+    return created(URI.create("/api/users/%s"
+            .formatted(createdUser.getId())))
+            .body(userMapper.toDto(createdUser));
+  }
 
-    @PutMapping(path = "/{userId}")
-    public ResponseEntity<UserDto> update(@Valid @RequestBody SaveUserDto dto, @PathVariable Long userId) {
-        log.info("REST request to update user " + dto);
-        User updatedUser = userService.update(userMapper.toEntity(dto), userId);
-        return ResponseEntity.ok(userMapper.toDto(updatedUser));
-    }
+  @PutMapping(path = "/{userId}")
+  public ResponseEntity<UserDto> update(@Valid @RequestBody SaveUserDto dto, @PathVariable Long userId) {
+    log.info("REST request to update user " + dto);
+    User updatedUser = userService.update(userMapper.toEntity(dto), userId);
+    return ResponseEntity.ok(userMapper.toDto(updatedUser));
+  }
 
-    @DeleteMapping(path = "/{userId}")
-    @Operation(summary = "Delete an existing user")
-    public void delete(@PathVariable Long userId) {
-        log.info("REST request to delete user " + userId);
-        userService.delete(userId);
-    }
+  @DeleteMapping(path = "/{userId}")
+  @Operation(summary = "Delete an existing user")
+  public void delete(@PathVariable Long userId) {
+    log.info("REST request to delete user " + userId);
+    userService.delete(userId);
+  }
 }

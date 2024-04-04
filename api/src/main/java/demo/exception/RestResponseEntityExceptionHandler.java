@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -21,6 +22,12 @@ public class RestResponseEntityExceptionHandler {
 
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     protected ResponseEntity<Object> handleHttpRequestMethodNotSupportedException( HttpRequestMethodNotSupportedException ex ) {
+        log.warn(ex.toString());
+        return ResponseEntity.badRequest().body(ex.getBody());
+    }
+
+    @ExceptionHandler(MissingServletRequestParameterException.class)
+    protected ResponseEntity<Object> handleMissingServletRequestParameterException( MissingServletRequestParameterException ex ) {
         log.warn(ex.toString());
         return ResponseEntity.badRequest().body(ex.getBody());
     }

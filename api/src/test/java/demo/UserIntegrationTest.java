@@ -32,9 +32,9 @@ class UserIntegrationTest extends ContextIntegrationTest {
 
     mockMvc.perform(get("/users")
                     .param("pageNumber", "0")
+                    .param("sortBy", "id")
                     .param("pageSize", "1"))
             .andExpect(status().isOk())
-            .andDo(print())
             .andExpect(jsonPath("$.content.length()").value(1))
             .andExpect(jsonPath("$.content[0].name").value("user_a_q"))
             .andExpect(jsonPath("$.content[0].agreeToTerms").value(true))
@@ -43,15 +43,25 @@ class UserIntegrationTest extends ContextIntegrationTest {
             .andExpect(jsonPath("$.pageable.pageNumber").value(0))
             .andExpect(jsonPath("$.pageable.pageSize").value(1));
 
-    mockMvc.perform(get("/users"))
-            .andExpect(status().isOk())
+    mockMvc.perform(get("/users")
+                    .param("pageNumber", "0")
+                    .param("sortBy", "id")
+                    .param("pageSize", "10"))
             .andDo(print())
+            .andExpect(status().isOk())
             .andExpect(jsonPath("$.content.length()").value(2))
             .andExpect(jsonPath("$.content[1].name").value("user_b_q"))
             .andExpect(jsonPath("$.content[1].agreeToTerms").value(true))
             .andExpect(jsonPath("$.content[1].sectors.length()").value(2))
             .andExpect(jsonPath("$.pageable.pageNumber").value(0))
-            .andExpect(jsonPath("$.pageable.pageSize").value(100));
+            .andExpect(jsonPath("$.pageable.pageSize").value(10));
+  }
+  @Test
+  void findAll_shouldReturnBadRequest_ifParamMissing() throws Exception {
+    mockMvc.perform(get("/users")
+                    .param("sortBy", "id")
+                    .param("pageSize", "1"))
+            .andExpect(status().isBadRequest());
   }
 
   @Test
