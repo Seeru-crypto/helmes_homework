@@ -25,13 +25,9 @@ import java.util.List;
 public class UserService {
   private final UserRepository userRepository;
 
-  private static final String USER_ID = "id";
-  private static final int DEFAULT_PAGE_NUMBER = 0;
-  private static final int DEFAULT_SIZE_OF_PAGE = 100;
   private final List<UserValidator> userValidators;
   private final List<UserIdValidator> userIdValidators;
   private final List<PageableValidator> pageableValidators;
-
 
     protected void validateUserData(User user) {
     ValidationResult validationResult = userValidators.stream()
@@ -88,19 +84,6 @@ public class UserService {
     Pageable pageable = PageRequest.of(pageableProps.getPageNumber(), pageableProps.getSizeOfPage(), Sort.by(Sort.Direction.ASC, pageableProps.getSortBy()));
     return userRepository.findAll(pageable);
 
-  }
-
-  private Pageable getPageable(String sortBy, Integer pageNumber, Integer sizeOfPage) {
-    if (pageNumber == null) {
-      pageNumber = DEFAULT_PAGE_NUMBER;
-    }
-    if (sizeOfPage == null) {
-      sizeOfPage = DEFAULT_SIZE_OF_PAGE;
-    }
-    if (sortBy == null || sortBy.isEmpty()) {
-      sortBy = USER_ID;
-    }
-    return PageRequest.of(pageNumber, sizeOfPage, Sort.by(Sort.Direction.ASC, sortBy));
   }
 
   @Transactional
