@@ -1,6 +1,5 @@
 package demo;
 
-import demo.controller.dto.SectorDto;
 import demo.model.Sector;
 import demo.model.User;
 import jakarta.persistence.EntityManager;
@@ -10,53 +9,107 @@ import java.util.List;
 
 public class ContextIntegrationTest extends BaseIntegrationTest {
 
-    private static final List<Object> createdEntities = new ArrayList<>();
+  private static final List<Object> createdEntities = new ArrayList<>();
 
-    protected Sector createSector(String name, Long parentId, int value) {
-        Sector sector = sectorService.save(parentId, name, value);
-        entityManager.persist(sector);
-        return sector;
-    }
+  protected Sector createSector(String name, Long parentId, int value) {
+    Sector sector = sectorService.save(parentId, name, value);
+    entityManager.persist(sector);
+    return sector;
+  }
 
-    protected void createFullSectorTree() {
-        Sector sectorA = createSector("A", null, 1);
-        Sector sectorB = createSector("B", sectorA.getId(), 2);
-        Sector sectorC = createSector("C", sectorA.getId(), 3);
-        Sector sectorD = createSector("D", sectorB.getId(), 4);
-        Sector sectorE = createSector("E", sectorB.getId(), 5);
-        Sector sectorF = createSector("F", sectorC.getId(), 6);
-        Sector sectorG = createSector("G", sectorC.getId(), 7);
-        Sector sectorH = createSector("H", sectorD.getId(), 8);
-        Sector sectorI = createSector("I", sectorD.getId(), 9);
-        Sector sectorJ = createSector("J", sectorE.getId(), 10);
-        Sector sectorK = createSector("K", sectorE.getId(), 11);
-        Sector sectorL = createSector("L", sectorF.getId(), 12);
-        Sector sectorM = createSector("M", sectorF.getId(), 13);
-        Sector sectorN = createSector("N", sectorG.getId(), 14);
-        Sector sectorO = createSector("O", sectorG.getId(), 15);
-        Sector sectorP = createSector("P", sectorH.getId(), 16);
-        Sector sectorQ = createSector("Q", sectorH.getId(), 17);
-        Sector sectorR = createSector("R", sectorI.getId(), 18);
-        Sector sectorS = createSector("S", sectorI.getId(), 19);
-        Sector sectorT = createSector("T", sectorJ.getId(), 20);
-        Sector sectorU = createSector("U", sectorJ.getId(), 21);
-        Sector sectorV = createSector("V", sectorK.getId(), 22);
-        Sector sectorW = createSector("W", sectorK.getId(), 23);
-        Sector sectorX = createSector("X", sectorL.getId(), 24);
-    }
+  protected void createFullSectorTree() {
+    Sector sectorA = createSector("Manufacturing", null, 1);
+    Sector sectorB = createSector("Construction materials", sectorA.getId(), 11);
+    Sector sectorC = createSector("Electronics and Optics", sectorA.getId(), 12);
+    Sector sectorD = createSector("Food and Beverage", sectorA.getId(), 13);
+    Sector sectorE = createSector("Bakery & confectionery products", sectorD.getId(), 131);
+    Sector sectorF = createSector("Beverages", sectorD.getId(), 132);
+    Sector sectorG = createSector("Fish & fish products", sectorD.getId(), 133);
+    Sector sectorH = createSector("Milk & dairy products", sectorD.getId(), 134);
+    Sector sectorI = createSector("Other", sectorD.getId(), 135);
+    Sector sectorJ = createSector("Sweets & snack food", sectorD.getId(), 136);
+    Sector sectorK = createSector("Furniture", sectorA.getId(), 14);
+    Sector sectorL = createSector("Bathroom/sauna", sectorK.getId(), 141);
+    Sector sectorM = createSector("Bedroom", sectorK.getId(), 142);
+    Sector sectorN = createSector("Children’s room", sectorK.getId(), 143);
+    Sector sectorO = createSector("Kitchen", sectorK.getId(), 144);
+    Sector sectorP = createSector("Living room", sectorK.getId(), 145);
+    Sector sectorQ = createSector("Office", sectorK.getId(), 146);
+    Sector sectorR = createSector("Other (Furniture)", sectorK.getId(), 147);
+    Sector sectorS = createSector("Outdoor", sectorK.getId(), 148);
+    Sector sectorT = createSector("Project furniture", sectorK.getId(), 149);
+    Sector sectorU = createSector("Machinery", sectorA.getId(), 15);
+    Sector sectorV = createSector("Machinery components", sectorU.getId(), 151);
+    Sector sectorW = createSector("Machinery equipment/tools", sectorU.getId(), 152);
+    Sector sectorX = createSector("Manufacture of machinery", sectorU.getId(), 153);
+    Sector sectorY = createSector("Maritime", sectorU.getId(), 154);
+    Sector sectorZ = createSector("Aluminium and steel workboats", sectorY.getId(), 1541);
+    Sector sectorAA = createSector("Boat/Yacht building", sectorY.getId(), 1542);
+    Sector sectorAB = createSector("Ship repair and conversion", sectorY.getId(), 1543);
+    Sector sectorAC = createSector("Metal structures", sectorU.getId(), 155);
+    Sector sectorAD = createSector("Other", sectorU.getId(), 156);
+    Sector sectorAE = createSector("Repair and maintenance service", sectorU.getId(), 157);
+    Sector sectorAF = createSector("Metalworking", sectorA.getId(), 16);
+    Sector sectorAG = createSector("Construction of metal structures", sectorAF.getId(), 161);
+    Sector sectorAH = createSector("Houses and buildings", sectorAF.getId(), 162);
+    Sector sectorAI = createSector("Metal products", sectorAF.getId(), 163);
+    Sector sectorAJ = createSector("Metal works", sectorAF.getId(), 164);
+    Sector sectorAK = createSector("CNC-machining", sectorAJ.getId(), 1641);
+    Sector sectorAL = createSector("Forgings, Fasteners", sectorAJ.getId(), 1642);
+    Sector sectorAM = createSector("Gas, Plasma, Laser cutting", sectorAJ.getId(), 1643);
+    Sector sectorAN = createSector("MIG, TIG, Aluminum welding", sectorAJ.getId(), 1644);
+    Sector sectorAO = createSector("Plastic and Rubber", sectorA.getId(), 17);
+    Sector sectorAP = createSector("Packaging", sectorAO.getId(), 171);
+    Sector sectorAQ = createSector("Plastic goods", sectorAO.getId(), 172);
+    Sector sectorAR = createSector("Plastic processing technology", sectorAO.getId(), 173);
+    Sector sectorAS = createSector("Blowing", sectorAR.getId(), 1731);
+    Sector sectorAT = createSector("Moulding", sectorAR.getId(), 1732);
+    Sector sectorAU = createSector("Plastics welding and processing", sectorAR.getId(), 1733);
+    Sector sectorAV = createSector("Plastic profiles", sectorAO.getId(), 174);
+    Sector sectorAW = createSector("Printing", sectorA.getId(), 18);
+    Sector sectorAX = createSector("Advertising", sectorAW.getId(), 181);
+    Sector sectorAY = createSector("Book/Periodicals printing", sectorAW.getId(), 182);
+    Sector sectorAZ = createSector("Labelling and packaging printing", sectorAW.getId(), 183);
+    Sector sectorBA = createSector("Textile and Clothing", sectorA.getId(), 19);
+    Sector sectorBB = createSector("Clothing", sectorBA.getId(), 191);
+    Sector sectorBC = createSector("Textile", sectorBA.getId(), 192);
+    Sector sectorBD = createSector("Wood", sectorA.getId(), 20);
+    Sector sectorBE = createSector("Other (Wood)", sectorBD.getId(), 201);
+    Sector sectorBF = createSector("Wooden building materials", sectorBD.getId(), 202);
+    Sector sectorBG = createSector("Wooden houses", sectorBD.getId(), 203);
+    Sector sectorBH = createSector("Other", null, 2);
+    Sector sectorBI = createSector("Creative industries", sectorBH.getId(), 21);
+    Sector sectorBJ = createSector("Energy technology", sectorBH.getId(), 22);
+    Sector sectorBK = createSector("Environment", sectorBH.getId(), 23);
+    Sector sectorBL = createSector("Service", null, 3);
+    Sector sectorBM = createSector("Business services", sectorBL.getId(), 31);
+    Sector sectorBN = createSector("Engineering", sectorBL.getId(), 32);
+    Sector sectorBO = createSector("Information Technology and Telecommunications", sectorBL.getId(), 33);
+    Sector sectorBP = createSector("Data processing, Web portals, E-marketing", sectorBO.getId(), 331);
+    Sector sectorBQ = createSector("Programming, Consultancy", sectorBO.getId(), 332);
+    Sector sectorBR = createSector("Software, Hardware", sectorBO.getId(), 333);
+    Sector sectorBS = createSector("Telecommunications", sectorBO.getId(), 334);
+    Sector sectorBT = createSector("Tourism", sectorBL.getId(), 34);
+    Sector sectorBU = createSector("Translation services", sectorBL.getId(), 35);
+    Sector sectorBV = createSector("Transport and Logistics", sectorBL.getId(), 36);
+    Sector sectorBW = createSector("Air", sectorBV.getId(), 361);
+    Sector sectorBX = createSector("Rail", sectorBV.getId(), 362);
+    Sector sectorBY = createSector("Road", sectorBV.getId(), 363);
+    Sector sectorBZ = createSector("Water", sectorBV.getId(), 364);
+  }
 
     protected User createUser(String name, boolean agreeToTerms, List<Sector> sectors) {
-        User user = userService.save(new User().setName(name).setAgreeToTerms(agreeToTerms).setSectors(sectors));
-        entityManager.persist(user);
-        return user;
-    }
+    User user = userService.save(new User().setName(name).setAgreeToTerms(agreeToTerms).setSectors(sectors));
+    entityManager.persist(user);
+    return user;
+  }
 
-    public static void clear() {
-        createdEntities.clear();
-    }
+  public static void clear() {
+    createdEntities.clear();
+  }
 
-    public static void persistCreatedEntities(EntityManager em) {
-        createdEntities.forEach(em::persist);
-        em.flush();
-    }
+  public static void persistCreatedEntities(EntityManager em) {
+    createdEntities.forEach(em::persist);
+    em.flush();
+  }
 }

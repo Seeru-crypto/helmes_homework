@@ -1,6 +1,5 @@
 package demo;
 
-import demo.model.Sector;
 import org.junit.jupiter.api.Test;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,12 +18,11 @@ class SectorIntegrationTest extends ContextIntegrationTest {
         mockMvc.perform(get("/sectors"))
                 .andExpect(status().isOk())
                 .andDo(print())
-                .andExpect(jsonPath("$.length()").value(1))
-                .andExpect(jsonPath("$[0].name").value("A"))
-                .andExpect(jsonPath("$[0].children.length()").value(2));
+                .andExpect(jsonPath("$.length()").value(3))
+                .andExpect(jsonPath("$[0].name").value("Manufacturing"))
+                .andExpect(jsonPath("$[0].children.length()").value(10));
     }
 
-    // TODO: Fix test
     @Test
     void findById_shouldReturnSingleSector() throws Exception {
         createFullSectorTree();
@@ -32,8 +30,9 @@ class SectorIntegrationTest extends ContextIntegrationTest {
         mockMvc.perform(get("/sectors/{id}", 4L))
                 .andExpect(status().isOk())
                 .andDo(print())
-                .andExpect(jsonPath("$.name").value("A"))
-                .andExpect(jsonPath("$.children").isEmpty());
+                .andExpect(jsonPath("$.name").value("Food and Beverage"))
+                .andExpect(jsonPath("$.id").value("4"))
+                .andExpect(jsonPath("$.children.length()").value(6));
     }
 
     // TODO: Fix test

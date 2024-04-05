@@ -1,5 +1,6 @@
 package demo.service;
 
+import demo.exception.BusinessException;
 import demo.model.Sector;
 import demo.repository.SectorRepository;
 import jakarta.transaction.Transactional;
@@ -23,11 +24,9 @@ public class SectorService {
   // vüiks kasutada lombok builderit, kuna siis ei initisaliseeri
 
   private void addChildren(Sector child) {
-    Sector parent = sectorRepository.findById(child.getParentId()).orElse(null);
-    if (parent == null) {
-      log.error("Parent not found for child {}", child);
-      return;
-    }
+    Sector parent = sectorRepository.findById(child.getParentId())
+            .orElseThrow(() -> new BusinessException("Parent not found") {
+            });
     parent.addChild(child);
   }
 
