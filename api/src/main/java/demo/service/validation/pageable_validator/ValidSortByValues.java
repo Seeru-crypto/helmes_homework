@@ -3,11 +3,11 @@ package demo.service.validation.pageable_validator;
 import demo.service.validation.user_validator.UserErrors;
 
 public enum ValidSortByValues {
-  ID,
-  NAME,
-  PHONENUMBER,
-  EMAIL,
-  AGREETOTERMS;
+  ID, // USER.ID
+  NAME, // USER.NAME
+  PHONENUMBER,  // USER.PHONENUMBER
+  EMAIL, // USER.EMAIL
+  AGREETOTERMS; // USER.AGREETOTERMS
 
   public static UserErrors getValue(String kood) { return UserErrors.valueOf(kood);}
 
