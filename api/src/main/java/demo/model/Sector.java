@@ -45,4 +45,8 @@ public class Sector extends AbstractAuditingEntity<Long> {
     public void removeChild(Sector child) {
         children.remove(child);
     }
+
+    public void removeAllChildren() {
+        children.clear();
+    }
 }

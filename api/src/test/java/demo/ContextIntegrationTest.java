@@ -98,7 +98,15 @@ public class ContextIntegrationTest extends BaseIntegrationTest {
     Sector sectorBZ = createSector("Water", sectorBV.getId(), 364);
   }
 
-    protected User createUser(String name, boolean agreeToTerms, List<Sector> sectors) {
+  protected boolean sectorExists(Long sectorId) {
+    return sectorService.existsById(sectorId);
+  }
+
+  protected Sector findSectorById(Long id) {
+    return sectorService.findById(id);
+  }
+
+  protected User createUser(String name, boolean agreeToTerms, List<Sector> sectors) {
     User user = userService.save(new User().setName(name).setAgreeToTerms(agreeToTerms).setSectors(sectors));
     entityManager.persist(user);
     return user;

@@ -41,6 +41,32 @@ public class SectorService {
   }
 
   public Sector findById(Long id) {
-    return sectorRepository.findById(id).orElse(null);
+    return sectorRepository.findById(id).orElseThrow(() -> {
+      log.warn("Sector not found: {}", id);
+       return new BusinessException("Sector not found"){};
+    });
+  }
+
+  public boolean existsById(Long id) {
+    return sectorRepository.existsById(id);
+  }
+
+  @Transactional
+  public void deleteById(Long id) {
+    Sector sector = findById(id);
+    // update existing parent-child connections
+    updateParentChildConnections(sector);
+    // delete the sector
+    sector.removeAllChildren();
+    sectorRepository.deleteById(id);
+  }
+
+  private void updateParentChildConnections(Sector sector) {
+    if (sector.getChildren().isEmpty()) return;
+
+    sector.getChildren().forEach(child -> {
+      child.setParentId(sector.getParentId());
+      sectorRepository.save(child);
+    });
   }
 }

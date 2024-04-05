@@ -3,10 +3,7 @@ package demo.controller;
 import demo.controller.dto.SectorDto;
 import lombok.RequiredArgsConstructor;
 import demo.mapper.SectorMapper;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import demo.service.SectorService;
 
 import java.util.List;
@@ -26,5 +23,10 @@ public class SectorController {
     @GetMapping("/{id}")
     public SectorDto findById(@PathVariable Long id) {
         return sectorMapper.toDto(sectorService.findById(id));
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteById(@PathVariable Long id) {
+        sectorService.deleteById(id);
     }
 }
