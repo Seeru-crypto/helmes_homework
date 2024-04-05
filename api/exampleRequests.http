@@ -1,6 +1,9 @@
 ###____________________________ SECTORS
 GET localhost:8880/api/sectors
 
+###____________________________ SECTORS
+DELETE localhost:8880/api/sectors/1
+
 
 ###____________________________ USERS
 GET localhost:8880/api/users?sortBy=id&pageNumber=0&pageSize=2

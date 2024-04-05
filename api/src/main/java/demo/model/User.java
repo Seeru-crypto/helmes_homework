@@ -61,4 +61,8 @@ public class User extends AbstractAuditingEntity<Long> {
             inverseJoinColumns = @JoinColumn(name = "sector_id")
     )
     List<Sector> sectors = new ArrayList<>();
+
+    public void removeSector(Sector sector) {
+        this.sectors.remove(sector);
+    }
 }

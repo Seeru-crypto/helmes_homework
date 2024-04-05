@@ -34,7 +34,9 @@ public class Sector extends AbstractAuditingEntity<Long> {
     @Column
     private Long parentId;
 
-    @OneToMany(cascade = ALL, orphanRemoval = true)
+    @OneToMany(cascade = ALL
+//            , orphanRemoval = true
+    )
     @JoinColumn(name = "parentId")
     private List<Sector> children = new ArrayList<>();
 

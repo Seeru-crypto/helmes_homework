@@ -16,6 +16,8 @@ import java.util.List;
 public class SectorService {
   private final SectorRepository sectorRepository;
 
+  private final UserService userService;
+
   @Transactional
   public List<Sector> findAll() {
     return sectorRepository.findAllByParentId(null);
@@ -54,6 +56,10 @@ public class SectorService {
   public void deleteById(Long id) {
     Sector sector = findById(id);
     // update existing parent-child connections
+
+    // remove from user
+    userService.removeSectorFromAllUsers(sector);
+
     updateParentChildConnections(sector);
     // delete the sector
     sector.removeAllChildren();

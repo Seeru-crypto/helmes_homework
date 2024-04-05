@@ -1,6 +1,4 @@
-BEGIN;
-
-TRUNCATE TABLE sector cascade;
+TRUNCATE sector cascade;
 ALTER SEQUENCE sector_id_seq RESTART WITH 1;
 
 INSERT INTO sector (name, parent_id, created_by, created_at, modified_by, modified_at, ID, value)
@@ -99,5 +97,3 @@ VALUES ('Manufacturing', NULL, NULL, CURRENT_TIMESTAMP, NULL, CURRENT_TIMESTAMP,
        ('Rail', 74, NULL, CURRENT_TIMESTAMP, NULL, CURRENT_TIMESTAMP, 76, 362),
        ('Road', 74, NULL, CURRENT_TIMESTAMP, NULL, CURRENT_TIMESTAMP, 77, 363),
        ('Water', 74, NULL, CURRENT_TIMESTAMP, NULL, CURRENT_TIMESTAMP, 78, 364);
-
-END;

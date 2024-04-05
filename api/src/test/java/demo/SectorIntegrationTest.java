@@ -75,6 +75,58 @@ class SectorIntegrationTest extends ContextIntegrationTest {
 
   @Test
   void remove_shouldRemoveSector_onMiddleLeaf() throws Exception {
+    createFullSectorTree();
+
+    List<Long> childIds = findSectorById(4L).getChildren().stream().map(Sector::getId).toList();
+    assertEquals(6, childIds.size());
+    Long parentId = findSectorById(4L).getParentId();
+
+    mockMvc.perform(delete("/sectors/{id}", 4L))
+            .andExpect(status().isOk())
+    ;
+    Assertions.assertFalse(sectorExists(4L));
+
+    for (Long childId : childIds) {
+      assertEquals(parentId, findSectorById(childId).getParentId());
+    }
+  }
+
+  @Test
+  void remove_shouldRemoveSector_fromUser_sectorTable() throws Exception {
+    createFullSectorTree();
+    List<Sector> list = List.of(findSectorById(1L), findSectorById(4L), findSectorById(6L));
+    createUser("userq1", true, list);
+
+    // assert user has 3 sectors connected
+    mockMvc.perform(get("/users")
+                    .param("pageNumber", "0")
+                    .param("sortBy", "id")
+                    .param("pageSize", "1")
+            )
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.content[0].sectors.length()").value(3))
+            .andExpect(jsonPath("$.content[0].sectors[0]").value("Manufacturing"))
+            .andExpect(jsonPath("$.content[0].sectors[1]").value("Food and Beverage"))
+            .andExpect(jsonPath("$.content[0].sectors[2]").value("Beverages"))
+    ;
+
+    mockMvc.perform(delete("/sectors/{id}", 4L))
+            .andExpect(status().isOk())
+    ;
+
+    // assert user has 3 sectors connected
+    mockMvc.perform(get("/users")
+                    .param("pageNumber", "0")
+                    .param("sortBy", "id")
+                    .param("pageSize", "1")
+            )
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.content[0].sectors.length()").value(2))
+            .andExpect(jsonPath("$.content[0].sectors[0]").value("Manufacturing"))
+            .andExpect(jsonPath("$.content[0].sectors[1]").value("Beverages"))
+    ;
 
   }
 

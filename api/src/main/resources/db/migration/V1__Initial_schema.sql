@@ -15,6 +15,8 @@ CREATE TABLE IF NOT EXISTS "user"
     modified_at  TIMESTAMP
 );
 
+DROP TABLE IF EXISTS sector CASCADE;
+
 CREATE TABLE sector
 (
     id          bigserial NOT NULL PRIMARY KEY,
@@ -26,6 +28,8 @@ CREATE TABLE sector
     modified_by TEXT,
     modified_at TIMESTAMP
 );
+
+DROP TABLE IF EXISTS user_sectors CASCADE;
 
 CREATE TABLE user_sectors
 (

@@ -2,6 +2,7 @@ package demo.service;
 
 import demo.exception.BusinessException;
 import demo.model.PageableProps;
+import demo.model.Sector;
 import demo.model.User;
 import demo.repository.UserRepository;
 import demo.service.validation.ValidationResult;
@@ -106,5 +107,9 @@ public class UserService {
   public void delete(Long id) {
     validateUserId(id);
     userRepository.deleteById(id);
+  }
+
+  public void removeSectorFromAllUsers(Sector sector) {
+    userRepository.findAllBySectorsContains(sector).forEach(user -> user.removeSector(sector));
   }
 }
