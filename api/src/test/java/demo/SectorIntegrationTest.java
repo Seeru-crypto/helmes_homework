@@ -12,7 +12,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @Transactional
 class SectorIntegrationTest extends ContextIntegrationTest {
-    // TODO: Fix test
     @Test
     void findAll_shouldReturnAllSectors() throws Exception {
         createFullSectorTree();
@@ -22,7 +21,7 @@ class SectorIntegrationTest extends ContextIntegrationTest {
                 .andDo(print())
                 .andExpect(jsonPath("$.length()").value(1))
                 .andExpect(jsonPath("$[0].name").value("A"))
-                .andExpect(jsonPath("$[0].children").isNotEmpty());
+                .andExpect(jsonPath("$[0].children.length()").value(2));
     }
 
     // TODO: Fix test

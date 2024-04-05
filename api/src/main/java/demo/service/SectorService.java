@@ -7,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -22,13 +21,24 @@ public class SectorService {
   }
 
   // vüiks kasutada lombok builderit, kuna siis ei initisaliseeri
+
+  private void addChildren(Sector child) {
+    Sector parent = sectorRepository.findById(child.getParentId()).orElse(null);
+    if (parent == null) {
+      log.error("Parent not found for child {}", child);
+      return;
+    }
+    parent.addChild(child);
+  }
+
   public Sector save(Long parentId, String name, int value) {
-    return sectorRepository.save(new Sector()
+    Sector child = sectorRepository.save(new Sector()
             .setName(name)
             .setValue(value)
             .setParentId(parentId)
-            .setChildren(new ArrayList<>())
     );
+    if (parentId != null) addChildren(child);
+    return child;
   }
 
   public Sector findById(Long id) {
