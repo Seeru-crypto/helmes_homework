@@ -51,6 +51,7 @@ class SectorIntegrationTest extends ContextIntegrationTest {
             .andDo(print())
             .andExpect(status().isOk())
     ;
+    // TODO: replace entitymanager call with a sector service call
     assertFalse(sectorExists(2L));
   }
 

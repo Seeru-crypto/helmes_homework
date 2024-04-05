@@ -51,7 +51,6 @@ public class SectorService {
     return sectorRepository.existsById(id);
   }
 
-  @Transactional
   public void deleteById(Long id) {
     Sector sector = findById(id);
     // update existing parent-child connections

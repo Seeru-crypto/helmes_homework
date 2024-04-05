@@ -98,9 +98,14 @@ public class ContextIntegrationTest extends BaseIntegrationTest {
     Sector sectorBZ = createSector("Water", sectorBV.getId(), 364);
   }
 
-  protected boolean sectorExists(Long sectorId) {
+  protected boolean sectorExists_v2(Long sectorId) {
     return sectorService.existsById(sectorId);
   }
+
+  protected boolean sectorExists(Long sectorId) {
+    return entityManager.find(Sector.class, sectorId) != null;
+  }
+
 
   protected Sector findSectorById(Long id) {
     return sectorService.findById(id);
