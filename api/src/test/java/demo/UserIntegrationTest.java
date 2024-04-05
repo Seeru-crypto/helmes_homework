@@ -5,22 +5,17 @@ import demo.model.Sector;
 import demo.model.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 import static demo.service.validation.user_validator.UserErrors.NAME_DOESNT_CONTAIN_Q;
 import static demo.service.validation.user_validator.UserErrors.NAME_NOT_UNIQUE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@Transactional
 class UserIntegrationTest extends ContextIntegrationTest {
 
   @Test
@@ -31,9 +26,9 @@ class UserIntegrationTest extends ContextIntegrationTest {
     createUser("user_b_q", true, List.of(sector_a, sector_b));
 
     mockMvc.perform(get("/users")
-                    .param("pageNumber", "0")
-                    .param("sortBy", "id")
-                    .param("pageSize", "1"))
+                    .param("page", "0")
+                    .param("sort", "id,asc")
+                    .param("size", "1"))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.content.length()").value(1))
             .andExpect(jsonPath("$.content[0].name").value("user_a_q"))
@@ -44,9 +39,9 @@ class UserIntegrationTest extends ContextIntegrationTest {
             .andExpect(jsonPath("$.pageable.pageSize").value(1));
 
     mockMvc.perform(get("/users")
-                    .param("pageNumber", "0")
-                    .param("sortBy", "id")
-                    .param("pageSize", "10"))
+                    .param("page", "0")
+                    .param("sort", "id")
+                    .param("size", "10"))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.content.length()").value(2))
             .andExpect(jsonPath("$.content[1].name").value("user_b_q"))
@@ -54,13 +49,6 @@ class UserIntegrationTest extends ContextIntegrationTest {
             .andExpect(jsonPath("$.content[1].sectors.length()").value(2))
             .andExpect(jsonPath("$.pageable.pageNumber").value(0))
             .andExpect(jsonPath("$.pageable.pageSize").value(10));
-  }
-  @Test
-  void findAll_shouldReturnBadRequest_ifParamMissing() throws Exception {
-    mockMvc.perform(get("/users")
-                    .param("sortBy", "id")
-                    .param("pageSize", "1"))
-            .andExpect(status().isBadRequest());
   }
 
   @Test
@@ -107,7 +95,7 @@ class UserIntegrationTest extends ContextIntegrationTest {
   @Test
   void save_shouldThrowError_ifNameExists() throws Exception {
     Sector sector_a = createSector("sector_a", null, 1);
-    var sector_b = createSector("sector_b", sector_a.getId(), 2);
+    Sector sector_b = createSector("sector_b", sector_a.getId(), 2);
     createUser("user_a_q", true, List.of(sector_a, sector_b));
 
     SaveUserDto dto = new SaveUserDto()

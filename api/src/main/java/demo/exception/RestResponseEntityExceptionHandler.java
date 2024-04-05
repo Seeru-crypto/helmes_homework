@@ -16,43 +16,43 @@ public class RestResponseEntityExceptionHandler {
 
     @ExceptionHandler(Throwable.class)
     protected ResponseEntity<Object> handleThrowableException( Throwable ex ) {
-        log.warn(ex.toString());
+        log.warn(ex.toString(), ex);
         return ResponseEntity.internalServerError().build();
     }
 
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     protected ResponseEntity<Object> handleHttpRequestMethodNotSupportedException( HttpRequestMethodNotSupportedException ex ) {
-        log.warn(ex.toString());
+        log.warn(ex.toString(), ex);
         return ResponseEntity.badRequest().body(ex.getBody());
     }
 
     @ExceptionHandler(MissingServletRequestParameterException.class)
     protected ResponseEntity<Object> handleMissingServletRequestParameterException( MissingServletRequestParameterException ex ) {
-        log.warn(ex.toString());
+        log.warn(ex.toString(), ex);
         return ResponseEntity.badRequest().body(ex.getBody());
     }
 
     @ExceptionHandler(IllegalArgumentException .class)
     protected ResponseEntity<Object> handleIllegalArgumentException ( IllegalArgumentException  ex ) {
-        log.warn(ex.toString());
+        log.warn(ex.toString(), ex);
         return ResponseEntity.badRequest().body(ex.getMessage());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     protected ResponseEntity<Object> handleMethodArgumentNotValidException( MethodArgumentNotValidException ex ) {
-        log.warn(ex.toString());
+        log.warn(ex.toString(), ex);
         return ResponseEntity.badRequest().body(List.of(ex.getBody().getDetail()));
     }
 
     @ExceptionHandler(RuntimeException.class)
     protected ResponseEntity<Object> handleRuntimeException( RuntimeException ex ) {
-        log.warn(ex.toString());
+        log.warn(ex.toString(), ex);
         return ResponseEntity.badRequest().body(List.of(ex.getMessage()));
     }
 
     @ExceptionHandler(BusinessException.class)
     protected ResponseEntity<Object> handleConflict( BusinessException ex ) {
-        log.warn(ex.toString());
+        log.warn(ex.toString(), ex);
         return ResponseEntity.badRequest().body(List.of(ex.getMessage()));
     }
 }

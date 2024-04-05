@@ -11,6 +11,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,17 +29,8 @@ public class UserController {
 
   @GetMapping
   @Operation(summary = "Get paginated list of all created users")
-  public ResponseEntity<Page<UserDto>> findAll(
-          @RequestParam(name = "sortBy") String sortBy,
-          @RequestParam(name = "pageNumber") Integer pageNumber,
-          @RequestParam(name = "pageSize") Integer pageSize
-  ) {
-    PageableProps pageableProps = new PageableProps()
-            .setPageNumber(pageNumber)
-            .setSortBy(sortBy)
-            .setSizeOfPage(pageSize);
-    log.info("REST request to get all users: sortBy-{}; pageNumber-{}; pageSize-{}", sortBy, pageNumber, pageSize);
-    Page<User> users = userService.findAll(pageableProps);
+  public ResponseEntity<Page<UserDto>> findAll(Pageable pageable) {
+    Page<User> users = userService.findAll_v2(pageable);
     Page<UserDto> dto = users.map(userMapper::toDto);
     return ResponseEntity.ok(dto);
   }

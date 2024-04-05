@@ -84,7 +84,10 @@ public class UserService {
 
     Pageable pageable = PageRequest.of(pageableProps.getPageNumber(), pageableProps.getSizeOfPage(), Sort.by(Sort.Direction.ASC, pageableProps.getSortBy()));
     return userRepository.findAll(pageable);
+  }
 
+  public Page<User> findAll_v2(Pageable pageable) {
+    return userRepository.findAll(pageable);
   }
 
   @Transactional
@@ -110,6 +113,9 @@ public class UserService {
   }
 
   public void removeSectorFromAllUsers(Sector sector) {
-    userRepository.findAllBySectorsContains(sector).forEach(user -> user.removeSector(sector));
+    userRepository
+            .findAllBySectorsContains(sector)
+            .forEach(user ->
+                    user.removeSector(sector));
   }
 }

@@ -13,7 +13,6 @@ public class ContextIntegrationTest extends BaseIntegrationTest {
 
   protected Sector createSector(String name, Long parentId, int value) {
     Sector sector = sectorService.save(parentId, name, value);
-    entityManager.persist(sector);
     return sector;
   }
 
@@ -113,7 +112,6 @@ public class ContextIntegrationTest extends BaseIntegrationTest {
 
   protected User createUser(String name, boolean agreeToTerms, List<Sector> sectors) {
     User user = userService.save(new User().setName(name).setAgreeToTerms(agreeToTerms).setSectors(sectors));
-    entityManager.persist(user);
     return user;
   }
 

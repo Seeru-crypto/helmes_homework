@@ -60,9 +60,15 @@ public class User extends AbstractAuditingEntity<Long> {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "sector_id")
     )
-    List<Sector> sectors = new ArrayList<>();
+    private List<Sector> sectors = new ArrayList<>();
 
     public void removeSector(Sector sector) {
         this.sectors.remove(sector);
+    }
+
+    public User setSectors(List<Sector> sectors) {
+        this.sectors.clear();
+        this.sectors.addAll(sectors);
+        return this;
     }
 }

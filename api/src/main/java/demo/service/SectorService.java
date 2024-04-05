@@ -32,6 +32,7 @@ public class SectorService {
     parent.addChild(child);
   }
 
+  @Transactional
   public Sector save(Long parentId, String name, int value) {
     Sector child = sectorRepository.save(new Sector()
             .setName(name)

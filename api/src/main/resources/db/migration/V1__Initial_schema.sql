@@ -1,5 +1,3 @@
-BEGIN;
-
 DROP TABLE IF EXISTS "user" CASCADE;
 
 CREATE TABLE IF NOT EXISTS "user"
@@ -24,9 +22,9 @@ CREATE TABLE sector
     value       int       NOT NULL unique,
     parent_id   bigint,
     created_by  TEXT,
-    created_at  TIMESTAMP,
+    created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
     modified_by TEXT,
-    modified_at TIMESTAMP
+    modified_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
 DROP TABLE IF EXISTS user_sectors CASCADE;
@@ -39,5 +37,3 @@ CREATE TABLE user_sectors
     CONSTRAINT user_has_sectors FOREIGN KEY (user_id) REFERENCES "user" (id),
     CONSTRAINT sectors_have_users FOREIGN KEY (sector_id) REFERENCES sector (id)
 );
-
-END;
