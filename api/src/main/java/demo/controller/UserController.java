@@ -58,4 +58,6 @@ public class UserController {
     log.info("REST request to delete user " + userId);
     userService.delete(userId);
   }
+
+  // FindAll users by sector
 }

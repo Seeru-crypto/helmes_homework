@@ -75,4 +75,18 @@ public class SectorService {
       sectorRepository.save(child);
     });
   }
+
+  public Sector save(Sector sector) {
+    if (sectorRepository.existsByName(sector.getName())) {
+      log.warn("Sector with the given name exists {}", sector.getName());
+      throw new BusinessException("Sector with the given name exists") {};
+    }
+
+    if (sectorRepository.existsByValue(sector.getValue())) {
+      log.warn("Sector with the given value  exists {}", sector.getValue());
+      throw new BusinessException("Sector with the given value  exists") {};
+    }
+
+    return sectorRepository.save(sector);
+  }
 }

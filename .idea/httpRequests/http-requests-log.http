@@ -1,3 +1,37 @@
+GET http://localhost:8880/api/sectors
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.10)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2024-04-06T140334.200.json
+
+###
+
+GET http://localhost:8880/api/sectors/3
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.10)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2024-04-06T140327.200.json
+
+###
+
+DELETE http://localhost:8880/api/sectors/100
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.10)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2024-04-06T140238.400.json
+
+###
+
+DELETE http://localhost:8880/api/sectors/100
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.10)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+###
+
 POST http://localhost:8880/api/users
 Content-Type: application/json
 Content-Length: 69
@@ -411,58 +445,6 @@ User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
 Accept-Encoding: br,deflate,gzip,x-gzip
 
 <> 2024-04-04T150314.400.json
-
-###
-
-GET http://localhost:8880/api/sectors
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.10)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-<> 2024-04-03T212927.200.json
-
-###
-
-GET http://localhost:8880/api/users
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.10)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-<> 2024-04-03T202329.200.json
-
-###
-
-POST http://localhost:8880/api/users
-Content-Type: application/json
-Content-Length: 69
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.10)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-{
-  "name":"tetqe25",
-  "sectorIds":[15, 70],
-  "agreeToTerms":true
-}
-
-<> 2024-04-03T202314.201.json
-
-###
-
-POST http://localhost:8880/api/users
-Content-Type: application/json
-Content-Length: 69
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-{
-  "name":"tetqe25",
-  "sectorIds":[15, 70],
-  "agreeToTerms":true
-}
-
-<> 2024-04-03T183808.201.json
 
 ###
 

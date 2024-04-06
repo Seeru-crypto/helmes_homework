@@ -1,8 +1,10 @@
 package demo;
 
+import demo.controller.dto.SectorDto;
 import demo.model.Sector;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.springframework.http.MediaType;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -10,8 +12,7 @@ import java.util.List;
 import static org.junit.Assert.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -54,7 +55,6 @@ class SectorIntegrationTest extends ContextIntegrationTest {
     // TODO: replace entitymanager call with a sector service call
     assertFalse(sectorExists(2L));
   }
-
 
   @Test
   void remove_shouldRemoveSector_onTopLeaf() throws Exception {
@@ -127,7 +127,49 @@ class SectorIntegrationTest extends ContextIntegrationTest {
             .andExpect(jsonPath("$.content[0].sectors[0]").value("Manufacturing"))
             .andExpect(jsonPath("$.content[0].sectors[1]").value("Beverages"))
     ;
-
   }
 
+  @Test
+  void save_shouldSaveSector() throws Exception {
+    SectorDto sectorDto = new SectorDto().setName("tere").setParentId(null).setValue(2);
+    byte[] bytes = getBytes(sectorDto);
+    mockMvc.perform(post("/sectors")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(bytes))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.name").value("tere"))
+            .andExpect(jsonPath("$.id").value(1))
+            .andExpect(jsonPath("$.parentId").isEmpty())
+            .andExpect(jsonPath("$.value").value(2))
+            .andExpect(jsonPath("$.children.length()").value(0))
+    ;
+  }
+
+  @Test
+  void save_shouldReturnBadRequest_ifNameExists() throws Exception {
+    Sector existingSetor = createSector("tere", null, 2);
+
+    SectorDto sectorDto = new SectorDto().setName(existingSetor.getName()).setParentId(1L).setValue(23);
+    byte[] bytes = getBytes(sectorDto);
+    mockMvc.perform(post("/sectors")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(bytes))
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$").value("Sector with the given name exists"))
+    ;
+  }
+
+  @Test
+  void save_shouldReturnBadRequest_ifValueExists() throws Exception {
+    Sector existingSetor = createSector("tere", null, 2);
+
+    SectorDto sectorDto = new SectorDto().setName("pere").setParentId(1L).setValue(existingSetor.getValue());
+    byte[] bytes = getBytes(sectorDto);
+    mockMvc.perform(post("/sectors")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(bytes))
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$").value("Sector with the given value  exists"))
+    ;
+  }
 }

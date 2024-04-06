@@ -1,8 +1,11 @@
 ###____________________________ SECTORS
 GET localhost:8880/api/sectors
 
-###____________________________ SECTORS
-DELETE localhost:8880/api/sectors/1
+###
+GET localhost:8880/api/sectors/3
+
+###
+DELETE localhost:8880/api/sectors/100
 
 
 ###____________________________ USERS

@@ -1,13 +1,18 @@
 package demo.controller;
 
 import demo.controller.dto.SectorDto;
-import lombok.RequiredArgsConstructor;
 import demo.mapper.SectorMapper;
-import org.springframework.web.bind.annotation.*;
+import demo.model.Sector;
 import demo.service.SectorService;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(path = "/sectors")
@@ -17,16 +22,32 @@ public class SectorController {
 
     @GetMapping
     public List<SectorDto> findAll() {
+        log.info("REST request to findAll sectors");
         return sectorMapper.toDtos(sectorService.findAll());
     }
 
     @GetMapping("/{id}")
     public SectorDto findById(@PathVariable Long id) {
+        log.info("REST request to sector by id: {}", id);
         return sectorMapper.toDto(sectorService.findById(id));
     }
 
     @DeleteMapping("/{id}")
     public void deleteById(@PathVariable Long id) {
+        log.info("REST request to delete sector by id: {}", id);
         sectorService.deleteById(id);
     }
+
+    @PostMapping
+    public ResponseEntity<SectorDto> save(@Valid @RequestBody SectorDto sectorDto) {
+        log.info("REST request to save sector: {}", sectorDto);
+        Sector createdSector = sectorService.save(sectorMapper.toEntity(sectorDto));
+        return ResponseEntity.ok(sectorMapper.toDto(createdSector));
+    }
+
+    // PUT sector
+
+
+
+
 }

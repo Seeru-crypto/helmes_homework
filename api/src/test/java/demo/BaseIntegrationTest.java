@@ -3,6 +3,7 @@ package demo;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import demo.controller.dto.SaveUserDto;
+import demo.controller.dto.SectorDto;
 import demo.service.SectorService;
 import demo.service.UserService;
 import jakarta.persistence.EntityManager;
@@ -60,6 +61,10 @@ public abstract class BaseIntegrationTest {
         return allQuery.getResultList();
     }
     protected byte[] getBytes( SaveUserDto dto ) throws JsonProcessingException {
+        return objectMapper.writeValueAsBytes(dto);
+    }
+
+    protected byte[] getBytes( SectorDto dto ) throws JsonProcessingException {
         return objectMapper.writeValueAsBytes(dto);
     }
 
