@@ -3,8 +3,9 @@ package demo.controller;
 import demo.controller.dto.SaveUserDto;
 import demo.controller.dto.UserDto;
 import demo.mapper.UserMapper;
-import demo.model.PageableProps;
+import demo.model.Sector;
 import demo.model.User;
+import demo.service.SectorService;
 import demo.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
@@ -16,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.List;
 
 import static org.springframework.http.ResponseEntity.created;
 
@@ -25,12 +27,13 @@ import static org.springframework.http.ResponseEntity.created;
 @RequestMapping(path = "/users")
 public class UserController {
   private final UserService userService;
+  private final SectorService sectorService;
   private final UserMapper userMapper;
 
   @GetMapping
   @Operation(summary = "Get paginated list of all created users")
   public ResponseEntity<Page<UserDto>> findAll(Pageable pageable) {
-    Page<User> users = userService.findAll_v2(pageable);
+    Page<User> users = userService.findAll(pageable);
     Page<UserDto> dto = users.map(userMapper::toDto);
     return ResponseEntity.ok(dto);
   }
@@ -59,5 +62,12 @@ public class UserController {
     userService.delete(userId);
   }
 
-  // FindAll users by sector
+  @GetMapping(path="sector/{sectorId}")
+  public ResponseEntity<List<UserDto>> findAllBySector(@PathVariable Long sectorId) {
+    log.info("REST request to get all users by sector " + sectorId);
+    Sector existingSector = sectorService.findById(sectorId);
+    List<User> users = userService.findAllBySector(existingSector);
+    List<UserDto> dto = users.stream().map(userMapper::toDto).toList();
+    return ResponseEntity.ok(dto);
+  }
 }

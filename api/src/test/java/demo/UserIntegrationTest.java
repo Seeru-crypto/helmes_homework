@@ -144,8 +144,7 @@ class UserIntegrationTest extends ContextIntegrationTest {
     mockMvc.perform(put("/users/99")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(bytes))
-            .andExpect(status().isBadRequest())
-            .andExpect(jsonPath("$").value("given user does not exist"));
+            .andExpect(status().isNotFound());
   }
 
   @Test
@@ -165,5 +164,31 @@ class UserIntegrationTest extends ContextIntegrationTest {
     mockMvc.perform(delete(String.format("/users/%s", 99)))
             .andExpect(status().isBadRequest())
             .andExpect(jsonPath("$").value("USER_NOT_EXIST"));
+  }
+
+  @Test
+  void findAllBySector_shouldReturnUsersBySector() throws Exception {
+    createFullSectorTree();
+    User user_a = createUser("user_a_q", true, List.of(findSectorById(1L)));
+    User user_b = createUser("user_b_q", true, List.of(findSectorById(2L), findSectorById(3L)));
+    User user_c = createUser("user_c_q", true, List.of(findSectorById(1L), findSectorById(5L)));
+
+    mockMvc.perform(get("/users/sector/1"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.length()").value(2))
+            .andExpect(jsonPath("$[0].name").value(user_a.getName()))
+            .andExpect(jsonPath("$[0].sectors.length()").value(user_a.getSectors().size()))
+            .andExpect(jsonPath("$[0].sectors[0]").value("Manufacturing"))
+            .andExpect(jsonPath("$[1].name").value(user_c.getName()))
+            .andExpect(jsonPath("$[1].sectors.length()").value(user_c.getSectors().size()))
+            .andExpect(jsonPath("$[1].sectors[0]").value("Manufacturing"))
+            .andExpect(jsonPath("$[1].sectors[1]").value("Bakery & confectionery products"));
+  }
+
+  @Test
+  void findAllBySector_shouldReturnNotFound_ifSectorIdMissing() throws Exception {
+    mockMvc.perform(get("/users/sector/99"))
+            .andDo(print())
+            .andExpect(status().isNotFound());
   }
 }

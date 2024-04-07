@@ -55,4 +55,10 @@ public class RestResponseEntityExceptionHandler {
         log.warn(ex.toString(), ex);
         return ResponseEntity.badRequest().body(List.of(ex.getMessage()));
     }
+
+    @ExceptionHandler(NotFoundException.class)
+    protected ResponseEntity<Object> handleNotFound( NotFoundException ex ) {
+        log.warn(ex.toString(), ex);
+        return ResponseEntity.notFound().build();
+    }
 }

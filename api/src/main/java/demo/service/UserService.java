@@ -1,6 +1,7 @@
 package demo.service;
 
 import demo.exception.BusinessException;
+import demo.exception.NotFoundException;
 import demo.model.PageableProps;
 import demo.model.Sector;
 import demo.model.User;
@@ -13,9 +14,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,98 +23,95 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class UserService {
-  private final UserRepository userRepository;
+    private final UserRepository userRepository;
 
-  private final List<UserValidator> userValidators;
-  private final List<UserIdValidator> userIdValidators;
-  private final List<PageableValidator> pageableValidators;
+    private final List<UserValidator> userValidators;
+    private final List<UserIdValidator> userIdValidators;
+    private final List<PageableValidator> pageableValidators;
 
     protected void validateUserData(User user) {
-    ValidationResult validationResult = userValidators.stream()
-            .map(userValidator -> userValidator.validate(user))
-            .filter(result -> !result.isValid())
-            .findFirst()
-            .orElse(new ValidationResult().setValid(true)); // If no validation failure, return a successful result
+        ValidationResult validationResult = userValidators.stream()
+                .map(userValidator -> userValidator.validate(user))
+                .filter(result -> !result.isValid())
+                .findFirst()
+                .orElse(new ValidationResult().setValid(true)); // If no validation failure, return a successful result
 
-    validationCleanup(validationResult);
-  }
-
-  protected void validateUserId(Long id) {
-    ValidationResult validationResult = userIdValidators.stream()
-            .map(userValidator -> userValidator.validate(id))
-            .filter(result -> !result.isValid())
-            .findFirst()
-            .orElse(new ValidationResult().setValid(true)); // If no validation failure, return a successful result
-
-    validationCleanup(validationResult);
-  }
-
-  protected void validatePageableProps(PageableProps pageableProps) {
-    ValidationResult validationResult = pageableValidators.stream()
-            .map(userValidator -> userValidator.validate(pageableProps))
-            .filter(result -> !result.isValid())
-            .findFirst()
-            .orElse(new ValidationResult().setValid(true)); // If no validation failure, return a successful result
-
-    validationCleanup(validationResult);
-  }
-
-  private void validationCleanup(ValidationResult validationResult) {
-    if (!validationResult.isValid()) {
-      log.warn("user validation failed: {}", validationResult.getMessage());
-      throw new BusinessException("DEFAULT_ERROR") {
-        // Override getMessage() to provide a custom error message
-        @Override
-        public String getMessage() {
-          return validationResult.getMessage().getKood();
-        }
-      };
+        validationCleanup(validationResult);
     }
-  }
 
-  @Transactional
-  public User save(User user) {
-    validateUserData(user);
-    return userRepository.save(user);
-  }
+    protected void validateUserId(Long id) {
+        ValidationResult validationResult = userIdValidators.stream()
+                .map(userValidator -> userValidator.validate(id))
+                .filter(result -> !result.isValid())
+                .findFirst()
+                .orElse(new ValidationResult().setValid(true)); // If no validation failure, return a successful result
 
-  public Page<User> findAll(PageableProps pageableProps) {
-    validatePageableProps(pageableProps);
+        validationCleanup(validationResult);
+    }
 
-    Pageable pageable = PageRequest.of(pageableProps.getPageNumber(), pageableProps.getSizeOfPage(), Sort.by(Sort.Direction.ASC, pageableProps.getSortBy()));
-    return userRepository.findAll(pageable);
-  }
+    protected void validatePageableProps(PageableProps pageableProps) {
+        ValidationResult validationResult = pageableValidators.stream()
+                .map(userValidator -> userValidator.validate(pageableProps))
+                .filter(result -> !result.isValid())
+                .findFirst()
+                .orElse(new ValidationResult().setValid(true)); // If no validation failure, return a successful result
 
-  public Page<User> findAll_v2(Pageable pageable) {
-    return userRepository.findAll(pageable);
-  }
+        validationCleanup(validationResult);
+    }
 
-  @Transactional
-  public User update(User entity, Long userId) {
-    User existingUser = userRepository.findById(userId)
-            .orElseThrow(() -> {
-              log.warn("update validation exception: given user does not exist {}", userId);
-              return new BusinessException("given user does not exist") {
-              };
-            });
-    validateUserData(entity);
+    private void validationCleanup(ValidationResult validationResult) {
+        if (!validationResult.isValid()) {
+            log.warn("user validation failed: {}", validationResult.getMessage());
+            throw new BusinessException("DEFAULT_ERROR") {
+                // Override getMessage() to provide a custom error message
+                @Override
+                public String getMessage() {
+                    return validationResult.getMessage().getKood();
+                }
+            };
+        }
+    }
 
-    return existingUser
-            .setName(entity.getName())
-            .setEmail(entity.getEmail())
-            .setPhoneNumber(entity.getPhoneNumber())
-            .setSectors(entity.getSectors());
-  }
+    @Transactional
+    public User save(User user) {
+        validateUserData(user);
+        return userRepository.save(user);
+    }
 
-  public void delete(Long id) {
-    validateUserId(id);
-    userRepository.deleteById(id);
-  }
+    public Page<User> findAll(Pageable pageable) {
+        return userRepository.findAll(pageable);
+    }
 
-  public void removeSectorFromAllUsers(Sector sector) {
-    userRepository
-            .findAllBySectorsContains(sector)
-            .forEach(user ->
-                    user.removeSector(sector));
-  }
+    @Transactional
+    public User update(User entity, Long userId) {
+        User existingUser = userRepository.findById(userId)
+                .orElseThrow(() -> {
+                    log.warn("update validation exception: given user does not exist {}", userId);
+                    return new NotFoundException("given user does not exist") {
+                    };
+                });
+        validateUserData(entity);
+
+        return existingUser
+                .setName(entity.getName())
+                .setEmail(entity.getEmail())
+                .setPhoneNumber(entity.getPhoneNumber())
+                .setSectors(entity.getSectors());
+    }
+
+    public void delete(Long id) {
+        validateUserId(id);
+        userRepository.deleteById(id);
+    }
+
+    public void removeSectorFromAllUsers(Sector sector) {
+        userRepository
+                .findAllBySectorsContains(sector)
+                .forEach(user ->
+                        user.removeSector(sector));
+    }
+
+    public List<User> findAllBySector(Sector existingSector) {
+        return userRepository.findAllBySectorsContains(existingSector);
+    }
 }
