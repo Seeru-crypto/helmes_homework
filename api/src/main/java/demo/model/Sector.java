@@ -10,7 +10,7 @@ import lombok.ToString;
 import java.util.ArrayList;
 import java.util.List;
 
-import static jakarta.persistence.CascadeType.ALL;
+import static jakarta.persistence.CascadeType.MERGE;
 import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Getter
@@ -34,8 +34,8 @@ public class Sector extends AbstractAuditingEntity<Long> {
     @Column
     private Long parentId;
 
-    @OneToMany(cascade = ALL
-//            , orphanRemoval = true
+    @OneToMany(cascade = MERGE,
+            fetch = FetchType.EAGER
     )
     @JoinColumn(name = "parentId")
     private List<Sector> children = new ArrayList<>();
@@ -50,5 +50,11 @@ public class Sector extends AbstractAuditingEntity<Long> {
 
     public void removeAllChildren() {
         children.clear();
+    }
+
+    public Sector setChildren(List<Sector> sectors) {
+        this.children.clear();
+        this.children.addAll(sectors);
+        return this;
     }
 }

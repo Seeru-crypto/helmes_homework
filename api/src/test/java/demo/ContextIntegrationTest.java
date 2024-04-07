@@ -12,8 +12,7 @@ public class ContextIntegrationTest extends BaseIntegrationTest {
   private static final List<Object> createdEntities = new ArrayList<>();
 
   protected Sector createSector(String name, Long parentId, int value) {
-    Sector sector = sectorService.save(parentId, name, value);
-    return sector;
+    return sectorService.save(parentId, name, value);
   }
 
   protected void createFullSectorTree() {
@@ -97,22 +96,16 @@ public class ContextIntegrationTest extends BaseIntegrationTest {
     Sector sectorBZ = createSector("Water", sectorBV.getId(), 364);
   }
 
-  protected boolean sectorExists_v2(Long sectorId) {
-    return sectorService.existsById(sectorId);
-  }
-
   protected boolean sectorExists(Long sectorId) {
     return entityManager.find(Sector.class, sectorId) != null;
   }
-
 
   protected Sector findSectorById(Long id) {
     return sectorService.findById(id);
   }
 
   protected User createUser(String name, boolean agreeToTerms, List<Sector> sectors) {
-    User user = userService.save(new User().setName(name).setAgreeToTerms(agreeToTerms).setSectors(sectors));
-    return user;
+    return userService.save(new User().setName(name).setAgreeToTerms(agreeToTerms).setSectors(sectors));
   }
 
   public static void clear() {

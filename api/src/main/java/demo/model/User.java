@@ -1,6 +1,5 @@
 package demo.model;
 
-
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;

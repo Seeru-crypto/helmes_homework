@@ -89,4 +89,10 @@ public class SectorService {
 
     return sectorRepository.save(sector);
   }
+
+  public Sector update(Sector entity) {
+    // for now we only update the sector name
+    // moving a child from parent_A to parent_B is not allowed
+    return findById(entity.getId()).setName(entity.getName());
+  }
 }
