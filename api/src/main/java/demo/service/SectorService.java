@@ -3,7 +3,10 @@ package demo.service;
 import demo.exception.BusinessException;
 import demo.exception.NotFoundException;
 import demo.model.Sector;
+import demo.model.User;
 import demo.repository.SectorRepository;
+import demo.service.validation.ValidationResult;
+import demo.service.validation.sector_validator.SectorValidator;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,18 +21,43 @@ public class SectorService {
     private final SectorRepository sectorRepository;
 
     private final UserService userService;
+    private final List<SectorValidator> sectorValidators;
+
+    public Sector save(Sector sector) {
+        validateSector(sector);
+
+        return sectorRepository.save(sector);
+    }
+
+    protected void validateSector(Sector sector) {
+        ValidationResult validationResult = sectorValidators.stream()
+                .map(userValidator -> userValidator.validate(sector))
+                .filter(result -> !result.isValid())
+                .findFirst()
+                .orElse(new ValidationResult().setValid(true)); // If no validation failure, return a successful result
+
+        validationCleanup(validationResult);
+    }
+
+    private void validationCleanup(ValidationResult validationResult) {
+        if (!validationResult.isValid()) {
+            log.warn("sector validation failed: {}", validationResult.getMessage());
+            throw new BusinessException("DEFAULT_ERROR") {
+                // Override getMessage() to provide a custom error message
+                @Override
+                public String getMessage() {
+                    return validationResult.getMessage().getKood();
+                }
+            };
+        }
+    }
 
     @Transactional
     public List<Sector> findAll() {
         return sectorRepository.findAllByParentId(null);
     }
-
-    // vüiks kasutada lombok builderit, kuna siis ei initisaliseeri
-
     private void addChildren(Sector child) {
-        Sector parent = sectorRepository.findById(child.getParentId())
-                .orElseThrow(() -> new BusinessException("Parent not found") {
-                });
+        Sector parent = findById(child.getParentId());
         parent.addChild(child);
     }
 
@@ -45,8 +73,6 @@ public class SectorService {
     }
 
     public Sector findById(Long id) {
-        sectorRepository.getReferenceById(2L);;
-
         return sectorRepository.findById(id).orElseThrow(() -> {
             log.warn("Sector not found: {}", id);
             return new NotFoundException("Sector not found") {
@@ -74,22 +100,6 @@ public class SectorService {
             child.setParentId(sector.getParentId());
             sectorRepository.save(child);
         });
-    }
-
-    public Sector save(Sector sector) {
-        if (sectorRepository.existsByName(sector.getName())) {
-            log.warn("Sector with the given name exists {}", sector.getName());
-            throw new BusinessException("Sector with the given name exists") {
-            };
-        }
-
-        if (sectorRepository.existsByValue(sector.getValue())) {
-            log.warn("Sector with the given value  exists {}", sector.getValue());
-            throw new BusinessException("Sector with the given value  exists") {
-            };
-        }
-
-        return sectorRepository.save(sector);
     }
 
     public Sector update(Sector entity) {

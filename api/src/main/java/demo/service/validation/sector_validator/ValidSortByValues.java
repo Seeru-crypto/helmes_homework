@@ -1,4 +1,4 @@
-package demo.service.validation.pageable_validator;
+package demo.service.validation.sector_validator;
 
 import demo.service.validation.user_validator.UserErrors;
 

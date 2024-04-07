@@ -2,12 +2,11 @@ package demo.service;
 
 import demo.exception.BusinessException;
 import demo.exception.NotFoundException;
-import demo.model.PageableProps;
 import demo.model.Sector;
 import demo.model.User;
 import demo.repository.UserRepository;
 import demo.service.validation.ValidationResult;
-import demo.service.validation.pageable_validator.PageableValidator;
+import demo.service.validation.sector_validator.SectorValidator;
 import demo.service.validation.user_validator.UserIdValidator;
 import demo.service.validation.user_validator.UserValidator;
 import jakarta.transaction.Transactional;
@@ -24,10 +23,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
-
     private final List<UserValidator> userValidators;
     private final List<UserIdValidator> userIdValidators;
-    private final List<PageableValidator> pageableValidators;
 
     protected void validateUserData(User user) {
         ValidationResult validationResult = userValidators.stream()
@@ -42,16 +39,6 @@ public class UserService {
     protected void validateUserId(Long id) {
         ValidationResult validationResult = userIdValidators.stream()
                 .map(userValidator -> userValidator.validate(id))
-                .filter(result -> !result.isValid())
-                .findFirst()
-                .orElse(new ValidationResult().setValid(true)); // If no validation failure, return a successful result
-
-        validationCleanup(validationResult);
-    }
-
-    protected void validatePageableProps(PageableProps pageableProps) {
-        ValidationResult validationResult = pageableValidators.stream()
-                .map(userValidator -> userValidator.validate(pageableProps))
                 .filter(result -> !result.isValid())
                 .findFirst()
                 .orElse(new ValidationResult().setValid(true)); // If no validation failure, return a successful result

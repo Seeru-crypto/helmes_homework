@@ -8,6 +8,7 @@ import org.springframework.http.MediaType;
 
 import java.util.List;
 
+import static demo.service.validation.sector_validator.SectorErrors.NAME_EXISTS;
 import static org.junit.Assert.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -160,7 +161,7 @@ class SectorIntegrationTest extends ContextIntegrationTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(bytes))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$").value("Sector with the given name exists"))
+                .andExpect(jsonPath("$").value(NAME_EXISTS.getKood()))
         ;
     }
 
@@ -174,7 +175,7 @@ class SectorIntegrationTest extends ContextIntegrationTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(bytes))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$").value("Sector with the given value  exists"))
+                .andExpect(jsonPath("$").value(NAME_EXISTS.getKood()))
         ;
     }
 
