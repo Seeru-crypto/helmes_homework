@@ -49,7 +49,7 @@ public class SectorController {
 
     @PutMapping
     public ResponseEntity<SectorDto> update(@Valid @RequestBody SectorDto dto) {
-        log.info("REST request to update sector " + dto);
+        log.info("REST request to update sector: " + dto);
         Sector updatedSector = sectorService.update(sectorMapper.toEntity(dto));
         return ResponseEntity.ok(sectorMapper.toDto(updatedSector));
         }

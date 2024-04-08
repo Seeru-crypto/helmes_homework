@@ -34,6 +34,7 @@ public class UserController {
   @GetMapping
   @Operation(summary = "Get paginated list of all created users")
   public ResponseEntity<Page<UserDto>> findAll(Pageable pageable) {
+    log.info("REST to find all users: " + pageable);
     Page<User> users = userService.findAll(pageable);
     Page<UserDto> dto = users.map(userMapper::toDto);
     return ResponseEntity.ok(dto);
@@ -41,7 +42,7 @@ public class UserController {
 
   @PostMapping
   public ResponseEntity<UserDto> save(@Valid @RequestBody SaveUserDto dto) {
-    log.info("REST request to save user " + dto);
+    log.info("REST request to save user: " + dto);
     User tempUser = userMapper.toEntity(dto);
     User createdUser = userService.save(tempUser);
     return created(URI.create("/api/users/%s"
@@ -51,7 +52,7 @@ public class UserController {
 
   @PutMapping(path = "/{userId}")
   public ResponseEntity<UserDto> update(@Valid @RequestBody SaveUserDto dto, @PathVariable UUID userId) {
-    log.info("REST request to update user " + dto);
+    log.info("REST request to update user: " + dto);
     User updatedUser = userService.update(userMapper.toEntity(dto), userId);
     return ResponseEntity.ok(userMapper.toDto(updatedUser));
   }
@@ -59,14 +60,14 @@ public class UserController {
   @DeleteMapping(path = "/{userId}")
   @Operation(summary = "Delete an existing user")
   public void delete(@PathVariable UUID userId) {
-    log.info("REST request to delete user " + userId);
+    log.info("REST request to delete user: " + userId);
     userService.delete(userId);
   }
 
   @GetMapping(path="sector/{sectorId}")
   @Operation(summary = "Get all users by sector")
   public ResponseEntity<List<UserDto>> findAllBySector(@PathVariable Long sectorId) {
-    log.info("REST request to get all users by sector " + sectorId);
+    log.info("REST request to get all users by sector: " + sectorId);
     Sector existingSector = sectorService.findById(sectorId);
     List<User> users = userService.findAllBySector(existingSector);
     List<UserDto> dto = users.stream().map(userMapper::toDto).toList();
