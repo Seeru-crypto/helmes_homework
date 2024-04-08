@@ -9,10 +9,10 @@ import org.springframework.stereotype.Component;
 import static demo.service.validation.sector_validator.SectorErrors.NAME_EXISTS;
 
 @Component
-public class SectorValidators implements Validator<Sector> {
+public class SectorValueValidators implements Validator<Sector> {
   private final SectorRepository sectorRepository;
 
-  public SectorValidators(SectorRepository sectorRepository) {
+  public SectorValueValidators(SectorRepository sectorRepository) {
     this.sectorRepository = sectorRepository;
   }
 
