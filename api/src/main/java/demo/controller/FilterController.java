@@ -2,7 +2,7 @@ package demo.controller;
 
 
 import demo.controller.dto.UserFilterDto;
-import demo.mapper.FilterMapper;
+import demo.mapper.UserFilterMapper;
 import demo.model.UserFilter;
 import demo.service.FilterService;
 import demo.service.UserService;
@@ -22,7 +22,7 @@ import java.util.UUID;
 public class FilterController {
   private final FilterService filterService;
   private final UserService userService;
-  private final FilterMapper filterMapper;
+  private final UserFilterMapper userFilterMapper;
 
   @GetMapping
   @Operation(summary = "Get filter options")
@@ -35,20 +35,12 @@ public class FilterController {
   return null;
   }
 
-
   @PostMapping("/{userId}")
   @Operation(summary = "Get user filters")
-  public UserFilter saveFilter(@RequestBody UserFilterDto filterDto, @PathVariable UUID userId) {
+  public UserFilterDto saveFilter(@RequestBody UserFilterDto filterDto, @PathVariable UUID userId) {
     var user = userService.findById(userId);
-    return filterService.saveFilters(filterDto, user);
+    var createdFilter =  filterService.saveFilters(filterDto, user);
+    return userFilterMapper.toDto(createdFilter);
   }
-
-
-
-
-
-
-
-
 
 }

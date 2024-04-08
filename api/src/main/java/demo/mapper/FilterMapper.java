@@ -1,15 +1,17 @@
 package demo.mapper;
 
-import demo.controller.dto.SaveUserDto;
-import demo.controller.dto.UserDto;
-import demo.model.Sector;
-import demo.model.User;
+import demo.controller.dto.FilterDto;
+import demo.controller.dto.UserFilterDto;
+import demo.model.Filter;
+import demo.model.UserFilter;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.Named;
 
-import java.util.List;
-
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = {SectorMapper.class, UserMapper.class})
 public interface FilterMapper {
+
+  Filter toEntity (FilterDto dto);
+
+  FilterDto toDto(Filter entity);
+
 }
