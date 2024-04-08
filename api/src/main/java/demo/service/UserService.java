@@ -1,5 +1,6 @@
 package demo.service;
 
+import demo.exception.BusinessException;
 import demo.exception.NotFoundException;
 import demo.model.Sector;
 import demo.model.User;
@@ -24,6 +25,12 @@ public class UserService {
 
     @Transactional
     public User save(User user) {
+        if (user.getId() != null && !userRepository.existsById(user.getId())) {
+            log.warn("User with given ID already exists: {}", user.getEmail());
+            throw new BusinessException("User with email already exists") {
+            };
+        }
+
         validationService.validateEntity(user, validationService.getUserValidator());
         return userRepository.save(user);
     }
