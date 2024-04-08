@@ -110,4 +110,6 @@ VALUES ('02438185-f1e4-4fd0-bc62-675f64b2c819', 'qJohn Does', TRUE, 'johndoe1234
 INSERT INTO user_sectors (user_id, sector_id)
 VALUES ('02438185-f1e4-4fd0-bc62-675f64b2c819', 1),
        ('02438185-f1e4-4fd0-bc62-675f64b2c819', 6),
+       ('02438185-f1e4-4fd0-bc62-675f64b2c821', 40),
+       ('02438185-f1e4-4fd0-bc62-675f64b2c822', 31),
        ('02438185-f1e4-4fd0-bc62-675f64b2c820', 25);

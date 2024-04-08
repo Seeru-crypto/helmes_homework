@@ -12,8 +12,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Slf4j
-@Service
 @Getter
+@Service
 @RequiredArgsConstructor
 public class ValidationService {
   private final List<Validator<User>> userValidator;

@@ -4,6 +4,7 @@ import demo.controller.dto.SectorDto;
 import demo.mapper.SectorMapper;
 import demo.model.Sector;
 import demo.service.SectorService;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,6 +34,7 @@ public class SectorController {
     }
 
     @DeleteMapping("/{id}")
+    @Operation(summary = "Delete an existing sector by id, deletes all relationships as well")
     public void deleteById(@PathVariable Long id) {
         log.info("REST request to delete sector by id: {}", id);
         sectorService.deleteById(id);

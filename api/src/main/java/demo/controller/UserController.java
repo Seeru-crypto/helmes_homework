@@ -64,6 +64,7 @@ public class UserController {
   }
 
   @GetMapping(path="sector/{sectorId}")
+  @Operation(summary = "Get all users by sector")
   public ResponseEntity<List<UserDto>> findAllBySector(@PathVariable Long sectorId) {
     log.info("REST request to get all users by sector " + sectorId);
     Sector existingSector = sectorService.findById(sectorId);
