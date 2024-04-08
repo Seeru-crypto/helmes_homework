@@ -15,6 +15,18 @@ public class ContextIntegrationTest extends BaseIntegrationTest {
     return sectorService.save(parentId, name, value);
   }
 
+  protected List<User> createDefaultUsers() {
+    if (!sectorExists(1L)) {
+      createFullSectorTree();
+    }
+    List<User> users = new ArrayList<>();
+    users.add(createUser("qJohn Does", true, List.of(findSectorById(1L))));
+    users.add(createUser("qJane Does", true, List.of(findSectorById(2L), findSectorById(11L))));
+    users.add(createUser("qJack Doesn't", true, List.of(findSectorById(8L), findSectorById(11L), findSectorById(13L))));
+    users.add(createUser("qJames Memorial", true, List.of(findSectorById(1L), findSectorById(20L))));
+    return users;
+  }
+
   protected void createFullSectorTree() {
     Sector sectorA = createSector("Manufacturing", null, 1);
     Sector sectorB = createSector("Construction materials", sectorA.getId(), 11);

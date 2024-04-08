@@ -168,21 +168,19 @@ class UserIntegrationTest extends ContextIntegrationTest {
 
   @Test
   void findAllBySector_shouldReturnUsersBySector() throws Exception {
-    createFullSectorTree();
-    User user_a = createUser("user_a_q", true, List.of(findSectorById(1L)));
-    User user_b = createUser("user_b_q", true, List.of(findSectorById(2L), findSectorById(3L)));
-    User user_c = createUser("user_c_q", true, List.of(findSectorById(1L), findSectorById(5L)));
+    var users = createDefaultUsers();
 
     mockMvc.perform(get("/users/sector/1"))
             .andExpect(status().isOk())
+            .andDo(print())
             .andExpect(jsonPath("$.length()").value(2))
-            .andExpect(jsonPath("$[0].name").value(user_a.getName()))
-            .andExpect(jsonPath("$[0].sectors.length()").value(user_a.getSectors().size()))
+            .andExpect(jsonPath("$[0].name").value(users.get(0).getName()))
+            .andExpect(jsonPath("$[0].sectors.length()").value(users.get(0).getSectors().size()))
             .andExpect(jsonPath("$[0].sectors[0]").value("Manufacturing"))
-            .andExpect(jsonPath("$[1].name").value(user_c.getName()))
-            .andExpect(jsonPath("$[1].sectors.length()").value(user_c.getSectors().size()))
+            .andExpect(jsonPath("$[1].name").value(users.get(3).getName()))
+            .andExpect(jsonPath("$[1].sectors.length()").value(users.get(3).getSectors().size()))
             .andExpect(jsonPath("$[1].sectors[0]").value("Manufacturing"))
-            .andExpect(jsonPath("$[1].sectors[1]").value("Bakery & confectionery products"));
+            .andExpect(jsonPath("$[1].sectors[1]").value("Project furniture"));
   }
 
   @Test

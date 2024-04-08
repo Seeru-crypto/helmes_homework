@@ -50,4 +50,18 @@ If it occurs just reload the browser.
   - integer bigger than, smaller than
   - dob before and after
 - Kas PhoneNumberValidatorTest puhul saab ValueSource´i inputi muuta muutujaks (näeb ilusam välja)
-- 
+
+
+## Project structure
+│   │       ├───config                                                  
+│   │       ├───controller                                              
+│   │       │   └───dto                         // DTO models                        
+│   │       ├───exception
+│   │       ├───mapper                          // Mapstruct mappers
+│   │       ├───model
+│   │       ├───repository
+│   │       └───service
+│   │           └───validation                  // Validators used for business logic validation 
+│   │               ├───pageable_validator
+│   │               ├───sector_validator
+│   │               └───user_validator
