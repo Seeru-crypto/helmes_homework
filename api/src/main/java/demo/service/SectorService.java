@@ -21,7 +21,7 @@ public class SectorService {
     private final ValidationService validationService;
 
     public Sector save(Sector sector) {
-        validationService.validateInput(sector, validationService.getSectorValidators());
+        validationService.validateEntity(sector, validationService.getSectorValidators());
         return sectorRepository.save(sector);
     }
 

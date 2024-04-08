@@ -23,11 +23,12 @@ public class UserService {
 
     @Transactional
     public User save(User user) {
-        validationService.validateInput(user, validationService.getUserValidator());
+        validationService.validateEntity(user, validationService.getUserValidator());
         return userRepository.save(user);
     }
 
     public Page<User> findAll(Pageable pageable) {
+        validationService.validateEntity(pageable, validationService.getPageableValidator());
         return userRepository.findAll(pageable);
     }
 
@@ -43,7 +44,7 @@ public class UserService {
     @Transactional
     public User update(User entity, Long userId) {
         User existingUser = findById(userId);
-        validationService.validateInput(entity, validationService.getUserValidator());
+        validationService.validateEntity(entity, validationService.getUserValidator());
 
         return existingUser
                 .setName(entity.getName())

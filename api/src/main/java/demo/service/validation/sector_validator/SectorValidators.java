@@ -20,10 +20,6 @@ public class SectorValidators implements Validator<Sector> {
   public ValidationResult validate(Sector sector) {
     ValidationResult result = new ValidationResult();
 
-    if (sectorRepository.existsByName(sector.getName())) {
-      return result.setValid(false).setMessage(NAME_EXISTS);
-      }
-
     if (sectorRepository.existsByValue(sector.getValue())) {
       return result.setValid(false).setMessage(NAME_EXISTS);
     }

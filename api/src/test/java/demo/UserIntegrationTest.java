@@ -40,13 +40,13 @@ class UserIntegrationTest extends ContextIntegrationTest {
 
     mockMvc.perform(get("/users")
                     .param("page", "0")
-                    .param("sort", "id")
+                    .param("sort", "name,desc")
                     .param("size", "10"))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.content.length()").value(2))
-            .andExpect(jsonPath("$.content[1].name").value("user_b_q"))
+            .andExpect(jsonPath("$.content[1].name").value("user_a_q"))
             .andExpect(jsonPath("$.content[1].agreeToTerms").value(true))
-            .andExpect(jsonPath("$.content[1].sectors.length()").value(2))
+            .andExpect(jsonPath("$.content[1].sectors.length()").value(1))
             .andExpect(jsonPath("$.pageable.pageNumber").value(0))
             .andExpect(jsonPath("$.pageable.pageSize").value(10));
   }
