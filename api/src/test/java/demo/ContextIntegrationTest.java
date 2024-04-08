@@ -4,6 +4,10 @@ import demo.model.Sector;
 import demo.model.User;
 import jakarta.persistence.EntityManager;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,15 +19,21 @@ public class ContextIntegrationTest extends BaseIntegrationTest {
     return sectorService.save(parentId, name, value);
   }
 
+  protected Instant getInstantFromString(String dateString) {
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    LocalDateTime localDateTime = LocalDateTime.parse(dateString, formatter);
+    return localDateTime.toInstant(ZoneOffset.UTC);
+  }
+
   protected List<User> createDefaultUsers() {
     if (!sectorExists(1L)) {
       createFullSectorTree();
     }
     List<User> users = new ArrayList<>();
-    users.add(createUser("qJohn Does", true, List.of(findSectorById(1L))));
-    users.add(createUser("qJane Does", true, List.of(findSectorById(2L), findSectorById(11L))));
-    users.add(createUser("qJack Doesn't", true, List.of(findSectorById(8L), findSectorById(11L), findSectorById(13L))));
-    users.add(createUser("qJames Memorial", true, List.of(findSectorById(1L), findSectorById(20L))));
+    users.add(createUser("qJohn Does", true, List.of(findSectorById(1L)), "johndoe1234@gmail.com", "+123 123456789",getInstantFromString("1985-07-15 12:30:00")));
+    users.add(createUser("qJane Does", true, List.of(findSectorById(2L), findSectorById(11L)), "jane_smith123@example.com", "+372 1234567",getInstantFromString("1990-04-28 08:15:00")));
+    users.add(createUser("qJack Doesn't", true, List.of(findSectorById(8L), findSectorById(11L), findSectorById(13L)), "bob.smith@company.co.uk", "+44 1234567890",getInstantFromString("1995-10-10 17:45:00")));
+    users.add(createUser("qJames Memorial", true, List.of(findSectorById(1L), findSectorById(20L)), "mary.smith@email.com", "+1 1234567890",getInstantFromString("1998-12-01 20:00:00")));
     return users;
   }
 
@@ -116,8 +126,20 @@ public class ContextIntegrationTest extends BaseIntegrationTest {
     return sectorService.findById(id);
   }
 
+  protected User createUser(String name, boolean agreeToTerms, List<Sector> sectors, String email, String phoneNumber, Instant dob) {
+    return userService.save(new User()
+            .setName(name)
+            .setAgreeToTerms(agreeToTerms)
+            .setEmail(email)
+            .setPhoneNumber(phoneNumber)
+            .setDob(dob)
+            .setSectors(sectors));
+  }
   protected User createUser(String name, boolean agreeToTerms, List<Sector> sectors) {
-    return userService.save(new User().setName(name).setAgreeToTerms(agreeToTerms).setSectors(sectors));
+    return userService.save(new User()
+            .setName(name)
+            .setAgreeToTerms(agreeToTerms)
+            .setSectors(sectors));
   }
 
   public static void clear() {

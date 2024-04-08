@@ -8,6 +8,7 @@ public enum UserErrors implements ValidationErrors {
   USER_NOT_EXIST,
   ID_IS_NULL,
   TOS_NOT_ACCEPTED,
+  USER_TOO_YOUNG,
   NAME_DOESNT_CONTAIN_Q;
 
   @Override

@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.time.Instant;
 import java.util.List;
 
 @Getter
@@ -25,6 +26,8 @@ public class UserDto {
     private String email;
 
     private String phoneNumber;
+
+    private Instant dob;
 
     @AssertTrue
     private boolean agreeToTerms;

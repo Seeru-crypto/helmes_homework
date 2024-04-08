@@ -6,7 +6,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,6 +48,10 @@ public class User extends AbstractAuditingEntity<Long> {
     @Size(max = MAX_EMAIL_LEN, message = "Email is too long")
     @Email(regexp = EMAIL_REGEX, message = "INVALID_USER_EMAIL")
     private String email;
+
+    @DateTimeFormat()
+    @PastOrPresent(message = "USER_TOO_YOUNG")
+    private Instant dob;
 
     @Column(name = "phone_number", unique = true)
     @Size(max = MAX_PHONE_LEN, message = "Phone is too long")
