@@ -3,7 +3,9 @@ package demo.controller;
 
 import demo.controller.dto.UserFilterDto;
 import demo.mapper.FilterMapper;
+import demo.model.UserFilter;
 import demo.service.FilterService;
+import demo.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +21,7 @@ import java.util.UUID;
 @RequestMapping(path = "/filters")
 public class FilterController {
   private final FilterService filterService;
+  private final UserService userService;
   private final FilterMapper filterMapper;
 
   @GetMapping
@@ -33,9 +36,11 @@ public class FilterController {
   }
 
 
-  @PostMapping
+  @PostMapping("/{userId}")
   @Operation(summary = "Get user filters")
-  public void saveFilter(@RequestBody UserFilterDto filterDto) {
+  public UserFilter saveFilter(@RequestBody UserFilterDto filterDto, @PathVariable UUID userId) {
+    var user = userService.findById(userId);
+    return filterService.saveFilters(filterDto, user);
   }
 
 

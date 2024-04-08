@@ -1,41 +1,46 @@
 package demo.service;
 
-import demo.exception.NotFoundException;
+import demo.controller.dto.FilterDto;
+import demo.controller.dto.UserFilterDto;
 import demo.model.Filter;
-import demo.model.Sector;
+import demo.model.User;
 import demo.model.UserFilter;
 import demo.repository.FilterRepository;
-import demo.repository.SectorRepository;
+import demo.repository.UserFilterRepository;
 import demo.service.filter.DataTypes;
-import demo.service.filter.Filters;
 import demo.service.validation.ValidationService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import static demo.service.filter.DataTypes.DATE;
-import static demo.service.filter.DataTypes.NUMBER;
-import static demo.service.filter.DataTypes.STRING;
-
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class FilterService {
+  private final UserFilterRepository userFilterRepository;
   private final FilterRepository filterRepository;
   private final ValidationService validationService;
 
   @Transactional
-  public void saveFilters(UserFilter userFilter) {
+  public UserFilter saveFilters(UserFilterDto userFilter, User user) {
     var dataMap = DataTypes.getDataMap();
-    filterRepository.save(userFilter);
-    // step 1 save parent obj & get ID
+
+    // validate User filter
+    var createdUserFilter = userFilterRepository.save(new UserFilter()
+            .setName(userFilter.getName())
+            .setUser(user));
 
     // step 2 save validate filters and save with parent ID
-
+    for (FilterDto filter : userFilter.getFilters()) {
+      // validate filter against dataMap
+      var createdFilter = filterRepository.save(new Filter()
+              .setCriteria(filter.getCriteria())
+              .setUserFilterId(createdUserFilter.getId())
+              .setValue(filter.getValue())
+              .setType(filter.getType()));
+      createdUserFilter.addFilter(createdFilter);
+    }
+    return createdUserFilter;
   }
 }

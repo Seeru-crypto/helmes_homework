@@ -33,14 +33,23 @@ public class UserFilter extends AbstractAuditingEntity<Long> {
   @OneToMany(cascade = CascadeType.ALL,
           fetch = FetchType.LAZY,
           orphanRemoval = true)
-  @JoinTable(
-          name = "filter",
-          joinColumns = @JoinColumn(name = "user_filter_id")
-  )
+  @JoinColumn(name = "userFilterId")
   private List<Filter> filters = new ArrayList<>();
 
   @ManyToOne(fetch = LAZY,
           cascade = MERGE)
   @JoinColumn(name = "user_id", referencedColumnName = "id")
   private User user;
+
+  public void addFilter(Filter filter) {
+    filters.add(filter);
+  }
+
+  public void removeFilter(Filter filter) {
+    filters.remove(filter);
+  }
+
+  public void removeAllFilters() {
+    filters.clear();
+  }
 }

@@ -22,17 +22,11 @@ public class Filter extends AbstractAuditingEntity<Long> {
   @GeneratedValue(strategy = IDENTITY)
   private Long id;
 
-  @NotBlank(message = "Name is mandatory")
-  @Column(nullable = false)
   private String criteria;
 
   private String type;
 
   private String value;
 
-  @NotNull
-  @ManyToOne(fetch = FetchType.LAZY,
-          cascade = CascadeType.MERGE)
-  @JoinColumn(name = "user_filter_id", referencedColumnName = "id")
-  private UserFilter userFilter;
+  private Long userFilterId;
 }
