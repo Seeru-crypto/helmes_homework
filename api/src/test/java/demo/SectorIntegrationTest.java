@@ -105,9 +105,9 @@ class SectorIntegrationTest extends ContextIntegrationTest {
 
         // assert user has 3 sectors connected
         mockMvc.perform(get("/users")
-                        .param("pageNumber", "0")
-                        .param("sortBy", "id")
-                        .param("pageSize", "1")
+                        .param("page", "0")
+                        .param("sort", "id")
+                        .param("size", "1")
                 )
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -123,9 +123,9 @@ class SectorIntegrationTest extends ContextIntegrationTest {
 
         // assert user has 3 sectors connected
         mockMvc.perform(get("/users")
-                        .param("pageNumber", "0")
-                        .param("sortBy", "id")
-                        .param("pageSize", "1")
+                        .param("page", "0")
+                        .param("sort", "id")
+                        .param("size", "1")
                 )
                 .andDo(print())
                 .andExpect(status().isOk())

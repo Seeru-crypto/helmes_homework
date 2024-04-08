@@ -1,5 +1,6 @@
 package demo.service.validation.pageable_validator;
 
+import demo.exception.BusinessException;
 import demo.service.validation.ValidationResult;
 import demo.service.validation.Validator;
 import org.springframework.data.domain.Pageable;
@@ -37,6 +38,6 @@ public class PageableValidator implements Validator<Pageable> {
     return sort.stream()
             .map(order -> order.getProperty())
             .findFirst()
-            .orElse("No sort by value provided");
+            .orElseThrow(() -> new BusinessException("no sort value provided"){});
   }
 }
