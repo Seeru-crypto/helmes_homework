@@ -19,12 +19,6 @@ public class DateValidator implements Validator<User> {
     if (data.getDob() == null) {
       return result.setValid(true);
     }
-
-//    Instant eightTeenYearsAgo = Instant.now().minus(18, YEARS);
-//
-//    if (data.getDob().isAfter(eightTeenYearsAgo)) {
-//      return result.setValid(false).setMessage(USER_TOO_YOUNG);
-//    }
     return result.setValid(true);
   }
 }

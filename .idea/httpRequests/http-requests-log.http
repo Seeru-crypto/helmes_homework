@@ -1,3 +1,21 @@
+GET http://localhost:8880/api/users?sort=id&page=0&size=2
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2024-04-08T131220.200.json
+
+###
+
+GET http://localhost:8880/api/users?sortBy=id&pageNumber=0&pageSize=2
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2024-04-08T131201.400.json
+
+###
+
 GET http://localhost:8880/api/sectors
 Connection: Keep-Alive
 User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.10)
@@ -427,24 +445,6 @@ User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
 Accept-Encoding: br,deflate,gzip,x-gzip
 
 <> 2024-04-04T150354.400.json
-
-###
-
-GET http://localhost:8880/api/users?sortBy="id"
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-<> 2024-04-04T150331.400.json
-
-###
-
-GET http://localhost:8880/api/users
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-<> 2024-04-04T150314.400.json
 
 ###
 

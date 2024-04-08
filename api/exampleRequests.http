@@ -9,7 +9,7 @@ DELETE localhost:8880/api/sectors/100
 
 
 ###____________________________ USERS
-GET localhost:8880/api/users?sortBy=id&pageNumber=0&pageSize=2
+GET localhost:8880/api/users?sort=id&page=0&size=2
 
 ###
 
