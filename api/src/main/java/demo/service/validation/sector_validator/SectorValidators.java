@@ -1,15 +1,15 @@
 package demo.service.validation.sector_validator;
 
-import demo.exception.BusinessException;
 import demo.model.Sector;
 import demo.repository.SectorRepository;
 import demo.service.validation.ValidationResult;
+import demo.service.validation.Validator;
 import org.springframework.stereotype.Component;
 
-import static demo.service.validation.sector_validator.SectorErrors.*;
+import static demo.service.validation.sector_validator.SectorErrors.NAME_EXISTS;
 
 @Component
-public class SectorValidators implements SectorValidator {
+public class SectorValidators implements Validator<Sector> {
   private final SectorRepository sectorRepository;
 
   public SectorValidators(SectorRepository sectorRepository) {

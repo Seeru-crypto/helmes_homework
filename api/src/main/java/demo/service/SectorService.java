@@ -1,12 +1,9 @@
 package demo.service;
 
-import demo.exception.BusinessException;
 import demo.exception.NotFoundException;
 import demo.model.Sector;
-import demo.model.User;
 import demo.repository.SectorRepository;
-import demo.service.validation.ValidationResult;
-import demo.service.validation.sector_validator.SectorValidator;
+import demo.service.validation.ValidationService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,35 +18,11 @@ public class SectorService {
     private final SectorRepository sectorRepository;
 
     private final UserService userService;
-    private final List<SectorValidator> sectorValidators;
+    private final ValidationService validationService;
 
     public Sector save(Sector sector) {
-        validateSector(sector);
-
+        validationService.validateInput(sector, validationService.getSectorValidators());
         return sectorRepository.save(sector);
-    }
-
-    protected void validateSector(Sector sector) {
-        ValidationResult validationResult = sectorValidators.stream()
-                .map(userValidator -> userValidator.validate(sector))
-                .filter(result -> !result.isValid())
-                .findFirst()
-                .orElse(new ValidationResult().setValid(true)); // If no validation failure, return a successful result
-
-        validationCleanup(validationResult);
-    }
-
-    private void validationCleanup(ValidationResult validationResult) {
-        if (!validationResult.isValid()) {
-            log.warn("sector validation failed: {}", validationResult.getMessage());
-            throw new BusinessException("DEFAULT_ERROR") {
-                // Override getMessage() to provide a custom error message
-                @Override
-                public String getMessage() {
-                    return validationResult.getMessage().getKood();
-                }
-            };
-        }
     }
 
     @Transactional

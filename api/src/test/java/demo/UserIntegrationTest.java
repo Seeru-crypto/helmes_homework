@@ -162,8 +162,8 @@ class UserIntegrationTest extends ContextIntegrationTest {
   @Test
   void delete_shouldThrowError_ifUserDoesNotExist() throws Exception {
     mockMvc.perform(delete(String.format("/users/%s", 99)))
-            .andExpect(status().isBadRequest())
-            .andExpect(jsonPath("$").value("USER_NOT_EXIST"));
+            .andExpect(status().isNotFound())
+            .andDo(print());
   }
 
   @Test

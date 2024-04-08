@@ -3,6 +3,7 @@ package demo.service.validation.user_validator;
 import demo.model.User;
 import demo.repository.UserRepository;
 import demo.service.validation.ValidationResult;
+import demo.service.validation.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -13,12 +14,12 @@ import static demo.service.validation.user_validator.UserErrors.NAME_DOESNT_CONT
 import static demo.service.validation.user_validator.UserErrors.NAME_NOT_UNIQUE;
 
 @Component
-public class UserNameValidator implements UserValidator {
+public class NameValidator implements Validator<User> {
 
   private final UserRepository userRepository;
 
   @Autowired
-  public UserNameValidator(UserRepository userRepository) {
+  public NameValidator(UserRepository userRepository) {
     this.userRepository = userRepository;
   }
 
