@@ -10,6 +10,8 @@ import lombok.ToString;
 import java.util.ArrayList;
 import java.util.List;
 
+import static jakarta.persistence.CascadeType.MERGE;
+import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Getter
@@ -19,24 +21,26 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @ToString
 public class UserFilter extends AbstractAuditingEntity<Long> {
 
-    @Id
-    @Column(unique = true)
-    @GeneratedValue(strategy = IDENTITY)
-    private Long id;
+  @Id
+  @Column(unique = true)
+  @GeneratedValue(strategy = IDENTITY)
+  private Long id;
 
-    @NotBlank(message = "Name is mandatory")
-    @Column(nullable = false)
-    private String name;
+  @NotBlank(message = "Name is mandatory")
+  @Column(nullable = false)
+  private String name;
 
-    @OneToMany(cascade = CascadeType.ALL,
-            fetch = FetchType.EAGER
-    )
-    private List<Filter> filters = new ArrayList<>();
+  @OneToMany(cascade = CascadeType.ALL,
+          fetch = FetchType.LAZY,
+          orphanRemoval = true)
+  @JoinTable(
+          name = "filter",
+          joinColumns = @JoinColumn(name = "user_filter_id")
+  )
+  private List<Filter> filters = new ArrayList<>();
 
-    @ManyToOne(
-            fetch = FetchType.LAZY
-    )
-    @JoinColumn(name = "user_id")
-    private User user;
-
+  @ManyToOne(fetch = LAZY,
+          cascade = MERGE)
+  @JoinColumn(name = "user_id", referencedColumnName = "id")
+  private User user;
 }

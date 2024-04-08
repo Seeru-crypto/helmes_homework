@@ -32,14 +32,10 @@ public class FilterService {
   @Transactional
   public void saveFilters(UserFilter userFilter) {
     var dataMap = DataTypes.getDataMap();
+    filterRepository.save(userFilter);
     // step 1 save parent obj & get ID
 
     // step 2 save validate filters and save with parent ID
-    userFilter.getFilters().forEach(filter -> {
-      validationService.validate(filter);
-      filter.setUser(userFilter);
-      filterRepository.save(filter);
-    });
 
   }
 }

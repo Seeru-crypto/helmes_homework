@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS user_filter
 (
     id           BIGSERIAL NOT NULL PRIMARY KEY,
     name         VARCHAR(50) NOT NULL,
-    user_id      BIGINT NOT NULL,
+    user_id      uuid NOT NULL,
 
     created_by   TEXT,
     created_at   TIMESTAMP,
