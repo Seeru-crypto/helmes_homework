@@ -2,15 +2,13 @@ package demo.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import static jakarta.persistence.CascadeType.MERGE;
 import static jakarta.persistence.FetchType.LAZY;
@@ -21,7 +19,7 @@ import static jakarta.persistence.FetchType.LAZY;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "\"user\"")
-public class User extends AbstractAuditingEntity<Long> {
+public class User extends AbstractAuditingEntity<UUID> {
     public static final int USER_MAX_NAME_LENGTH = 200;
     public static final int USER_MIN_NAME_LENGTH = 2;
     public static final int MAX_EMAIL_LEN = 35;
@@ -30,9 +28,8 @@ public class User extends AbstractAuditingEntity<Long> {
     public static final String PHONE_NR_REGEX = "\\+[0-9]{1,3} [0-9]{7,10}";
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(unique = true)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    UUID id;
 
     @NotNull
     @Size(min = USER_MIN_NAME_LENGTH)

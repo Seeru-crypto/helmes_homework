@@ -2,7 +2,7 @@ DROP TABLE IF EXISTS "user" CASCADE;
 
 CREATE TABLE IF NOT EXISTS "user"
 (
-    id           BIGSERIAL NOT NULL PRIMARY KEY,
+    id           UUID NOT NULL PRIMARY KEY,
     name         CHARACTER VARYING COLLATE pg_catalog."default",
     agree_terms  BOOLEAN,
     email        VARCHAR(50),
@@ -33,7 +33,7 @@ DROP TABLE IF EXISTS user_sectors CASCADE;
 CREATE TABLE user_sectors
 (
     id        bigserial NOT NULL PRIMARY KEY,
-    user_id   bigint    NOT NULL,
+    user_id   uuid    NOT NULL,
     sector_id bigint    NOT NULL,
     CONSTRAINT user_has_sectors FOREIGN KEY (user_id) REFERENCES "user" (id),
     CONSTRAINT sectors_have_users FOREIGN KEY (sector_id) REFERENCES sector (id)

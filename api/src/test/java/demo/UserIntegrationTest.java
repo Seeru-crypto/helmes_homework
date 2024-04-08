@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 
 import java.util.List;
+import java.util.UUID;
 
 import static demo.service.validation.user_validator.UserErrors.NAME_DOESNT_CONTAIN_Q;
 import static demo.service.validation.user_validator.UserErrors.NAME_NOT_UNIQUE;
@@ -129,7 +130,7 @@ class UserIntegrationTest extends ContextIntegrationTest {
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.name").value("newquser 2"))
             .andExpect(jsonPath("$.agreeToTerms").value(true))
-            .andExpect(jsonPath("$.id").value(createdUser.getId()))
+            .andExpect(jsonPath("$.id").value(createdUser.getId().toString()))
             .andExpect(jsonPath("$.sectors.length()").value(1));
   }
 
@@ -141,7 +142,7 @@ class UserIntegrationTest extends ContextIntegrationTest {
             .setAgreeToTerms(true);
     byte[] bytes = getBytes(dto);
 
-    mockMvc.perform(put("/users/99")
+    mockMvc.perform(put(String.format("/users/%s", UUID.randomUUID()))
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(bytes))
             .andExpect(status().isNotFound());
@@ -161,7 +162,7 @@ class UserIntegrationTest extends ContextIntegrationTest {
 
   @Test
   void delete_shouldThrowError_ifUserDoesNotExist() throws Exception {
-    mockMvc.perform(delete(String.format("/users/%s", 99)))
+    mockMvc.perform(delete(String.format("/users/%s", UUID.randomUUID())))
             .andExpect(status().isNotFound())
             .andDo(print());
   }

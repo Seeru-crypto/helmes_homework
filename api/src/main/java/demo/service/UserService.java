@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -32,7 +33,7 @@ public class UserService {
         return userRepository.findAll(pageable);
     }
 
-    public User findById(Long id) {
+    public User findById(UUID id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> {
                     log.warn("User not found: {}", id);
@@ -42,7 +43,7 @@ public class UserService {
     }
 
     @Transactional
-    public User update(User entity, Long userId) {
+    public User update(User entity, UUID userId) {
         User existingUser = findById(userId);
         validationService.validateEntity(entity, validationService.getUserValidator());
 
@@ -53,7 +54,7 @@ public class UserService {
                 .setSectors(entity.getSectors());
     }
 
-    public void delete(Long id) {
+    public void delete(UUID id) {
         if (!userRepository.existsById(id)) {
             log.warn("User not found: {}", id);
             throw new NotFoundException("User not found") {

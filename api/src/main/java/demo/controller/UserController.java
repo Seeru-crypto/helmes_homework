@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
+import java.util.UUID;
 
 import static org.springframework.http.ResponseEntity.created;
 
@@ -49,7 +50,7 @@ public class UserController {
   }
 
   @PutMapping(path = "/{userId}")
-  public ResponseEntity<UserDto> update(@Valid @RequestBody SaveUserDto dto, @PathVariable Long userId) {
+  public ResponseEntity<UserDto> update(@Valid @RequestBody SaveUserDto dto, @PathVariable UUID userId) {
     log.info("REST request to update user " + dto);
     User updatedUser = userService.update(userMapper.toEntity(dto), userId);
     return ResponseEntity.ok(userMapper.toDto(updatedUser));
@@ -57,7 +58,7 @@ public class UserController {
 
   @DeleteMapping(path = "/{userId}")
   @Operation(summary = "Delete an existing user")
-  public void delete(@PathVariable Long userId) {
+  public void delete(@PathVariable UUID userId) {
     log.info("REST request to delete user " + userId);
     userService.delete(userId);
   }

@@ -9,6 +9,7 @@ import lombok.ToString;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -18,7 +19,7 @@ public class UserDto {
     // In live prod, this would be a security issue. Since every ID would be exposed.
 
     // UUID, would be a better choice, but then I would have to change the DB schema.
-    private Long id;
+    private UUID id;
 
     @NotNull
     private String name;
