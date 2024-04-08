@@ -11,6 +11,11 @@ export async function GetRequest(slug: string, type: RequestType, messageApi?: M
     return await axios({
         method: 'get',
         url: fullPath,
+        params: {
+            sort: 'id',
+            page: 0,
+            size: 10
+        },
         responseType: "json",
     })
         .then(function (response) {

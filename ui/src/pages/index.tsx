@@ -66,6 +66,7 @@ export default function Home({sectors, existingUsers}: LandingProps): ReactEleme
         if (!isUserDataValid(dto, messageApi)) return
 
         const userId = sessionStorage.getItem("USER_ID");
+        console.log({userId})
         if (userId === null) {
             await PostRequest(SlugUsers, dto, messageApi, "user created successfully").then(async (res) => {
                 sessionStorage.setItem("USER_ID", res.id.toString());
@@ -159,5 +160,3 @@ export const getServerSideProps: GetServerSideProps = async () => {
     const existingUsers: UserProps = await GetRequest(SlugUsers, 'inner')
     return {props: {sectors, existingUsers}};
 };
-
-
