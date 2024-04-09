@@ -1,9 +1,9 @@
 package demo.controller;
 
 
+import demo.controller.dto.FilterOptionsDto;
 import demo.controller.dto.UserFilterDto;
 import demo.mapper.UserFilterMapper;
-import demo.model.UserFilter;
 import demo.service.FilterService;
 import demo.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -26,7 +26,8 @@ public class FilterController {
 
   @GetMapping
   @Operation(summary = "Get filter options")
-  public void findAllOptions() {
+  public ResponseEntity<List<FilterOptionsDto>> findAllOptions() {
+    return ResponseEntity.ok(filterService.findAllOptions());
   }
 
   @GetMapping(path = "/{userId}")
@@ -42,5 +43,4 @@ public class FilterController {
     var createdFilter =  filterService.saveFilters(filterDto, user);
     return userFilterMapper.toDto(createdFilter);
   }
-
 }

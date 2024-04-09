@@ -1,5 +1,7 @@
 package demo.service.filter;
 
+import java.util.List;
+
 public enum StringCriteria implements Filters {
   CONTAINS,
   DOES_NOT_CONTAIN,
@@ -8,5 +10,9 @@ public enum StringCriteria implements Filters {
   @Override
   public String getKood() {
     return null;
+  }
+
+  public static List<Filters> getStringCriterias() {
+    return List.of(CONTAINS, EQUALS, DOES_NOT_CONTAIN);
   }
 }

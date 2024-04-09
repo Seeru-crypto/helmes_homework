@@ -1,5 +1,7 @@
 package demo.service.filter;
 
+import java.util.List;
+
 public enum NumberCriteria implements Filters {
   SMALLER_THAN,
   EQUALS,
@@ -8,5 +10,9 @@ public enum NumberCriteria implements Filters {
   @Override
   public String getKood() {
     return null;
+  }
+
+  public static List<Filters> getNumberCriterias() {
+    return List.of(SMALLER_THAN, EQUALS, BIGGER_THAN);
   }
 }
