@@ -4,6 +4,8 @@ package demo.controller;
 import demo.controller.dto.FilterOptionsDto;
 import demo.controller.dto.UserFilterDto;
 import demo.mapper.UserFilterMapper;
+import demo.model.User;
+import demo.model.UserFilter;
 import demo.service.FilterService;
 import demo.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -33,14 +35,17 @@ public class FilterController {
   @GetMapping(path = "/{userId}")
   @Operation(summary = "Get user filters")
   public ResponseEntity<List<UserFilterDto>> findAllByUser(@PathVariable UUID userId) {
-  return null;
+    log.info("GET filters by user id: {}", userId);
+    User user = userService.findById(userId);
+    List<UserFilter> res =  filterService.findByUser(user);
+    return ResponseEntity.ok(userFilterMapper.toDto(res));
   }
 
   @PostMapping("/{userId}")
-  @Operation(summary = "Get user filters")
+  @Operation(summary = "save a new filter")
   public UserFilterDto saveFilter(@RequestBody UserFilterDto filterDto, @PathVariable UUID userId) {
     var user = userService.findById(userId);
-    var createdFilter =  filterService.saveFilters(filterDto, user);
+    var createdFilter = filterService.saveFilters(filterDto, user);
     return userFilterMapper.toDto(createdFilter);
   }
 }

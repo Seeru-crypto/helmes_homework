@@ -1,9 +1,14 @@
 package demo;
 
+import demo.controller.dto.FilterDto;
+import demo.controller.dto.UserFilterDto;
 import demo.model.Sector;
 import demo.model.User;
+import demo.model.UserFilter;
+import demo.service.filter.DataTypes;
 import jakarta.persistence.EntityManager;
 
+import javax.xml.crypto.Data;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -140,6 +145,17 @@ public class ContextIntegrationTest extends BaseIntegrationTest {
             .setName(name)
             .setAgreeToTerms(agreeToTerms)
             .setSectors(sectors));
+  }
+
+  protected UserFilter createUserFilter(List<FilterDto> filters, String name, User user) {
+    UserFilterDto filterDto = new UserFilterDto().setName(name).setFilters(filters);
+    return filterService.saveFilters(filterDto, user);
+  }
+
+  protected List<FilterDto> getFilterDtoList() {
+    FilterDto filter1 = new FilterDto().setCriteria("criteria 1").setValue("value 1").setType(DataTypes.DATE);
+    FilterDto filter2 = new FilterDto().setCriteria("criteria 2").setValue("value 2").setType(DataTypes.STRING);
+    return List.of(filter2, filter1);
   }
 
   public static void clear() {

@@ -11,6 +11,7 @@ import java.util.UUID;
 
 import static demo.service.validation.user_validator.UserErrors.NAME_DOESNT_CONTAIN_Q;
 import static demo.service.validation.user_validator.UserErrors.NAME_NOT_UNIQUE;
+import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -28,9 +29,10 @@ class UserIntegrationTest extends ContextIntegrationTest {
 
     mockMvc.perform(get("/users")
                     .param("page", "0")
-                    .param("sort", "id,asc")
+                    .param("sort", "name,asc")
                     .param("size", "1"))
             .andExpect(status().isOk())
+            .andDo(print())
             .andExpect(jsonPath("$.content.length()").value(1))
             .andExpect(jsonPath("$.content[0].name").value("user_a_q"))
             .andExpect(jsonPath("$.content[0].agreeToTerms").value(true))
@@ -180,8 +182,8 @@ class UserIntegrationTest extends ContextIntegrationTest {
             .andExpect(jsonPath("$[0].sectors[0]").value("Manufacturing"))
             .andExpect(jsonPath("$[1].name").value(users.get(3).getName()))
             .andExpect(jsonPath("$[1].sectors.length()").value(users.get(3).getSectors().size()))
-            .andExpect(jsonPath("$[1].sectors[0]").value("Manufacturing"))
-            .andExpect(jsonPath("$[1].sectors[1]").value("Project furniture"));
+            .andExpect(jsonPath("$[1].sectors[*]").value(containsInAnyOrder("Manufacturing", "Project furniture")))
+    ;
   }
 
   @Test

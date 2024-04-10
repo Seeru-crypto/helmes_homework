@@ -3,7 +3,9 @@ package demo.service.validation.filter_validator;
 import demo.service.validation.ValidationErrors;
 
 public enum FilterErrors implements ValidationErrors {
-  FILTER_ERROR
+  FILTER_ERROR,
+  DEFAULT_ERROR,
+  CRITERIA_ERROR
 
   ;
   @Override

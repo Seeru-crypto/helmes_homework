@@ -11,6 +11,9 @@ import java.util.List;
 @Setter
 @ToString
 public class UserFilterDto {
+
+    private Long id;
+
     @NotNull
     private String name;
 

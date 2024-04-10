@@ -19,6 +19,7 @@ public class UserFilterValidator implements Validator<Filter> {
     ValidationResult result = new ValidationResult();
 
     // Check if the sector name length is within the allowed range
+
     if (filter.getCriteria() == "tere") {
       return result.setValid(false).setMessage(FILTER_ERROR);
     }

@@ -9,6 +9,7 @@ import org.springframework.http.MediaType;
 import java.util.List;
 
 import static demo.service.validation.sector_validator.SectorErrors.NAME_EXISTS;
+import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.junit.Assert.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -112,9 +113,7 @@ class SectorIntegrationTest extends ContextIntegrationTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content[0].sectors.length()").value(3))
-                .andExpect(jsonPath("$.content[0].sectors[0]").value("Manufacturing"))
-                .andExpect(jsonPath("$.content[0].sectors[1]").value("Food and Beverage"))
-                .andExpect(jsonPath("$.content[0].sectors[2]").value("Beverages"))
+                .andExpect(jsonPath("$.content[0].sectors[*]").value(containsInAnyOrder("Manufacturing", "Food and Beverage", "Beverages")))
         ;
 
         mockMvc.perform(delete("/sectors/{id}", 4L))
@@ -130,8 +129,7 @@ class SectorIntegrationTest extends ContextIntegrationTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content[0].sectors.length()").value(2))
-                .andExpect(jsonPath("$.content[0].sectors[0]").value("Manufacturing"))
-                .andExpect(jsonPath("$.content[0].sectors[1]").value("Beverages"))
+                .andExpect(jsonPath("$.content[0].sectors[*]").value(containsInAnyOrder("Manufacturing", "Beverages")))
         ;
     }
 

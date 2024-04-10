@@ -12,6 +12,15 @@ public enum NumberCriteria implements Filters {
     return null;
   }
 
+  public static boolean isStringInEnumList(String string) {
+    for (NumberCriteria value : NumberCriteria.values()) {
+      if (value.name().equals(string.toUpperCase())) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   public static List<Filters> getNumberCriterias() {
     return List.of(SMALLER_THAN, EQUALS, BIGGER_THAN);
   }

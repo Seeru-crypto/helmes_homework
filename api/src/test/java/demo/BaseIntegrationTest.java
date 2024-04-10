@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import demo.controller.dto.SaveUserDto;
 import demo.controller.dto.SectorDto;
 import demo.controller.dto.UserFilterDto;
+import demo.service.FilterService;
 import demo.service.SectorService;
 import demo.service.UserService;
 import jakarta.persistence.EntityManager;
@@ -43,6 +44,9 @@ public abstract class BaseIntegrationTest {
 
     @Autowired
     protected UserService userService;
+
+    @Autowired
+    protected FilterService filterService;
 
     @Autowired
     protected SectorService sectorService;

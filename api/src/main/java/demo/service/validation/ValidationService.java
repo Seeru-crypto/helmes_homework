@@ -1,6 +1,8 @@
 package demo.service.validation;
 
+import demo.controller.dto.FilterDto;
 import demo.exception.BusinessException;
+import demo.model.Filter;
 import demo.model.Sector;
 import demo.model.User;
 import lombok.Getter;
@@ -17,6 +19,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ValidationService {
   private final List<Validator<User>> userValidator;
+  private final List<Validator<Filter>> filterValidator;
+  private final List<Validator<FilterDto>> filterDtoValidator;
   private final List<Validator<Sector>> sectorValidators;
   private final List<Validator<Pageable>> pageableValidator;
 

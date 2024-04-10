@@ -12,6 +12,15 @@ public enum StringCriteria implements Filters {
     return null;
   }
 
+  public static boolean isStringInEnumList(String string) {
+    for (StringCriteria value : StringCriteria.values()) {
+      if (value.name().equals(string.toUpperCase())) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   public static List<Filters> getStringCriterias() {
     return List.of(CONTAINS, EQUALS, DOES_NOT_CONTAIN);
   }

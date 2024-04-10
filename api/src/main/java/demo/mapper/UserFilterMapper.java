@@ -5,6 +5,8 @@ import demo.model.UserFilter;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
+import java.util.List;
+
 @Mapper(componentModel = "spring", uses = {SectorMapper.class, UserMapper.class, FilterMapper.class})
 public interface UserFilterMapper {
   @Mapping(target = "createdBy", ignore = true)
@@ -15,5 +17,7 @@ public interface UserFilterMapper {
 
 
   UserFilterDto toDto(UserFilter userFilterDto);
+
+  List<UserFilterDto> toDto(List<UserFilter> userFilterDto);
 
 }

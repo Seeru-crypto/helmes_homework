@@ -1,6 +1,7 @@
 package demo.model;
 
 
+import demo.service.filter.DataTypes;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -24,7 +25,7 @@ public class Filter extends AbstractAuditingEntity<Long> {
 
   private String criteria;
 
-  private String type;
+  private DataTypes type;
 
   private String value;
 

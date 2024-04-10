@@ -8,7 +8,6 @@ import demo.model.User;
 import demo.model.UserFilter;
 import demo.repository.FilterRepository;
 import demo.repository.UserFilterRepository;
-import demo.service.filter.DataTypes;
 import demo.service.filter.DateCriteria;
 import demo.service.filter.StringCriteria;
 import demo.service.validation.ValidationService;
@@ -44,8 +43,6 @@ public class FilterService {
 
   @Transactional
   public UserFilter saveFilters(UserFilterDto userFilter, User user) {
-    var dataMap = DataTypes.getDataMap();
-
     // validate User filter
     var createdUserFilter = userFilterRepository.save(new UserFilter()
             .setName(userFilter.getName())
@@ -53,6 +50,7 @@ public class FilterService {
 
     // step 2 save validate filters and save with parent ID
     for (FilterDto filter : userFilter.getFilters()) {
+      validationService.validateEntity(filter, validationService.getFilterDtoValidator());
       // validate filter against dataMap
       var createdFilter = filterRepository.save(new Filter()
               .setCriteria(filter.getCriteria())
@@ -70,5 +68,9 @@ public class FilterService {
     response.add(dateOptions);
 
     return response;
+  }
+
+  public List<UserFilter> findByUser(User user) {
+    return userFilterRepository.findAllByUser(user);
   }
 }
