@@ -9,24 +9,23 @@ public enum DateCriteria implements Filters {
   BETWEEN;
 
   @Override
-  public String getKood() {
-    return null;
+public String getKood() {
+    return this.name();
   }
 
   public static boolean isStringInEnumList(String string) {
     for (DateCriteria value : DateCriteria.values()) {
-      if (value.name().equals(string.toUpperCase())) {
-        return true;
+      try {
+        if (value.name().equals(string.toUpperCase())) {
+          return true;
+        }
+      } catch (NullPointerException e) {
+        return false;
       }
     }
     return false;
   }
-
-
   public static List<Filters> getDateCriterias() {
     return List.of(BEFORE, AFTER, EQUALS, BETWEEN);
   }
-
-
-
 }

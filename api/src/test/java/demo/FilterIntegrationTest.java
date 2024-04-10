@@ -7,6 +7,8 @@ import demo.model.Sector;
 import demo.model.User;
 import demo.model.UserFilter;
 import demo.service.filter.DataTypes;
+import demo.service.filter.NumberCriteria;
+import demo.service.filter.StringCriteria;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 
@@ -21,6 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class FilterIntegrationTest extends ContextIntegrationTest {
+
   @Test
   void save_shouldSaveNewFilter() throws Exception {
     List<User> users = createDefaultUsers();
@@ -32,12 +35,12 @@ class FilterIntegrationTest extends ContextIntegrationTest {
     mockMvc.perform(post(String.format("/filters/%s", users.get(0).getId()))
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(bytes))
-            .andExpect(status().isOk())
             .andDo(print())
+            .andExpect(status().isOk())
             .andExpect(jsonPath("$.name").value("hello world"))
-            .andExpect(jsonPath("$.filters[*].type").value(containsInAnyOrder("STRING", "DATE")))
-            .andExpect(jsonPath("$.filters[*].criteria").value(containsInAnyOrder("criteria 2", "criteria 1")))
-            .andExpect(jsonPath("$.filters[*].value").value(containsInAnyOrder("value 2", "value 1")))
+            .andExpect(jsonPath("$.filters[*].type").value(containsInAnyOrder("STRING", "DATE", "NUMBER")))
+            .andExpect(jsonPath("$.filters[*].criteria").value(containsInAnyOrder("CONTAINS", "AFTER", "SMALLER_THAN")))
+            .andExpect(jsonPath("$.filters[*].value").value(containsInAnyOrder(filterDtos.stream().map(FilterDto::getValue).toArray())))
     ;
 
     List<UserFilter> existingUserFilters = findAll(UserFilter.class);
@@ -45,7 +48,7 @@ class FilterIntegrationTest extends ContextIntegrationTest {
     assertEquals("hello world", existingUserFilters.get(0).getName());
 
     List<Filter> existingFilters = findAll(Filter.class);
-    assertEquals(2, existingFilters.size());
+    assertEquals(3, existingFilters.size());
     assertEquals(DataTypes.STRING, existingFilters.get(0).getType());
   }
 
@@ -57,11 +60,16 @@ class FilterIntegrationTest extends ContextIntegrationTest {
     List<FilterDto> filterDtos = getFilterDtoList();
     createUserFilter(filterDtos, "new filter profile", user);
 
-    FilterDto filter3 = new FilterDto().setCriteria("criteria 3").setValue("value 3").setType(DataTypes.STRING);
+    FilterDto filter3 = new FilterDto().setCriteria(StringCriteria.EQUALS.getKood())
+            .setValue("value 3")
+            .setType(DataTypes.STRING);
     createUserFilter(List.of(filter3), "second profile", user);
 
     User hiddenUser = createUser("hidden_user_q", true, List.of(sector));
-    FilterDto filter4 = new FilterDto().setCriteria("hidden criteria").setValue("value").setType(DataTypes.STRING);
+    FilterDto filter4 = new FilterDto()
+            .setCriteria(NumberCriteria.BIGGER_THAN.getKood())
+            .setValue("2")
+            .setType(DataTypes.NUMBER);
     createUserFilter(List.of(filter4), "hidden profile", hiddenUser);
 
     List<UserFilter> existingFilters = findAll(UserFilter.class);
@@ -77,10 +85,10 @@ class FilterIntegrationTest extends ContextIntegrationTest {
             .andDo(print())
             .andExpect(jsonPath("$.length()").value(2))
             .andExpect(jsonPath("$[*].name").value(containsInAnyOrder("new filter profile", "second profile")))
-            .andExpect(jsonPath("$[0].filters.length()").value(2))
-            .andExpect(jsonPath("$[0].filters[*].type").value(containsInAnyOrder("DATE", "STRING")))
-            .andExpect(jsonPath("$[0].filters[*].criteria").value(containsInAnyOrder("criteria 1", "criteria 2")))
-            .andExpect(jsonPath("$[0].filters[*].value").value(containsInAnyOrder("value 1", "value 2")))
+            .andExpect(jsonPath("$[0].filters.length()").value(3))
+            .andExpect(jsonPath("$[0].filters[*].type").value(containsInAnyOrder("DATE", "STRING", "NUMBER")))
+            .andExpect(jsonPath("$[0].filters[*].criteria").value(containsInAnyOrder("CONTAINS", "AFTER", "SMALLER_THAN")))
+            .andExpect(jsonPath("$[0].filters[*].value").value(containsInAnyOrder(filterDtos.stream().map(FilterDto::getValue).toArray())))
 
             .andExpect(jsonPath("$[1].filters.length()").value(1))
             .andExpect(jsonPath("$[1].filters[0].type").value("STRING"))

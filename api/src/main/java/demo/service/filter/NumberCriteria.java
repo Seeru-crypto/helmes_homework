@@ -8,8 +8,8 @@ public enum NumberCriteria implements Filters {
   BIGGER_THAN;
 
   @Override
-  public String getKood() {
-    return null;
+public String getKood() {
+    return this.name();
   }
 
   public static boolean isStringInEnumList(String string) {

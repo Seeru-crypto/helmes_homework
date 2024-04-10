@@ -37,7 +37,7 @@ public class ValidationService {
   private void validationCleanup(ValidationResult validationResult) {
     if (validationResult.isValid()) return;
 
-    log.warn("user validation failed: {}", validationResult.getMessage());
+    log.warn("data validation failed: {}", validationResult.getMessage());
     throw new BusinessException("DEFAULT_ERROR") {
       // Override getMessage() to provide a custom error message
       @Override
