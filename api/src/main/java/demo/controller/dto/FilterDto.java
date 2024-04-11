@@ -1,6 +1,7 @@
 package demo.controller.dto;
 
 import demo.service.filter.DataTypes;
+import demo.service.filter.FieldNames;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,4 +19,8 @@ public class FilterDto {
 
     @NotNull
     private String value;
+
+    @NotNull
+    private FieldNames fieldName; // missing the actual fieldName "name, dob....."
+
 }

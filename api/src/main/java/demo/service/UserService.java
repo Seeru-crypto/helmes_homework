@@ -4,6 +4,7 @@ import demo.exception.BusinessException;
 import demo.exception.NotFoundException;
 import demo.model.Sector;
 import demo.model.User;
+import demo.model.UserFilter;
 import demo.repository.UserRepository;
 import demo.service.validation.ValidationService;
 import jakarta.transaction.Transactional;
@@ -22,6 +23,7 @@ import java.util.UUID;
 public class UserService {
     private final UserRepository userRepository;
     private final ValidationService validationService;
+    private final FilterService filterService;
 
     @Transactional
     public User save(User user) {
@@ -75,6 +77,15 @@ public class UserService {
                 .findAllBySectorsContains(sector)
                 .forEach(user ->
                         user.removeSector(sector));
+    }
+
+
+    public List<User> findAllByFilter(Long userFilterId) {
+        UserFilter userFilter = filterService.findById(userFilterId);
+        // user name contains A
+        // user dob later than 1995
+
+        return null;
     }
 
     public List<User> findAllBySector(Sector existingSector) {

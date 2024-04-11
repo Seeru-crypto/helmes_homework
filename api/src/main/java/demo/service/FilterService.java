@@ -73,4 +73,8 @@ public class FilterService {
   public List<UserFilter> findByUser(User user) {
     return userFilterRepository.findAllByUser(user);
   }
+
+  public UserFilter findById(Long userFilterId) {
+    return userFilterRepository.getReferenceById(userFilterId);
+  }
 }
