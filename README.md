@@ -40,18 +40,6 @@ If it occurs just reload the browser.
 - [ ] Add dynamic filter for that table
 - [ ] Implementeeri DFS ja BFS otsingu algoritmid
 
-
-
-## Küsimmused Tõnnule
-- Dockerfile setup, kus teeks gradle build + run
-- Kuidas saaks valideerimise optimiseerida UserService.java
-- Kuidas näeks välja nested filter arhidektuur? Kus iga kasutaja saab salvestada endale filtri profiilid. Profiil A´l on ainult string filter või profiil C´l on 2 stringi ja üks DOB
-  - String contains & not contain
-  - integer bigger than, smaller than
-  - dob before and after
-- Kas PhoneNumberValidatorTest puhul saab ValueSource´i inputi muuta muutujaks (näeb ilusam välja)
-
-
 ## Project structure
 │   │       ├───config                                                  
 │   │       ├───controller                                              
