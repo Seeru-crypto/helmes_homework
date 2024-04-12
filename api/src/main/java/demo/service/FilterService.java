@@ -56,6 +56,7 @@ public class FilterService {
               .setCriteria(filter.getCriteria())
               .setUserFilterId(createdUserFilter.getId())
               .setValue(filter.getValue())
+              .setFieldName(filter.getFieldName())
               .setType(filter.getType()));
       createdUserFilter.addFilter(createdFilter);
     }

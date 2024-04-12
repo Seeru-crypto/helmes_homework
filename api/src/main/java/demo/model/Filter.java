@@ -26,7 +26,7 @@ public class Filter extends AbstractAuditingEntity<Long> {
 
   private String criteria; // CONTAINS, DOES_NOT_CONTAIN
 
-  private DataTypes type; //   STRING,DATE,   NUMBER;
+  private DataTypes type; //   STRING, DATE, NUMBER
 
   private String value; // searchCrietria a, 1, or date
 

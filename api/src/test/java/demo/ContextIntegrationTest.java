@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static demo.service.filter.DateCriteria.AFTER;
+import static demo.service.filter.FieldNames.DOB;
+import static demo.service.filter.FieldNames.NAME;
 import static demo.service.filter.NumberCriteria.SMALLER_THAN;
 import static demo.service.filter.StringCriteria.CONTAINS;
 
@@ -147,9 +149,9 @@ public class ContextIntegrationTest extends BaseIntegrationTest {
   }
 
   protected List<FilterDto> getFilterDtoList() {
-    FilterDto filter1 = new FilterDto().setCriteria(AFTER.getKood()).setValue(Instant.now().toString()).setType(DataTypes.DATE);
-    FilterDto filter2 = new FilterDto().setCriteria(CONTAINS.getKood()).setValue("value 2").setType(DataTypes.STRING);
-    FilterDto filter3 = new FilterDto().setCriteria(SMALLER_THAN.getKood()).setValue("3").setType(DataTypes.NUMBER);
+    FilterDto filter1 = new FilterDto().setCriteria(AFTER.getKood()).setValue(Instant.now().toString()).setType(DataTypes.DATE).setFieldName(DOB);
+    FilterDto filter2 = new FilterDto().setCriteria(CONTAINS.getKood()).setValue("value 2").setType(DataTypes.STRING).setFieldName(NAME);
+    FilterDto filter3 = new FilterDto().setCriteria(SMALLER_THAN.getKood()).setValue("3").setType(DataTypes.NUMBER).setFieldName(NAME);
     return List.of(filter2, filter1, filter3);
   }
 

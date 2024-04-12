@@ -8,6 +8,7 @@ public enum FieldNames {
   DOB
   ;
 
+  // TODO: Implement dataMap validation for filters
   public static Map<FieldNames, DataTypes> getDataMap() {
     Map<FieldNames, DataTypes> dataMap = new HashMap<>();
     dataMap.put(NAME, DataTypes.STRING);

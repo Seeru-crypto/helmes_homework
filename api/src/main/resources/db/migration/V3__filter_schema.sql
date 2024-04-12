@@ -23,6 +23,7 @@ CREATE TABLE IF NOT EXISTS filter
     criteria     VARCHAR(50) NOT NULL,
     type         VARCHAR(50) NOT NULL,
     value        VARCHAR(50) NOT NULL,
+    field_name        VARCHAR(50) NOT NULL,
     user_filter_id    BIGINT,
 
     created_by   TEXT,
