@@ -8,6 +8,7 @@ import demo.model.User;
 import demo.model.UserFilter;
 import demo.repository.UserRepository;
 import demo.service.filter.DataTypes;
+import demo.service.filter.DateCriteria;
 import demo.service.filter.StringCriteria;
 import demo.service.validation.ValidationService;
 import jakarta.persistence.EntityManager;
@@ -22,147 +23,134 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
-import java.util.regex.Pattern;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserService {
-  private final UserRepository userRepository;
-  private final ValidationService validationService;
-  private final FilterService filterService;
-  private final EntityManager entityManager;
+    private final UserRepository userRepository;
+    private final ValidationService validationService;
+    private final FilterService filterService;
+    private final EntityManager entityManager;
 
-  @Transactional
-  public User save(User user) {
-    if (user.getId() != null && !userRepository.existsById(user.getId())) {
-      log.warn("User with given ID already exists: {}", user.getEmail());
-      throw new BusinessException("User with email already exists") {
-      };
+    @Transactional
+    public User save(User user) {
+        if (user.getId() != null && !userRepository.existsById(user.getId())) {
+            log.warn("User with given ID already exists: {}", user.getEmail());
+            throw new BusinessException("User with email already exists") {
+            };
+        }
+
+        validationService.validateEntity(user, validationService.getUserValidator());
+        return userRepository.save(user);
     }
 
-    validationService.validateEntity(user, validationService.getUserValidator());
-    return userRepository.save(user);
-  }
-
-  public Page<User> findAll(Pageable pageable) {
-    validationService.validateEntity(pageable, validationService.getPageableValidator());
-    return userRepository.findAll(pageable);
-  }
-
-  public User findById(UUID id) {
-    return userRepository.findById(id)
-            .orElseThrow(() -> {
-              log.warn("User not found: {}", id);
-              return new NotFoundException("User not found") {
-              };
-            });
-  }
-
-  @Transactional
-  public User update(User entity, UUID userId) {
-    User existingUser = findById(userId);
-    validationService.validateEntity(entity, validationService.getUserValidator());
-
-    return existingUser
-            .setName(entity.getName())
-            .setEmail(entity.getEmail())
-            .setPhoneNumber(entity.getPhoneNumber())
-            .setSectors(entity.getSectors());
-  }
-
-  public void delete(UUID id) {
-    if (!userRepository.existsById(id)) {
-      log.warn("User not found: {}", id);
-      throw new NotFoundException("User not found") {
-      };
+    public Page<User> findAll(Pageable pageable) {
+        validationService.validateEntity(pageable, validationService.getPageableValidator());
+        return userRepository.findAll(pageable);
     }
-    userRepository.deleteById(id);
-  }
 
-  public void removeSectorFromAllUsers(Sector sector) {
-    userRepository
-            .findAllBySectorsContains(sector)
-            .forEach(user ->
-                    user.removeSector(sector));
-  }
+    public User findById(UUID id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> {
+                    log.warn("User not found: {}", id);
+                    return new NotFoundException("User not found") {
+                    };
+                });
+    }
 
-  public List<User> findAllBySector(Sector existingSector) {
-    return userRepository.findAllBySectorsContains(existingSector);
-  }
+    @Transactional
+    public User update(User entity, UUID userId) {
+        User existingUser = findById(userId);
+        validationService.validateEntity(entity, validationService.getUserValidator());
 
-  public List<User> findAllByUserFilter(UserFilter existingFilter) {
-    CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-    CriteriaQuery<User> criteriaQuery = criteriaBuilder.createQuery(User.class);
-    Root<User> itemRoot = criteriaQuery.from(User.class);
-     var test2 = generatePredicateFromFilter(existingFilter.getFilters().get(0), criteriaBuilder, itemRoot);
+        return existingUser
+                .setName(entity.getName())
+                .setEmail(entity.getEmail())
+                .setPhoneNumber(entity.getPhoneNumber())
+                .setSectors(entity.getSectors());
+    }
 
-    Predicate predicateEquelsJohn
-            = criteriaBuilder.equal(itemRoot.get("name"), "qJack Doesn't");
+    public void delete(UUID id) {
+        if (!userRepository.existsById(id)) {
+            log.warn("User not found: {}", id);
+            throw new NotFoundException("User not found") {
+            };
+        }
+        userRepository.deleteById(id);
+    }
 
-    Predicate predicateContainsJo
-            = criteriaBuilder.like(itemRoot.get("name"), "%Does%");
+    public void removeSectorFromAllUsers(Sector sector) {
+        userRepository
+                .findAllBySectorsContains(sector)
+                .forEach(user ->
+                        user.removeSector(sector));
+    }
 
-    Predicate predicateForColor
-            = criteriaBuilder.or(predicateEquelsJohn, predicateContainsJo);
+    public List<User> findAllBySector(Sector existingSector) {
+        return userRepository.findAllBySectorsContains(existingSector);
+    }
 
-//        List<Predicate> test = List.of(predicateContainsJo, predicateEquelsJohn);
-    List<Predicate> test = List.of(predicateContainsJo);
-    Predicate finalPredicate = null;
-    for (Predicate predicate : test) {
-      if (finalPredicate == null) {
-        finalPredicate = predicate;
-      } else {
-        finalPredicate = criteriaBuilder.and(finalPredicate, predicate);
-      }
+    public List<User> findAllByUserFilter(UserFilter existingFilter) {
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<User> criteriaQuery = criteriaBuilder.createQuery(User.class);
+        Root<User> itemRoot = criteriaQuery.from(User.class);
+
+        List<Predicate> predicateList = existingFilter.getFilters().stream().map(filter -> generatePredicateFromFilter(filter, criteriaBuilder, itemRoot)).toList();
+
+        Predicate finalPredicate = null;
+        for (Predicate predicate : predicateList) {
+            if (finalPredicate == null) {
+                finalPredicate = predicate;
+            } else {
+                finalPredicate = criteriaBuilder.and(finalPredicate, predicate);
+            }
+        }
+
+        criteriaQuery.where(finalPredicate);
+        return entityManager.createQuery(criteriaQuery).getResultList();
     }
 
 
-//        Predicate predicateForGradeA
-//                = criteriaBuilder.equal(itemRoot.get("grade"), "A");
-//        Predicate predicateForGradeB
-//                = criteriaBuilder.equal(itemRoot.get("grade"), "B");
-//        Predicate predicateForGrade
-//                = criteriaBuilder.or(predicateForGradeA, predicateForGradeB);
+    private Predicate generatePredicateFromFilter(Filter filter, CriteriaBuilder criteriaBuilder, Root<User> itemRoot) {
 
-//        Predicate finalPredicate
-//                = criteriaBuilder.and(predicateForColor, predicateForGrade);
+        if (filter.getType() == DataTypes.STRING) {
+            return stringFiltering(filter, criteriaBuilder, itemRoot);
+        } else if (filter.getType() == DataTypes.DATE) {
+            return dateFiltering(filter, criteriaBuilder, itemRoot);
 
-
-//        criteriaQuery.where(finalPredicate);
-
-    criteriaQuery.where(finalPredicate);
-    List<User> items = entityManager.createQuery(criteriaQuery).getResultList();
-//
-
-//        return items;
-    return null;
-  }
-
-
-  private Predicate generatePredicateFromFilter(Filter filter, CriteriaBuilder criteriaBuilder, Root<User> itemRoot) {
-    Predicate predicate = null;
-
-    if (filter.getType() == DataTypes.STRING) {
-      // Should be string criteria
-      StringCriteria criteria = StringCriteria.valueOf(filter.getCriteria());
-      return switch (criteria) {
-        case CONTAINS ->
-                criteriaBuilder.like(itemRoot.get(filter.getFieldName().name().toLowerCase()), "%" + filter.getValue() + "%");
-        case DOES_NOT_CONTAIN ->
-                criteriaBuilder.notLike(itemRoot.get(filter.getFieldName().name().toLowerCase()), "%" + filter.getValue() + "%");
-        case EQUALS -> criteriaBuilder.equal(itemRoot.get(filter.getFieldName().name().toLowerCase()), filter.getValue());
-      };
+        }
+        return null;
     }
-    return null;
-  }
 
+    private Predicate dateFiltering(Filter filter, CriteriaBuilder criteriaBuilder, Root<User> itemRoot) {
+        DateCriteria criteria = DateCriteria.valueOf(filter.getCriteria());
 
-  // name contains A
+        return switch (criteria) {
+            case BEFORE ->
+                    criteriaBuilder.lessThan(itemRoot.get(filter.getFieldName().name().toLowerCase()), Instant.parse(filter.getValue()));
+            case AFTER ->
+                    criteriaBuilder.greaterThan(itemRoot.get(filter.getFieldName().name().toLowerCase()), Instant.parse(filter.getValue()));
+            case EQUALS ->
+                    criteriaBuilder.equal(itemRoot.get(filter.getFieldName().name().toLowerCase()), Instant.parse(filter.getValue()));
+            case BETWEEN ->
+                    criteriaBuilder.between(itemRoot.get(filter.getFieldName().name().toLowerCase()), Instant.parse(filter.getValue()), Instant.parse(filter.getValue()));
+        };
+    }
 
-
-
-
+    private Predicate stringFiltering(Filter filter, CriteriaBuilder criteriaBuilder, Root<User> itemRoot) {
+        StringCriteria criteria = StringCriteria.valueOf(filter.getCriteria());
+        return switch (criteria) {
+            case CONTAINS ->
+                    criteriaBuilder.like(itemRoot.get(filter.getFieldName().name().toLowerCase()), "%" + filter.getValue() + "%");
+            case DOES_NOT_CONTAIN ->
+                    criteriaBuilder.notLike(itemRoot.get(filter.getFieldName().name().toLowerCase()), "%" + filter.getValue() + "%");
+            case EQUALS ->
+                    criteriaBuilder.equal(itemRoot.get(filter.getFieldName().name().toLowerCase()), filter.getValue());
+        };
+    }
 }

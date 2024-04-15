@@ -1,14 +1,22 @@
 package demo;
 
+import demo.controller.dto.FilterDto;
 import demo.controller.dto.SaveUserDto;
 import demo.model.Sector;
 import demo.model.User;
+import demo.service.filter.DataTypes;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
+import static demo.service.filter.DateCriteria.AFTER;
+import static demo.service.filter.NumberCriteria.SMALLER_THAN;
+import static demo.service.filter.StringCriteria.CONTAINS;
+import static demo.service.filter.UserFieldNames.DOB;
+import static demo.service.filter.UserFieldNames.NAME;
 import static demo.service.validation.user_validator.UserErrors.NAME_DOESNT_CONTAIN_Q;
 import static demo.service.validation.user_validator.UserErrors.NAME_NOT_UNIQUE;
 import static org.hamcrest.Matchers.containsInAnyOrder;
@@ -193,12 +201,27 @@ class UserIntegrationTest extends ContextIntegrationTest {
             .andExpect(status().isNotFound());
   }
 
+  // String
   @Test
-  void findAllByFilterId_shouldReturnUsers() throws Exception {
+  void findAllByFilterId_STRING_shouldReturnUsers() throws Exception {
     var users = createDefaultUsers();
     var mainUser = users.get(0);
 
-    var filters = getFilterDtoList();
+    var filters = List.of(new FilterDto().setCriteria(CONTAINS.getKood()).setValue("value 2").setType(DataTypes.STRING).setFieldName(NAME));
+    var userFilter = createUserFilter(filters, "user filter 1", mainUser);
+
+    mockMvc.perform(get(String.format("/users/filter/%s", userFilter.getId())))
+            .andExpect(status().isOk())
+            .andDo(print())
+    ;
+  }
+  // Date
+  @Test
+  void findAllByFilterId_DATE_shouldReturnUsers() throws Exception {
+    var users = createDefaultUsers();
+    var mainUser = users.get(0);
+// Instant.parse("1995-04-10T21:00:25.451157400Z")
+    var filters = List.of(new FilterDto().setCriteria(AFTER.getKood()).setValue("2001-05-10T21:00:25.451157400Z").setType(DataTypes.DATE).setFieldName(DOB));
     var userFilter = createUserFilter(filters, "user filter 1", mainUser);
 
     mockMvc.perform(get(String.format("/users/filter/%s", userFilter.getId())))

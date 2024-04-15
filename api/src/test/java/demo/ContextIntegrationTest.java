@@ -31,10 +31,10 @@ public class ContextIntegrationTest extends BaseIntegrationTest {
       createFullSectorTree();
     }
     List<User> users = new ArrayList<>();
-    users.add(createUser("qJohn Does", true, List.of(findSectorById(1L)), "johndoe1234@gmail.com", "+123 123456789", Instant.parse("2024-04-10T21:00:25.451157400Z")));
-    users.add(createUser("qJane Does", true, List.of(findSectorById(2L), findSectorById(11L)), "jane_smith123@example.com", "+372 1234567",Instant.parse("2024-04-10T21:00:25.451157400Z")));
-    users.add(createUser("qJack Doesn't", true, List.of(findSectorById(8L), findSectorById(11L), findSectorById(13L)), "bob.smith@company.co.uk", "+44 1234567890",Instant.parse("2024-04-10T21:00:25.451157400Z")));
-    users.add(createUser("qJames Memorial", true, List.of(findSectorById(1L), findSectorById(20L)), "mary.smith@email.com", "+1 1234567890",Instant.parse("2024-04-10T21:00:25.451157400Z")));
+    users.add(createUser("qJohn Does", true, List.of(findSectorById(1L)), "johndoe1234@gmail.com", "+123 123456789", Instant.parse("1995-04-10T21:00:25.451157400Z")));
+    users.add(createUser("qJane Does", true, List.of(findSectorById(2L), findSectorById(11L)), "jane_smith123@example.com", "+372 1234567",Instant.parse("2000-04-10T21:00:25.451157400Z")));
+    users.add(createUser("qJack Doesn't", true, List.of(findSectorById(8L), findSectorById(11L), findSectorById(13L)), "bob.smith@company.co.uk", "+44 1234567890",Instant.parse("2005-04-10T21:00:25.451157400Z")));
+    users.add(createUser("qJames Memorial", true, List.of(findSectorById(1L), findSectorById(20L)), "mary.smith@email.com", "+1 1234567890",Instant.parse("2010-04-10T21:00:25.451157400Z")));
     return users;
   }
 
