@@ -1,6 +1,5 @@
 package demo.controller;
 
-
 import demo.controller.dto.FilterOptionsDto;
 import demo.controller.dto.UserFilterDto;
 import demo.mapper.UserFilterMapper;
@@ -33,7 +32,7 @@ public class FilterController {
   }
 
   @GetMapping(path = "/{userId}")
-  @Operation(summary = "Get user filters")
+  @Operation(summary = "Get user filter options")
   public ResponseEntity<List<UserFilterDto>> findAllByUser(@PathVariable UUID userId) {
     log.info("GET filters by user id: {}", userId);
     User user = userService.findById(userId);
@@ -42,7 +41,7 @@ public class FilterController {
   }
 
   @PostMapping("/{userId}")
-  @Operation(summary = "save a new filter")
+  @Operation(summary = "save a new filter to he specified user")
   public UserFilterDto saveFilter(@RequestBody UserFilterDto filterDto, @PathVariable UUID userId) {
     var user = userService.findById(userId);
     var createdFilter = filterService.saveFilters(filterDto, user);

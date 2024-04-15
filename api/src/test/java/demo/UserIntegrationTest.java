@@ -192,4 +192,18 @@ class UserIntegrationTest extends ContextIntegrationTest {
             .andDo(print())
             .andExpect(status().isNotFound());
   }
+
+  @Test
+  void findAllByFilterId_shouldReturnUsers() throws Exception {
+    var users = createDefaultUsers();
+    var mainUser = users.get(0);
+
+    var filters = getFilterDtoList();
+    var userFilter = createUserFilter(filters, "user filter 1", mainUser);
+
+    mockMvc.perform(get(String.format("/users/filter/%s", userFilter.getId())))
+            .andExpect(status().isOk())
+            .andDo(print())
+    ;
+  }
 }

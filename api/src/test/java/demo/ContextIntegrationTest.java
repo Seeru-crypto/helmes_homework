@@ -13,8 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static demo.service.filter.DateCriteria.AFTER;
-import static demo.service.filter.FieldNames.DOB;
-import static demo.service.filter.FieldNames.NAME;
+import static demo.service.filter.UserFieldNames.DOB;
+import static demo.service.filter.UserFieldNames.NAME;
 import static demo.service.filter.NumberCriteria.SMALLER_THAN;
 import static demo.service.filter.StringCriteria.CONTAINS;
 

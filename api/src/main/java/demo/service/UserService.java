@@ -24,6 +24,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final ValidationService validationService;
     private final FilterService filterService;
+//    private final EntityManager entityManager;
 
     @Transactional
     public User save(User user) {
@@ -90,5 +91,34 @@ public class UserService {
 
     public List<User> findAllBySector(Sector existingSector) {
         return userRepository.findAllBySectorsContains(existingSector);
+    }
+
+    public List<User> findAllByUserFilter(UserFilter existingFilter) {
+//        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+//        CriteriaQuery<User> criteriaQuery = criteriaBuilder.createQuery(User.class);
+//        Root<User> itemRoot = criteriaQuery.from(User.class);
+//
+//        Predicate predicateForBlueColor
+//                = criteriaBuilder.equal(itemRoot.get("color"), "blue");
+//        Predicate predicateForRedColor
+//                = criteriaBuilder.equal(itemRoot.get("color"), "red");
+//        Predicate predicateForColor
+//                = criteriaBuilder.or(predicateForBlueColor, predicateForRedColor);
+//
+//        Predicate predicateForGradeA
+//                = criteriaBuilder.equal(itemRoot.get("grade"), "A");
+//        Predicate predicateForGradeB
+//                = criteriaBuilder.equal(itemRoot.get("grade"), "B");
+//        Predicate predicateForGrade
+//                = criteriaBuilder.or(predicateForGradeA, predicateForGradeB);
+//
+//        Predicate finalPredicate
+//                = criteriaBuilder.and(predicateForColor, predicateForGrade);
+//        criteriaQuery.where(finalPredicate);
+//        List<User> items = entityManager.createQuery(criteriaQuery).getResultList();
+//
+
+//        return items;
+        return null;
     }
 }

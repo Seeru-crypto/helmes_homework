@@ -7,7 +7,7 @@ import demo.model.Sector;
 import demo.model.User;
 import demo.model.UserFilter;
 import demo.service.filter.DataTypes;
-import demo.service.filter.FieldNames;
+import demo.service.filter.UserFieldNames;
 import demo.service.filter.NumberCriteria;
 import demo.service.filter.StringCriteria;
 import org.junit.jupiter.api.Test;
@@ -63,7 +63,7 @@ class FilterIntegrationTest extends ContextIntegrationTest {
 
     FilterDto filter3 = new FilterDto().setCriteria(StringCriteria.EQUALS.getKood())
             .setValue("value 3")
-            .setFieldName(FieldNames.NAME)
+            .setFieldName(UserFieldNames.NAME)
             .setType(DataTypes.STRING);
     createUserFilter(List.of(filter3), "second profile", user);
 
@@ -71,7 +71,7 @@ class FilterIntegrationTest extends ContextIntegrationTest {
     FilterDto filter4 = new FilterDto()
             .setCriteria(NumberCriteria.BIGGER_THAN.getKood())
             .setValue("2")
-            .setFieldName(FieldNames.NAME)
+            .setFieldName(UserFieldNames.NAME)
             .setType(DataTypes.NUMBER);
     createUserFilter(List.of(filter4), "hidden profile", hiddenUser);
 

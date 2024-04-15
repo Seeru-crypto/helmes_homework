@@ -29,37 +29,49 @@ public class FilterDtoValidator implements Validator<FilterDto> {
     switch (filterDto.getType()) {
       case DATE -> {
         // apply date validations
-        if (!DateCriteria.isStringInEnumList(filterDto.getCriteria())){
-          logWarning(INVALID_CRITERIA_ERROR, filterDto.getCriteria());
-          return result.setValid(false).setMessage(INVALID_CRITERIA_ERROR);
-        }
-
-        if (!isDateValid(filterDto.getValue())) {
-          logWarning(INVALID_DATE_VALUE, filterDto.getValue());
-          return result.setValid(false).setMessage(INVALID_DATE_VALUE);
-        }
+        return dateValidator(filterDto, result);
       }
       case NUMBER ->  {
         // apply numeric validations
-        if (!NumberCriteria.isStringInEnumList(filterDto.getCriteria())){
-          logWarning(INVALID_CRITERIA_ERROR, filterDto.getCriteria());
-          return result.setValid(false).setMessage(INVALID_CRITERIA_ERROR);
-        }
-
-        if (!isNumberValid(filterDto.getValue())) {
-          logWarning(INVALID_NUMBER_VALUE, filterDto.getValue());
-          return result.setValid(false).setMessage(INVALID_NUMBER_VALUE);
-        }
+        return numberValidator(filterDto, result);
       }
       case STRING -> {
-        if (!StringCriteria.isStringInEnumList(filterDto.getCriteria())){
-          logWarning(INVALID_CRITERIA_ERROR, filterDto.getCriteria());
-          return result.setValid(false).setMessage(INVALID_CRITERIA_ERROR);
-        }
+        return stringValidator(filterDto, result);
       }
       default -> {
-        return result.setValid(false).setMessage(DEFAULT_ERROR);
+        return result.setValid(true);
       }
+    }
+  }
+
+  private ValidationResult numberValidator(FilterDto filterDto, ValidationResult result) {
+    if (!NumberCriteria.isStringInEnumList(filterDto.getCriteria())){
+      logWarning(INVALID_CRITERIA_ERROR, filterDto.getCriteria());
+      return result.setValid(false).setMessage(INVALID_CRITERIA_ERROR);
+    }
+    if (!isNumberValid(filterDto.getValue())) {
+      logWarning(INVALID_NUMBER_VALUE, filterDto.getValue());
+      return result.setValid(false).setMessage(INVALID_NUMBER_VALUE);
+    }
+    return result.setValid(true);
+  }
+  private ValidationResult stringValidator(FilterDto filterDto, ValidationResult result) {
+    if (!StringCriteria.isStringInEnumList(filterDto.getCriteria())){
+      logWarning(INVALID_CRITERIA_ERROR, filterDto.getCriteria());
+      return result.setValid(false).setMessage(INVALID_CRITERIA_ERROR);
+    }
+    return result.setValid(true);
+  }
+
+  private ValidationResult dateValidator(FilterDto filterDto, ValidationResult result) {
+    if (!DateCriteria.isStringInEnumList(filterDto.getCriteria())){
+      logWarning(INVALID_CRITERIA_ERROR, filterDto.getCriteria());
+      return result.setValid(false).setMessage(INVALID_CRITERIA_ERROR);
+    }
+
+    if (!isDateValid(filterDto.getValue())) {
+      logWarning(INVALID_DATE_VALUE, filterDto.getValue());
+      return result.setValid(false).setMessage(INVALID_DATE_VALUE);
     }
     return result.setValid(true);
   }

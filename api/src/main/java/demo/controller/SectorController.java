@@ -22,12 +22,14 @@ public class SectorController {
     private final SectorMapper sectorMapper;
 
     @GetMapping
+    @Operation(summary = "Find all paginated sectors")
     public List<SectorDto> findAll() {
         log.info("REST request to findAll sectors");
         return sectorMapper.toDtos(sectorService.findAll());
     }
 
     @GetMapping("/{id}")
+    @Operation(summary = "get sector by id")
     public SectorDto findById(@PathVariable Long id) {
         log.info("REST request to sector by id: {}", id);
         return sectorMapper.toDto(sectorService.findById(id));
@@ -41,6 +43,7 @@ public class SectorController {
     }
 
     @PostMapping
+    @Operation(summary = "Save new sector")
     public ResponseEntity<SectorDto> save(@Valid @RequestBody SectorDto sectorDto) {
         log.info("REST request to save sector: {}", sectorDto);
         Sector createdSector = sectorService.save(sectorMapper.toEntity(sectorDto));
@@ -48,6 +51,7 @@ public class SectorController {
     }
 
     @PutMapping
+    @Operation(summary = "update existing sector")
     public ResponseEntity<SectorDto> update(@Valid @RequestBody SectorDto dto) {
         log.info("REST request to update sector: " + dto);
         Sector updatedSector = sectorService.update(sectorMapper.toEntity(dto));
