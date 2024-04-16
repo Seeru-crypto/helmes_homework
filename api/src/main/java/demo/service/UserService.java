@@ -2,21 +2,12 @@ package demo.service;
 
 import demo.exception.BusinessException;
 import demo.exception.NotFoundException;
-import demo.model.Filter;
 import demo.model.Sector;
 import demo.model.User;
 import demo.model.UserFilter;
 import demo.repository.UserRepository;
-import demo.service.filter.DataTypes;
-import demo.service.filter.DateCriteria;
-import demo.service.filter.NumberCriteria;
-import demo.service.filter.StringCriteria;
 import demo.service.validation.ValidationService;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.Predicate;
-import jakarta.persistence.criteria.Root;
+import demo.service.validation.filter_validator.FilterService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,8 +15,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -36,7 +25,6 @@ public class UserService {
     private final UserRepository userRepository;
     private final ValidationService validationService;
     private final FilterService filterService;
-    private final EntityManager entityManager;
 
     @Transactional
     public User save(User user) {
@@ -97,72 +85,6 @@ public class UserService {
     }
 
     public List<User> findAllByUserFilter(UserFilter existingFilter) {
-        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<User> criteriaQuery = criteriaBuilder.createQuery(User.class);
-        Root<User> itemRoot = criteriaQuery.from(User.class);
-
-        List<Predicate> predicateList = existingFilter
-                .getFilters()
-                .stream()
-                .map(filter -> generatePredicateFromFilter(filter, criteriaBuilder, itemRoot))
-                .toList();
-
-        Predicate finalPredicate = null;
-        for (Predicate predicate : predicateList) {
-            if (finalPredicate == null) {
-                finalPredicate = predicate;
-            } else {
-                finalPredicate = criteriaBuilder.and(finalPredicate, predicate);
-            }
-        }
-
-        criteriaQuery.where(finalPredicate);
-        return entityManager.createQuery(criteriaQuery).getResultList();
-    }
-
-    private Predicate generatePredicateFromFilter(Filter filter, CriteriaBuilder criteriaBuilder, Root<User> itemRoot) {
-
-        if (filter.getType() == DataTypes.STRING) {
-            return stringFiltering(filter, criteriaBuilder, itemRoot);
-        } else if (filter.getType() == DataTypes.DATE) {
-            return dateFiltering(filter, criteriaBuilder, itemRoot);
-        }
-        else {
-          // Number filtering
-          return numberFiltering(filter, criteriaBuilder, itemRoot);
-        }
-    }
-
-    private Predicate dateFiltering(Filter filter, CriteriaBuilder criteriaBuilder, Root<User> itemRoot) {
-        DateCriteria criteria = DateCriteria.valueOf(filter.getCriteria());
-
-        return switch (criteria) {
-            case BEFORE ->
-                    criteriaBuilder.lessThan(itemRoot.get(filter.getFieldName().name().toLowerCase()), Instant.parse(filter.getValue()));
-            case AFTER ->
-                    criteriaBuilder.greaterThan(itemRoot.get(filter.getFieldName().name().toLowerCase()), Instant.parse(filter.getValue()));
-            case EQUALS ->
-                    criteriaBuilder.equal(itemRoot.get(filter.getFieldName().name().toLowerCase()), Instant.parse(filter.getValue()));
-            case BETWEEN ->
-                    criteriaBuilder.between(itemRoot.get(filter.getFieldName().name().toLowerCase()), Instant.parse(filter.getValue()), Instant.parse(filter.getValue()));
-        };
-    }
-
-    private Predicate stringFiltering(Filter filter, CriteriaBuilder criteriaBuilder, Root<User> itemRoot) {
-        StringCriteria criteria = StringCriteria.valueOf(filter.getCriteria());
-        return switch (criteria) {
-            case CONTAINS ->
-                    criteriaBuilder.like(itemRoot.get(filter.getFieldName().name().toLowerCase()), "%" + filter.getValue() + "%");
-            case DOES_NOT_CONTAIN ->
-                    criteriaBuilder.notLike(itemRoot.get(filter.getFieldName().name().toLowerCase()), "%" + filter.getValue() + "%");
-            case EQUALS ->
-                    criteriaBuilder.equal(itemRoot.get(filter.getFieldName().name().toLowerCase()), filter.getValue());
-        };
-    }
-
-    private Predicate numberFiltering(Filter filter, CriteriaBuilder criteriaBuilder, Root<User> itemRoot) {
-        NumberCriteria criteria = NumberCriteria.valueOf(filter.getCriteria());
-        // TODO: implement number filtering
-        return null;
+        return filterService.findAllByUserFilter(existingFilter);
     }
 }

@@ -8,13 +8,12 @@ import demo.service.filter.DataTypes;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 
-import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
 import static demo.service.filter.DateCriteria.AFTER;
-import static demo.service.filter.NumberCriteria.SMALLER_THAN;
 import static demo.service.filter.StringCriteria.CONTAINS;
+import static demo.service.filter.StringCriteria.DOES_NOT_CONTAIN;
 import static demo.service.filter.UserFieldNames.DOB;
 import static demo.service.filter.UserFieldNames.NAME;
 import static demo.service.validation.user_validator.UserErrors.NAME_DOESNT_CONTAIN_Q;
@@ -201,20 +200,65 @@ class UserIntegrationTest extends ContextIntegrationTest {
             .andExpect(status().isNotFound());
   }
 
-  // String
   @Test
-  void findAllByFilterId_STRING_shouldReturnUsers() throws Exception {
+  void findAllByFilterId_STRING_CONTAINS_shouldReturnUsers() throws Exception {
     var users = createDefaultUsers();
     var mainUser = users.get(0);
 
-    var filters = List.of(new FilterDto().setCriteria(CONTAINS.getKood()).setValue("value 2").setType(DataTypes.STRING).setFieldName(NAME));
+    var filters = List.of(new FilterDto().setCriteria(CONTAINS.getKood()).setValue("Does").setType(DataTypes.STRING).setFieldName(NAME));
     var userFilter = createUserFilter(filters, "user filter 1", mainUser);
 
     mockMvc.perform(get(String.format("/users/filter/%s", userFilter.getId())))
             .andExpect(status().isOk())
             .andDo(print())
+            .andExpect(jsonPath("$.length()").value(3))
+            .andExpect(jsonPath("$[*].name").value(containsInAnyOrder("qJohn Does", "qJane Does", "qJack Doesn't")))
+    ;
+
+    filters = List.of(new FilterDto().setCriteria(CONTAINS.getKood()).setValue("abc").setType(DataTypes.STRING).setFieldName(NAME));
+    userFilter = createUserFilter(filters, "user filter 1", mainUser);
+
+    mockMvc.perform(get(String.format("/users/filter/%s", userFilter.getId())))
+            .andExpect(status().isOk())
+            .andDo(print())
+            .andExpect(jsonPath("$.length()").value(0))
     ;
   }
+
+  @Test
+  void findAllByFilterId_STRING_DOES_NOT_CONTAIN_shouldReturnUsers() throws Exception {
+    var users = createDefaultUsers();
+    var mainUser = users.get(0);
+
+    var filters = List.of(new FilterDto().setCriteria(DOES_NOT_CONTAIN.getKood()).setValue("Does").setType(DataTypes.STRING).setFieldName(NAME));
+    var userFilter = createUserFilter(filters, "user filter 1", mainUser);
+
+    mockMvc.perform(get(String.format("/users/filter/%s", userFilter.getId())))
+            .andExpect(status().isOk())
+            .andDo(print())
+            .andExpect(jsonPath("$.length()").value(1))
+            .andExpect(jsonPath("[0].name").value("qJames Memorial"))
+    ;
+  }
+
+  @Test
+  void findAllByFilterId_STRING_COMPOSITE_shouldReturnUsers() throws Exception {
+    var users = createDefaultUsers();
+    var mainUser = users.get(0);
+
+    var filter_1 = new FilterDto().setCriteria(DOES_NOT_CONTAIN.getKood()).setValue("qJane").setType(DataTypes.STRING).setFieldName(NAME);
+    var filter_2 = new FilterDto().setCriteria(CONTAINS.getKood()).setValue("Does").setType(DataTypes.STRING).setFieldName(NAME);
+    var filters = List.of(filter_2, filter_1);
+    var userFilter = createUserFilter(filters, "user filter 1", mainUser);
+
+    mockMvc.perform(get(String.format("/users/filter/%s", userFilter.getId())))
+            .andExpect(status().isOk())
+            .andDo(print())
+            .andExpect(jsonPath("$.length()").value(2))
+            .andExpect(jsonPath("$[*].name").value(containsInAnyOrder("qJohn Does", "qJack Doesn't")))
+    ;
+  }
+
   // Date
   @Test
   void findAllByFilterId_DATE_shouldReturnUsers() throws Exception {
