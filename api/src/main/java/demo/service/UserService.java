@@ -9,6 +9,7 @@ import demo.model.UserFilter;
 import demo.repository.UserRepository;
 import demo.service.filter.DataTypes;
 import demo.service.filter.DateCriteria;
+import demo.service.filter.NumberCriteria;
 import demo.service.filter.StringCriteria;
 import demo.service.validation.ValidationService;
 import jakarta.persistence.EntityManager;
@@ -100,7 +101,11 @@ public class UserService {
         CriteriaQuery<User> criteriaQuery = criteriaBuilder.createQuery(User.class);
         Root<User> itemRoot = criteriaQuery.from(User.class);
 
-        List<Predicate> predicateList = existingFilter.getFilters().stream().map(filter -> generatePredicateFromFilter(filter, criteriaBuilder, itemRoot)).toList();
+        List<Predicate> predicateList = existingFilter
+                .getFilters()
+                .stream()
+                .map(filter -> generatePredicateFromFilter(filter, criteriaBuilder, itemRoot))
+                .toList();
 
         Predicate finalPredicate = null;
         for (Predicate predicate : predicateList) {
@@ -115,16 +120,17 @@ public class UserService {
         return entityManager.createQuery(criteriaQuery).getResultList();
     }
 
-
     private Predicate generatePredicateFromFilter(Filter filter, CriteriaBuilder criteriaBuilder, Root<User> itemRoot) {
 
         if (filter.getType() == DataTypes.STRING) {
             return stringFiltering(filter, criteriaBuilder, itemRoot);
         } else if (filter.getType() == DataTypes.DATE) {
             return dateFiltering(filter, criteriaBuilder, itemRoot);
-
         }
-        return null;
+        else {
+          // Number filtering
+          return numberFiltering(filter, criteriaBuilder, itemRoot);
+        }
     }
 
     private Predicate dateFiltering(Filter filter, CriteriaBuilder criteriaBuilder, Root<User> itemRoot) {
@@ -152,5 +158,11 @@ public class UserService {
             case EQUALS ->
                     criteriaBuilder.equal(itemRoot.get(filter.getFieldName().name().toLowerCase()), filter.getValue());
         };
+    }
+
+    private Predicate numberFiltering(Filter filter, CriteriaBuilder criteriaBuilder, Root<User> itemRoot) {
+        NumberCriteria criteria = NumberCriteria.valueOf(filter.getCriteria());
+        // TODO: implement number filtering
+        return null;
     }
 }

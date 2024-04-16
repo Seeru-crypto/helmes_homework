@@ -55,6 +55,7 @@ public class FilterDtoValidator implements Validator<FilterDto> {
     }
     return result.setValid(true);
   }
+
   private ValidationResult stringValidator(FilterDto filterDto, ValidationResult result) {
     if (!StringCriteria.isStringInEnumList(filterDto.getCriteria())){
       logWarning(INVALID_CRITERIA_ERROR, filterDto.getCriteria());
