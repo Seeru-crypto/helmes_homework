@@ -3,15 +3,14 @@ package demo.service.filter;
 import demo.model.Filter;
 import demo.model.UserFilter;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.Predicate;
-import jakarta.persistence.criteria.Root;
+import jakarta.persistence.criteria.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneOffset;
 import java.util.List;
 
 @Slf4j
@@ -54,18 +53,23 @@ public class FilteringLogicService {
 
   private <T> Predicate dateFiltering(Filter filter, CriteriaBuilder criteriaBuilder, Root<T> itemRoot) {
     DateCriteria criteria = DateCriteria.valueOf(filter.getCriteria());
+    Expression<LocalDate> dateField = itemRoot.get(filter.getFieldName().name().toLowerCase());
+    LocalDate filterDate = Instant.parse(filter.getValue()).atZone(ZoneOffset.UTC).toLocalDate();
 
     return switch (criteria) {
       case BEFORE ->
-              criteriaBuilder.lessThan(itemRoot.get(filter.getFieldName().name().toLowerCase()), Instant.parse(filter.getValue()));
+              criteriaBuilder.lessThan(dateField, filterDate);
       case AFTER ->
-              criteriaBuilder.greaterThan(itemRoot.get(filter.getFieldName().name().toLowerCase()), Instant.parse(filter.getValue()));
-      case EQUALS ->
-              criteriaBuilder.equal(itemRoot.get(filter.getFieldName().name().toLowerCase()), Instant.parse(filter.getValue()));
+              criteriaBuilder.greaterThan(dateField, filterDate);
+      case EQUALS -> {
+        LocalDate nextDay = filterDate.plusDays(1);
+        yield criteriaBuilder.and(
+                criteriaBuilder.greaterThanOrEqualTo(dateField, filterDate),
+                criteriaBuilder.lessThan(dateField, nextDay));
+      }
       case BETWEEN ->
               // TODO: implement BETWEEN logic, for that filter value has to be array or a new value must be added
               null;
-//              criteriaBuilder.between(itemRoot.get(filter.getFieldName().name().toLowerCase()), Instant.parse(filter.getValue()), Instant.parse(filter.getValue()));
     };
   }
 
