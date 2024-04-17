@@ -7,7 +7,6 @@ import demo.model.User;
 import demo.model.UserFilter;
 import demo.repository.UserRepository;
 import demo.service.validation.ValidationService;
-import demo.service.validation.filter_validator.FilterService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

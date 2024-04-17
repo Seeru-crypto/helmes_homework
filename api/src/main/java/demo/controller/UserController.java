@@ -6,7 +6,7 @@ import demo.mapper.UserMapper;
 import demo.model.Sector;
 import demo.model.User;
 import demo.model.UserFilter;
-import demo.service.validation.filter_validator.FilterService;
+import demo.service.FilterService;
 import demo.service.SectorService;
 import demo.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
