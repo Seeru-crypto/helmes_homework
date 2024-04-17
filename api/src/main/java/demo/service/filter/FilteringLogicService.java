@@ -63,7 +63,9 @@ public class FilteringLogicService {
       case EQUALS ->
               criteriaBuilder.equal(itemRoot.get(filter.getFieldName().name().toLowerCase()), Instant.parse(filter.getValue()));
       case BETWEEN ->
-              criteriaBuilder.between(itemRoot.get(filter.getFieldName().name().toLowerCase()), Instant.parse(filter.getValue()), Instant.parse(filter.getValue()));
+              // TODO: implement BETWEEN logic, for that filter value has to be array or a new value must be added
+              null;
+//              criteriaBuilder.between(itemRoot.get(filter.getFieldName().name().toLowerCase()), Instant.parse(filter.getValue()), Instant.parse(filter.getValue()));
     };
   }
 
