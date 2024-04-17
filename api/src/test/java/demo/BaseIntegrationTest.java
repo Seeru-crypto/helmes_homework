@@ -8,6 +8,7 @@ import demo.controller.dto.UserFilterDto;
 import demo.service.FilterService;
 import demo.service.SectorService;
 import demo.service.UserService;
+import demo.service.filter.FilteringLogicService;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaBuilder;
@@ -50,6 +51,9 @@ public abstract class BaseIntegrationTest {
 
     @Autowired
     protected SectorService sectorService;
+
+    @Autowired
+    protected FilteringLogicService filteringLogicService;
 
     @Autowired
     protected MockMvc mockMvc;
