@@ -6,6 +6,7 @@ import demo.model.Sector;
 import demo.model.User;
 import demo.model.UserFilter;
 import demo.repository.UserRepository;
+import demo.service.filter.FilteringLogicService;
 import demo.service.validation.ValidationService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +24,7 @@ import java.util.UUID;
 public class UserService {
     private final UserRepository userRepository;
     private final ValidationService validationService;
-    private final FilterService filterService;
+    private final FilteringLogicService filteringLogicService;
 
     @Transactional
     public User save(User user) {
@@ -84,6 +85,6 @@ public class UserService {
     }
 
     public List<User> findAllByUserFilter(UserFilter existingFilter) {
-        return filterService.findAllByUserFilter(existingFilter);
+        return filteringLogicService.findAllByFilter(existingFilter, User.class);
     }
 }

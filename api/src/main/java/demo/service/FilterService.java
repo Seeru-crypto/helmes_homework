@@ -8,19 +8,14 @@ import demo.model.User;
 import demo.model.UserFilter;
 import demo.repository.FilterRepository;
 import demo.repository.UserFilterRepository;
-import demo.service.filter.*;
+import demo.service.filter.DateCriteria;
+import demo.service.filter.StringCriteria;
 import demo.service.validation.ValidationService;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.Predicate;
-import jakarta.persistence.criteria.Root;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,7 +29,6 @@ public class FilterService {
   private final UserFilterRepository userFilterRepository;
   private final FilterRepository filterRepository;
   private final ValidationService validationService;
-  private final FilteringLogicService filteringLogicService;
 
   private static final FilterOptionsDto nameOption = new FilterOptionsDto()
           .setField("name")
@@ -82,9 +76,5 @@ public class FilterService {
 
   public UserFilter findById(Long userFilterId) {
     return userFilterRepository.getReferenceById(userFilterId);
-  }
-
-  public List<User> findAllByUserFilter(UserFilter existingFilter) {
-    return filteringLogicService.findAllByFilter(existingFilter, User.class);
   }
 }
