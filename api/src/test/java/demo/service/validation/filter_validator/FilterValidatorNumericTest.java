@@ -48,7 +48,7 @@ class FilterValidatorNumericTest {
 
     static Stream<String> validNumericValues() {
         return Stream.of(
-                "1", "1.0", "666", "69"
+                "1", "666", "69"
         );
     }
 
@@ -88,6 +88,7 @@ class FilterValidatorNumericTest {
     private static Stream<Arguments> invalidNumericValues() {
         return Stream.of(
                 Arguments.of("a", INVALID_NUMBER_VALUE),
+                Arguments.of("1.0", INVALID_NUMBER_VALUE),
                 Arguments.of("a2s", INVALID_NUMBER_VALUE),
                 Arguments.of(null, INVALID_NUMBER_VALUE)
         );
