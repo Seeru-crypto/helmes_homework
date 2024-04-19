@@ -5,8 +5,7 @@ import java.util.List;
 public enum DateCriteria implements Filters {
   BEFORE,
   AFTER,
-  EQUALS,
-  BETWEEN;
+  EQUALS;
 
   @Override
 public String getKood() {
@@ -26,6 +25,6 @@ public String getKood() {
     return false;
   }
   public static List<Filters> getDateCriterias() {
-    return List.of(BEFORE, AFTER, EQUALS, BETWEEN);
+    return List.of(BEFORE, AFTER, EQUALS);
   }
 }
