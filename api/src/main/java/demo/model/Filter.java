@@ -25,11 +25,13 @@ public class Filter extends AbstractAuditingEntity<Long> {
 
   private String criteria; // CONTAINS, DOES_NOT_CONTAIN
 
+  @Enumerated(EnumType.STRING)
   private DataTypes type; //   STRING, DATE, NUMBER
 
   private String value; // searchCrietria a, 1, or date
 
   @NotNull
+  @Enumerated(EnumType.STRING)
   private UserFieldNames fieldName;
 
   private Long userFilterId;

@@ -3,6 +3,7 @@ package demo.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -26,8 +27,9 @@ public class UserFilter extends AbstractAuditingEntity<Long> {
   @GeneratedValue(strategy = IDENTITY)
   private Long id;
 
-  @NotBlank(message = "Name is mandatory")
   @Column(nullable = false)
+  @NotBlank(message = "Name is mandatory")
+  @Size(min = 4, max = 50, message = "USER_FILTER_NAME_ERROR")
   private String name;
 
   @OneToMany(cascade = CascadeType.ALL,

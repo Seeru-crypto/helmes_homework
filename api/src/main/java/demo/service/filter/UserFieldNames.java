@@ -24,4 +24,9 @@ public enum UserFieldNames {
     }
     return false;
   }
+
+  public String getKood() {
+    return this.name();
+  }
+
 }

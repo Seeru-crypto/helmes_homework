@@ -1,6 +1,7 @@
 package demo.service.validation;
 
 import demo.controller.dto.FilterDto;
+import demo.controller.dto.UserFilterDto;
 import demo.exception.BusinessException;
 import demo.model.Filter;
 import demo.model.Sector;
@@ -21,6 +22,7 @@ public class ValidationService {
   private final List<Validator<User>> userValidator;
   private final List<Validator<Filter>> filterValidator;
   private final List<Validator<FilterDto>> filterDtoValidator;
+  private final List<Validator<UserFilterDto>> userFilterDtoValidator;
   private final List<Validator<Sector>> sectorValidators;
   private final List<Validator<Pageable>> pageableValidator;
 

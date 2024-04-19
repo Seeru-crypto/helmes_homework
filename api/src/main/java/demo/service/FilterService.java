@@ -43,11 +43,12 @@ public class FilterService {
   @Transactional
   public UserFilter saveFilters(UserFilterDto userFilter, User user) {
     // validate User filter
+
+    validationService.validateEntity(userFilter, validationService.getUserFilterDtoValidator());
     var createdUserFilter = userFilterRepository.save(new UserFilter()
             .setName(userFilter.getName())
             .setUser(user));
 
-    // step 2 save validate filters and save with parent ID
     for (FilterDto filter : userFilter.getFilters()) {
       validationService.validateEntity(filter, validationService.getFilterDtoValidator());
       // validate filter against dataMap
