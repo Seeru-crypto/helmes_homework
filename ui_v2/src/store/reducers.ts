@@ -1,6 +1,6 @@
 import { ReducersMapObject } from '@reduxjs/toolkit';
 
-import locale from './locale';
+import locale from './locale.ts';
 import entitiesReducers from "./entitiesReducers.ts";
 
 /* jhipster-needle-add-reducer-import - JHipster will add reducer here */
