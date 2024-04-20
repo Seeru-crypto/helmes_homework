@@ -12,6 +12,12 @@ function UserRegistrationForm() {
     const [agreeToTerms, setAgreeToTerms] = useState<boolean>(false)
     const [sectorOptions, setSectorOptions] = useState<CascaderProps[]>([])
 
+
+    function submitForm() {
+
+
+    }
+
     return (
         <div className={styles.container}>
             <div className="registration">
