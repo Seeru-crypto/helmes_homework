@@ -3,11 +3,9 @@ import {createAsyncThunk, createSlice, isFulfilled} from '@reduxjs/toolkit';
 import {IQueryParams} from "../../store/reducer.utils.ts";
 import {IUser} from "../../store/user.model.ts";
 
-
 interface Iusers {
     users: IUser[];
 }
-
 
 const initialState: Iusers = {
     users: []
