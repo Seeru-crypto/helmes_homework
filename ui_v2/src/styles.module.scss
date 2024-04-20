@@ -1,3 +1,11 @@
 .container {
   border: 1px solid red;
+  height: 100%;
+  flex-grow: 1;
+}
+
+.root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
 }

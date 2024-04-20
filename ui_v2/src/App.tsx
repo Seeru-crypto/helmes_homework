@@ -8,7 +8,7 @@ import Footer from "./components/Footer/Footer.tsx";
 function App() {
 
     return (
-            <div className={styles.AppHeader}>
+            <div className={styles.root}>
                 <ToastContainer className="toastify-container" toastClassName="toastify-toast"/>
                 <Header/>
                 <div className={styles.container}>

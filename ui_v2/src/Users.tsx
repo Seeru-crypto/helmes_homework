@@ -1,4 +1,4 @@
-function Second() {
+function Users() {
 
     return (
         <div>
@@ -9,4 +9,4 @@ function Second() {
 
 }
 
-export  default Second
+export  default Users

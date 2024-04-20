@@ -10,17 +10,17 @@ function Header() {
     }
 
   return (
-      <div className={styles.header}>
-          <nav>
+      <div className={styles.container}>
+          <nav className={styles.navigationButtons}>
               <button
               onClick={(event) => navigateToPage({event, destination: "/"})}
               >
                   First
               </button>
               <button
-              onClick={(event) => navigateToPage({event, destination: "/second"})}
+              onClick={(event) => navigateToPage({event, destination: "/users"})}
               >
-                  Second
+                  users
               </button>
           </nav>
       </div>
