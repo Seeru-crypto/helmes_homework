@@ -1,9 +1,15 @@
-import {configureStore} from '@reduxjs/toolkit';
+import {combineReducers, configureStore} from '@reduxjs/toolkit';
 import {TypedUseSelectorHook, useDispatch, useSelector} from 'react-redux';
-import reducers from "./reducers.ts";
+import usersReducer from "../entities/users/users.reducer.ts";
+import settingReducer from "../entities/users/setting.reducer.ts";
+
+const rootReducer = combineReducers({
+  user: usersReducer,
+  setting: settingReducer
+})
 
 export const store = configureStore({
-  reducer: reducers,
+  reducer: rootReducer,
 });
 
 export type AppDispatch = typeof store.dispatch;
