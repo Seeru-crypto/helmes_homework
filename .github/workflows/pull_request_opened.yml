@@ -34,6 +34,5 @@ jobs:
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
       - name: Run build with Gradle Wrapper
-        run: |
-          cd api
-          ./gradlew build
+        run: ./gradlew build
+        working-directory: ./api
