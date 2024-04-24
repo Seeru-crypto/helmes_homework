@@ -1,7 +1,7 @@
 import {combineReducers, configureStore} from '@reduxjs/toolkit';
 import {TypedUseSelectorHook, useDispatch, useSelector} from 'react-redux';
-import usersReducer from "../entities/users/users.reducer.ts";
-import settingReducer from "../entities/users/setting.reducer.ts";
+import usersReducer from "../entities/users.reducer.ts";
+import settingReducer from "../entities/setting.reducer.ts";
 import sectorReducer from "../entities/sector.reducer.ts";
 
 const rootReducer = combineReducers({

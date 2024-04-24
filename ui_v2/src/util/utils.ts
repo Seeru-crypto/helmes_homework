@@ -1,11 +1,11 @@
 import {MessageInstance} from "antd/es/message/interface";
-import {SectorDto} from "../entities/interfaces/SectorDto.ts";
-import {SaveUserDto} from "../entities/interfaces/SaveUserDto.ts";
+import {ISaveUser} from "../entities/interfaces/ISaveUser.ts";
 import {ICascaderOptions} from "../components/user_registration_form/CascaderInput/CascaderInput.tsx";
+import {ISector} from "../entities/interfaces/ISector.ts";
 
-export function mapToOptions(data: SectorDto[]): ICascaderOptions[] {
+export function mapToOptions(data: ISector[]): ICascaderOptions[] {
     if (!data) return ([] as ICascaderOptions[]);
-    return data.map((sector: SectorDto) => {
+    return data.map((sector: ISector) => {
         return {
             value: sector.name,
             label: sector.name,
@@ -14,7 +14,7 @@ export function mapToOptions(data: SectorDto[]): ICascaderOptions[] {
     })
 }
 
-export function isUserDataValid(dto: SaveUserDto, messageApi: MessageInstance ) {
+export function isUserDataValid(dto: ISaveUser, messageApi: MessageInstance ) {
 
     if (!dto.agreeToTerms){
         messageApi.error("You must agree to the terms and conditions");
@@ -34,14 +34,14 @@ export function isUserDataValid(dto: SaveUserDto, messageApi: MessageInstance ) 
     return true;
 }
 
-export function mapSectorsToIds(selectedSectors: string[][], sectors: SectorDto[]): (number | undefined)[] {
+export function mapSectorsToIds(selectedSectors: string[][], sectors: ISector[]): (number | undefined)[] {
     return selectedSectors.map((sector: string[]) => {
         const lastElement = sector[sector.length - 1]
         return handleSearch(lastElement, sectors)
     })
 }
 
-const searchSector = (sectors: SectorDto[], searchTerm: string): number | null => {
+const searchSector = (sectors: ISector[], searchTerm: string): number | null => {
     for (let i = 0; i < sectors.length; i++) {
         const sector = sectors[i];
         if (sector.name === searchTerm) {
@@ -56,7 +56,7 @@ const searchSector = (sectors: SectorDto[], searchTerm: string): number | null =
     return null;
 };
 
-export const handleSearch = (searchTerm: string, sectors: SectorDto[]): number | undefined => {
+export const handleSearch = (searchTerm: string, sectors: ISector[]): number | undefined => {
     console.log(`Searching for sector '${searchTerm}'...`)
     const id = searchSector(sectors, searchTerm);
     if (id !== null) {

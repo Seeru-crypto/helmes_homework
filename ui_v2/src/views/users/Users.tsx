@@ -1,7 +1,7 @@
 import {useAppDispatch, useAppSelector} from "../../store/store.ts";
-import {decreaseCount, increaseCount} from "../../entities/users/setting.reducer.ts";
+import {decreaseCount, increaseCount} from "../../entities/setting.reducer.ts";
 import {useEffect} from "react";
-import {getUsers} from "../../entities/users/users.reducer.ts";
+import {getUsers} from "../../entities/users.reducer.ts";
 
 function Users() {
     const dispatch = useAppDispatch();

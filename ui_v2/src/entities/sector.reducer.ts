@@ -1,4 +1,4 @@
-import {ISector} from "../store/sector.model.ts";
+import {ISector} from "./interfaces/ISector.ts";
 import {createAsyncThunk, createSlice, isFulfilled} from "@reduxjs/toolkit";
 import axios from "axios";
 

@@ -1,7 +1,7 @@
 import axios from 'axios';
 import {createAsyncThunk, createSlice, isFulfilled} from '@reduxjs/toolkit';
-import {IUser} from "../../store/user.model.ts";
-import {IPageableWrapper} from "../interfaces/IPageableWrapper.ts";
+import {IUser} from "./interfaces/IUser.ts";
+import {IPageableWrapper} from "./interfaces/IPageableWrapper.ts";
 
 interface Iusers {
     users: IUser[];

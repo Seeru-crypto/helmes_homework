@@ -1,5 +1,5 @@
 import {useAppDispatch, useAppSelector} from "../../store/store.ts";
-import {increaseCount} from "../../entities/users/setting.reducer.ts";
+import {increaseCount} from "../../entities/setting.reducer.ts";
 import UserRegistrationForm from "../../components/user_registration_form/userRegistrationForm.tsx";
 import styles from "./Home.module.scss"
 
