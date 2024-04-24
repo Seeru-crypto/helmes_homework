@@ -1,7 +1,7 @@
 import axios from 'axios';
 import {createAsyncThunk, createSlice, isFulfilled} from '@reduxjs/toolkit';
-import {IQueryParams} from "../../store/reducer.utils.ts";
 import {IUser} from "../../store/user.model.ts";
+import {IPageableWrapper} from "../interfaces/IPageableWrapper.ts";
 
 interface Iusers {
     users: IUser[];
@@ -11,17 +11,16 @@ const initialState: Iusers = {
     users: []
 };
 
-const apiUrl = 'api/regions';
+const apiUrl = 'api/users';
 
 // Actions
 
-export const getEntities = createAsyncThunk('region/fetch_entity_list', async ({sort}: IQueryParams) => {
-    const requestUrl = `${apiUrl}?${sort ? `sort=${sort}&` : ''}cacheBuster=${new Date().getTime()}`;
-    return axios.get<IUser[]>(requestUrl);
+export const getUsers = createAsyncThunk('getUsers', async () => {
+    const pathParams = `?sort=id&page=0&size=10`
+    const fullPAth = "http://localhost:8880/" + apiUrl+ pathParams
+    const response = await axios.get<IPageableWrapper<IUser>>(fullPAth);
+    return response.data
 });
-
-
-// slice
 
 export const UserSlice = createSlice({
     name: 'user',
@@ -29,8 +28,8 @@ export const UserSlice = createSlice({
     reducers: {},
     extraReducers(builder) {
         builder
-            .addMatcher(isFulfilled(getEntities), (state, action) => {
-                state.users = action.payload.data;
+            .addMatcher(isFulfilled(getUsers), (state, action) => {
+                state.users = action.payload.content;
             })
     }
 })

@@ -3,7 +3,7 @@ import styles from "./CheckboxInput.module.scss"
 import type { CheckboxChangeEvent } from 'antd/es/checkbox';
 
 interface CheckboxProps {
-    checkboxState: (boolean) => void
+    checkboxState: (boolean: boolean) => void
     label: string
 }
 

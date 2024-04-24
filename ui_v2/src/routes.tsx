@@ -1,6 +1,6 @@
 import {Route, Routes} from 'react-router-dom';
-import Users from "./Users.tsx";
-import Home from "./Home.tsx";
+import Users from "./views/users/Users.tsx";
+import Home from "./views/home/Home.tsx";
 import PageNotFound from "./page-not-found.tsx";
 
 const AppRoutes = () => {

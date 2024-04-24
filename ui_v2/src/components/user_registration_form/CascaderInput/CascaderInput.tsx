@@ -1,5 +1,5 @@
 import {Cascader} from 'antd';
-import styles from "./CascaderOptionProps.module.scss"
+import styles from "./CascaderInput.module.scss"
 
 interface CascaderProps {
     options: ICascaderOptions[]
@@ -14,8 +14,7 @@ export interface ICascaderOptions {
 }
 
 const CascaderInput = (props: CascaderProps) => {
-
-    function onChange (value: string[][]) {
+    function onChange (value: any ): undefined {
         props.selectedSectorsCallback(value)
     }
 
