@@ -7,8 +7,6 @@ function Home() {
     const dispatch = useAppDispatch();
     const count = useAppSelector((state) => state.setting.count);
 
-
-
     return (
         <div className={styles.container}>
             <div>

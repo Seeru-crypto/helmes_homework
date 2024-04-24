@@ -3,17 +3,17 @@ import TextInput from "./TextInput/TextInput.tsx";
 import CheckboxInput from "./CheckboxInput/CheckboxInput.tsx";
 import {useEffect, useState} from "react";
 import CascaderInput from "./CascaderInput/CascaderInput.tsx";
-import {CascaderProps} from "antd";
 import CustomButton from "./Button.tsx";
 import {useAppDispatch, useAppSelector} from "../../store/store.ts";
+import {mapSectorsToIds, mapToOptions} from "../../util/utils.ts";
+import {ISaveUser} from "../../entities/interfaces/ISaveUser.ts";
+import {saveUser} from "../../entities/users.reducer.ts";
 import {getSectors} from "../../entities/sector.reducer.ts";
-import {mapToOptions} from "../../util/utils.ts";
 
 function UserRegistrationForm() {
     const [username, setUsername] = useState('')
     const [selectedSectors, setSelectedSectors] = useState<string[][]>([[]])
     const [agreeToTerms, setAgreeToTerms] = useState<boolean>(false)
-    const [sectorOptions, setSectorOptions] = useState<CascaderProps[]>([])
     const dispatch = useAppDispatch();
     const sectors = useAppSelector((state) => state.sectors.sectors)
 
@@ -22,7 +22,12 @@ function UserRegistrationForm() {
     }, [dispatch])
 
    function submitForm() {
-       console.log("submitting user data")
+       const payload: ISaveUser = {
+           name: username,
+           agreeToTerms: agreeToTerms,
+           sectorIds: mapSectorsToIds(selectedSectors, sectors)
+       }
+       dispatch(saveUser(payload))
     }
 
     return (

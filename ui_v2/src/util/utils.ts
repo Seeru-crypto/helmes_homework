@@ -34,11 +34,12 @@ export function isUserDataValid(dto: ISaveUser, messageApi: MessageInstance ) {
     return true;
 }
 
-export function mapSectorsToIds(selectedSectors: string[][], sectors: ISector[]): (number | undefined)[] {
-    return selectedSectors.map((sector: string[]) => {
+export function mapSectorsToIds(selectedSectors: string[][], sectors: ISector[]): number[] {
+    return selectedSectors
+        .map((sector: string[]) => {
         const lastElement = sector[sector.length - 1]
         return handleSearch(lastElement, sectors)
-    })
+    }) as number[];
 }
 
 const searchSector = (sectors: ISector[], searchTerm: string): number | null => {
@@ -57,10 +58,8 @@ const searchSector = (sectors: ISector[], searchTerm: string): number | null => 
 };
 
 export const handleSearch = (searchTerm: string, sectors: ISector[]): number | undefined => {
-    console.log(`Searching for sector '${searchTerm}'...`)
     const id = searchSector(sectors, searchTerm);
     if (id !== null) {
-        console.log(`ID of sector '${searchTerm}': ${id}`);
         return id;
     } else {
         console.log(`Sector '${searchTerm}' not found.`);
