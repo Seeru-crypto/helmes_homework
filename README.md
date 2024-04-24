@@ -1,5 +1,5 @@
 # Helmes homework
-
+test
 ## Setup via docker
 - navigate to /api
 - Build gradle project with either gradle build or gradle assemble
