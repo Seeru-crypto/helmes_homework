@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {createAsyncThunk, createSlice, isFulfilled} from '@reduxjs/toolkit';
+import {createAsyncThunk, createSlice, isRejected} from '@reduxjs/toolkit';
 import {IUser} from "./interfaces/IUser.ts";
 import {IPageableWrapper} from "./interfaces/IPageableWrapper.ts";
 import {ISaveUser} from "./interfaces/ISaveUser.ts";
@@ -41,8 +41,9 @@ export const UserSlice = createSlice({
             .addCase(saveUser.fulfilled, () => {
                 toast("user saved")
             })
-            .addMatcher(isFulfilled(getUsers), (state, action) => {
-                state.users = action.payload.content;
+            .addMatcher(isRejected(saveUser), (state, action) => {
+                const test = action.error.message
+                toast(test)
             })
     }
 })
