@@ -17,7 +17,6 @@ function UserRegistrationForm() {
     }
     return (
         <div className={styles.container}>
-            <div className="registration">
                 <div className="left">
                     <span>Username</span>
                     <TextInput placeholder="username" onChange={setUsername}/>
@@ -30,7 +29,6 @@ function UserRegistrationForm() {
                     <CascaderInput selectedSectorsCallback={(e) => setSelectedSectors(e)} options={sectorOptions}/>
                     <CustomButton label="submit" onClick={() => submitForm()}/>
                 </div>
-            </div>
         </div>
     )
 }
