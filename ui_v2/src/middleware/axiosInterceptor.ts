@@ -16,11 +16,8 @@ interface CustomAxiosError extends Omit<AxiosError, 'response'> {
 export const setupAxiosInterceptors = async (): Promise<void> => {
   const onResponseSuccess = (response: AxiosResponse): AxiosResponse<any, any> => response;
   const onResponseError = async (err: CustomAxiosError): Promise<CustomAxiosError> => {
-    console.log("err: ", err)
     const originalErrorMessages: string[] = err.response?.data !== undefined ? err.response?.data : ['Error has occured'];
-
     // TODO: Implement a better Axios Error handler, where each error will be thrown independently
-    console.log({originalErrorMessages})
     const translatedMessage = ERROR_TRANSLATIONS.get(originalErrorMessages[0])
     const response = translatedMessage || originalErrorMessages[0];
     throw new Error(response);

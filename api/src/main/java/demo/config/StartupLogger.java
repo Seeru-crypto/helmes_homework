@@ -22,6 +22,7 @@ public class StartupLogger {
             log.info("local profile active");
             log.info("App hosted at " + "http://localhost:" + env.getProperty("server.port"));
             log.info("Swagger enabled at http://localhost:{}/api/swagger-ui/index.html#/", env.getProperty("server.port"));
+            log.info("Health endpoint available at http://localhost:{}/api/actuator/health", env.getProperty("server.port"));
         }
         else if (profiles.contains("production")){
             log.info("production profile active");

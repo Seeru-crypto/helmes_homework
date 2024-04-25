@@ -9,3 +9,9 @@ server:
   port: 8880
   servlet:
     context-path: /api
+
+management:
+   endpoints:
+    web:
+      exposure:
+        include: "health"

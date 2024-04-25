@@ -64,7 +64,7 @@ export const UserSlice = createSlice({
                 state.users = action.payload.content;
                 state.totalUsers = action.payload.totalElements
             })
-            .addMatcher(isRejected(saveUser, updateUser), (_state, action) => {
+            .addMatcher(isRejected(saveUser, updateUser, getUsers), (_state, action) => {
                 const test = action.error.message
                 toast.error(test, {...toastDefaultSettings, autoClose:6000 })
             })

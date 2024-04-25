@@ -4,7 +4,6 @@ import {getUsers} from "../../entities/users.reducer.ts";
 import {useAppDispatch, useAppSelector} from "../../store/store.ts";
 import {Pagination, PaginationProps, Table} from "antd";
 
-
 function Users() {
     const users = useAppSelector((state) => state.user.users);
     const totalUsers = useAppSelector((state) => state.user.totalUsers);
