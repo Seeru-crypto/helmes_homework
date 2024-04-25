@@ -7,7 +7,7 @@ import CustomButton from "./Button.tsx";
 import {useAppDispatch, useAppSelector} from "../../store/store.ts";
 import {mapSectorsToIds, mapToOptions} from "../../util/utils.ts";
 import {ISaveUser} from "../../entities/interfaces/ISaveUser.ts";
-import {saveUser} from "../../entities/users.reducer.ts";
+import {saveUser, updateUser} from "../../entities/users.reducer.ts";
 import {getSectors} from "../../entities/sector.reducer.ts";
 
 function UserRegistrationForm() {
@@ -16,6 +16,7 @@ function UserRegistrationForm() {
     const [agreeToTerms, setAgreeToTerms] = useState<boolean>(false)
     const dispatch = useAppDispatch();
     const sectors = useAppSelector((state) => state.sectors.sectors)
+    const userId = useAppSelector((state) => state.user.currentUserID)
 
     useEffect(() => {
         if (sectors.length === 0) dispatch(getSectors())
@@ -27,7 +28,8 @@ function UserRegistrationForm() {
             agreeToTerms: agreeToTerms,
             sectorIds: mapSectorsToIds(selectedSectors, sectors)
         }
-        dispatch(saveUser(payload))
+
+        userId === "" ? dispatch(saveUser(payload)) : dispatch(updateUser({userId, payload}))
     }
 
     return (

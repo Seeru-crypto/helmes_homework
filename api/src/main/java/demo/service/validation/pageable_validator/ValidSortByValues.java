@@ -7,7 +7,8 @@ public enum ValidSortByValues {
   NAME, // USER.NAME
   PHONENUMBER,  // USER.PHONENUMBER
   EMAIL, // USER.EMAIL
-  AGREETOTERMS; // USER.AGREETOTERMS
+  AGREETOTERMS, // USER.AGREETOTERMS
+  CREATEDAT; // USER.CREATEDAT
 
   public static UserErrors getValue(String kood) { return UserErrors.valueOf(kood);}
 

@@ -21,7 +21,7 @@ const apiUrl = 'api/users';
 // Actions
 
 export const getUsers = createAsyncThunk('getUsers', async () => {
-    const pathParams = `?sort=id&page=0&size=10`
+    const pathParams = `?sort=createdAt,desc&page=0&size=3`
     const fullPAth = apiUrl + pathParams
     const response = await axios.get<IPageableWrapper<IUser>>(fullPAth);
     console.log({response})
@@ -34,6 +34,17 @@ export const saveUser = createAsyncThunk('saveUser', async (entity: ISaveUser, t
     return response.data
 });
 
+interface IUpdateUser {
+    payload: ISaveUser,
+    userId: string
+}
+
+export const updateUser = createAsyncThunk('updateUser', async (entity: IUpdateUser, thunkApi) => {
+    const response = await axios.put<IUser>(`${apiUrl}/${entity.userId}`, entity.payload);
+    void thunkApi.dispatch(getUsers());
+    return response.data
+});
+
 export const UserSlice = createSlice({
     name: 'user',
     initialState,
@@ -42,12 +53,15 @@ export const UserSlice = createSlice({
         builder
             .addCase(saveUser.fulfilled, (state, action) => {
                 toast.success("user saved", toastDefaultSettings)
-                state.currentUserID = action.payload.id || ""
+                state.currentUserID = action.payload.id ?? ""
+            })
+            .addCase(updateUser.fulfilled, () => {
+                toast.success("user updated", toastDefaultSettings)
             })
             .addMatcher(isFulfilled(getUsers), (state, action) => {
                 state.users = action.payload.content;
             })
-            .addMatcher(isRejected(saveUser), (_state, action) => {
+            .addMatcher(isRejected(saveUser, updateUser), (_state, action) => {
                 const test = action.error.message
                 toast.error(test, {...toastDefaultSettings, autoClose:6000 })
             })
