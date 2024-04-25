@@ -56,7 +56,7 @@ public class UserService {
     public User update(User entity, UUID userId) {
         User existingUser = findById(userId);
         // TODO: Add Update specific validator
-        // validationService.validateEntity(entity, validationService.getUserValidator());
+        validationService.validateEntity(entity.setId(userId), validationService.getUserValidator());
 
         return existingUser
                 .setName(entity.getName())

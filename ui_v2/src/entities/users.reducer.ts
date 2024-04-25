@@ -10,11 +10,13 @@ import {IPage} from "./interfaces/IPage.ts";
 interface Iusers {
     users: IUser[];
     currentUserID: string;
+    totalUsers: number
 }
 
 const initialState: Iusers = {
     users: [],
-    currentUserID: ""
+    currentUserID: "",
+    totalUsers: 0
 };
 
 const apiUrl = 'api/users';
@@ -25,7 +27,6 @@ export const getUsers = createAsyncThunk('getUsers', async (page: IPage) => {
     const pathParams = getPathParams(page)
     const fullPAth = apiUrl + pathParams
     const response = await axios.get<IPageableWrapper<IUser>>(fullPAth, );
-    console.log({response})
     return response.data
 });
 
@@ -61,6 +62,7 @@ export const UserSlice = createSlice({
             })
             .addMatcher(isFulfilled(getUsers), (state, action) => {
                 state.users = action.payload.content;
+                state.totalUsers = action.payload.totalElements
             })
             .addMatcher(isRejected(saveUser, updateUser), (_state, action) => {
                 const test = action.error.message

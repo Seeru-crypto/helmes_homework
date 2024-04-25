@@ -34,7 +34,9 @@ public class NameValidator implements Validator<User> {
       return result.setValid(false).setMessage(NAME_DOESNT_CONTAIN_Q);
     }
 
-    if (!isNameUnique(data.getName())) {
+    // When creating a user the unique name validation is applied and the id is null,
+    // but when updating there should be and ID
+    if (!isNameUnique(data.getName()) && data.getId() == null) {
       return result.setValid(false).setMessage(NAME_NOT_UNIQUE);
     }
     return result.setValid(true);
