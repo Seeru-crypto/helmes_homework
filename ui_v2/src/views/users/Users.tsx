@@ -3,6 +3,7 @@ import {decreaseCount, increaseCount} from "../../entities/setting.reducer.ts";
 import {useEffect} from "react";
 import {getUsers} from "../../entities/users.reducer.ts";
 import UserCardList from "../../components/user_card_list/userCardList.tsx";
+import {IPage} from "../../entities/interfaces/IPage.ts";
 
 function Users() {
     const dispatch = useAppDispatch();
@@ -10,7 +11,12 @@ function Users() {
     const users = useAppSelector((state) => state.user.users);
 
     useEffect(() => {
-        dispatch(getUsers())
+        const page: IPage = {
+            sort: "createdAt,desc",
+            size: 3,
+            page: 0
+        }
+        dispatch(getUsers(page))
     }, [dispatch]);
 
     return (

@@ -3,6 +3,7 @@ import {ISaveUser} from "../entities/interfaces/ISaveUser.ts";
 import {ICascaderOptions} from "../components/user_registration_form/CascaderInput/CascaderInput.tsx";
 import {ISector} from "../entities/interfaces/ISector.ts";
 import {Bounce, ToastOptions} from "react-toastify";
+import {IPage} from "../entities/interfaces/IPage.ts";
 
 export function mapToOptions(data: ISector[]): ICascaderOptions[] {
     if (!data) return ([] as ICascaderOptions[]);
@@ -69,6 +70,10 @@ const searchSector = (sectors: ISector[], searchTerm: string): number | null => 
     }
     return null;
 };
+
+export function getPathParams(entity: IPage): string {
+    return `?sort=${entity.sort}&page=${entity.page}&size=${entity.size}`
+}
 
 export const handleSearch = (searchTerm: string, sectors: ISector[]): number | undefined => {
     const id = searchSector(sectors, searchTerm);

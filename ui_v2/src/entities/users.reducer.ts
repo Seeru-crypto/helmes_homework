@@ -4,7 +4,8 @@ import {IUser} from "./interfaces/IUser.ts";
 import {IPageableWrapper} from "./interfaces/IPageableWrapper.ts";
 import {ISaveUser} from "./interfaces/ISaveUser.ts";
 import {toast} from "react-toastify";
-import {toastDefaultSettings} from "../util/utils.ts";
+import {getPathParams, toastDefaultSettings} from "../util/utils.ts";
+import {IPage} from "./interfaces/IPage.ts";
 
 interface Iusers {
     users: IUser[];
@@ -20,17 +21,17 @@ const apiUrl = 'api/users';
 
 // Actions
 
-export const getUsers = createAsyncThunk('getUsers', async () => {
-    const pathParams = `?sort=createdAt,desc&page=0&size=3`
+export const getUsers = createAsyncThunk('getUsers', async (page: IPage) => {
+    const pathParams = getPathParams(page)
     const fullPAth = apiUrl + pathParams
-    const response = await axios.get<IPageableWrapper<IUser>>(fullPAth);
+    const response = await axios.get<IPageableWrapper<IUser>>(fullPAth, );
     console.log({response})
     return response.data
 });
 
 export const saveUser = createAsyncThunk('saveUser', async (entity: ISaveUser, thunkApi) => {
     const response = await axios.post<IUser>(apiUrl, entity);
-    void thunkApi.dispatch(getUsers());
+    void thunkApi.dispatch(getUsers(defaultPage));
     return response.data
 });
 
@@ -41,7 +42,7 @@ interface IUpdateUser {
 
 export const updateUser = createAsyncThunk('updateUser', async (entity: IUpdateUser, thunkApi) => {
     const response = await axios.put<IUser>(`${apiUrl}/${entity.userId}`, entity.payload);
-    void thunkApi.dispatch(getUsers());
+    void thunkApi.dispatch(getUsers(defaultPage));
     return response.data
 });
 
@@ -67,6 +68,12 @@ export const UserSlice = createSlice({
             })
     }
 })
+
+const defaultPage: IPage = {
+    sort: "createdAt,desc",
+    size: 3,
+    page: 0
+}
 
 // Reducer
 export default UserSlice.reducer;
