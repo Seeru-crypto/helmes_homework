@@ -2,7 +2,6 @@ import styled from "styled-components";
 import {Card, Tag} from "antd";
 import {CardSize} from "antd/es/card/Card";
 
-
 interface UserCardProps {
     size?: CardSize;
     title: string;

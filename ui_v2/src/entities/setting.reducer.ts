@@ -1,5 +1,5 @@
 import {createSlice} from "@reduxjs/toolkit";
-import {Slide, toast} from 'react-toastify';
+import {toast} from 'react-toastify';
 import {toastDefaultSettings} from "../util/utils.ts";
 
 interface ISettings {

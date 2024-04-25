@@ -13,8 +13,7 @@ const initialState: ISectors = {
 // Actions
 const apiUrl = 'api/sectors';
 export const getSectors = createAsyncThunk('get_sectors', async () => {
-    const fullPAth = "http://localhost:8880/" + apiUrl
-    const response = await axios.get<ISector[]>(fullPAth);
+    const response = await axios.get<ISector[]>(apiUrl);
     return response.data
 });
 

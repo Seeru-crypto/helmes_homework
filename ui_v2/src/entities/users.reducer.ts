@@ -3,15 +3,17 @@ import {createAsyncThunk, createSlice, isFulfilled, isRejected} from '@reduxjs/t
 import {IUser} from "./interfaces/IUser.ts";
 import {IPageableWrapper} from "./interfaces/IPageableWrapper.ts";
 import {ISaveUser} from "./interfaces/ISaveUser.ts";
-import {Slide, toast} from "react-toastify";
+import {toast} from "react-toastify";
 import {toastDefaultSettings} from "../util/utils.ts";
 
 interface Iusers {
     users: IUser[];
+    currentUserID: string;
 }
 
 const initialState: Iusers = {
-    users: []
+    users: [],
+    currentUserID: ""
 };
 
 const apiUrl = 'api/users';
@@ -20,17 +22,15 @@ const apiUrl = 'api/users';
 
 export const getUsers = createAsyncThunk('getUsers', async () => {
     const pathParams = `?sort=id&page=0&size=10`
-    const fullPAth = "http://localhost:8880/" + apiUrl + pathParams
+    const fullPAth = apiUrl + pathParams
     const response = await axios.get<IPageableWrapper<IUser>>(fullPAth);
     console.log({response})
     return response.data
 });
 
 export const saveUser = createAsyncThunk('saveUser', async (entity: ISaveUser, thunkApi) => {
-    const path = "http://localhost:8880/" + apiUrl
-    const response = await axios.post<ISaveUser>(path, entity);
+    const response = await axios.post<IUser>(apiUrl, entity);
     void thunkApi.dispatch(getUsers());
-
     return response.data
 });
 
@@ -40,20 +40,19 @@ export const UserSlice = createSlice({
     reducers: {},
     extraReducers(builder) {
         builder
-            .addCase(saveUser.fulfilled, () => {
-                toast("user saved")
+            .addCase(saveUser.fulfilled, (state, action) => {
+                toast.success("user saved", toastDefaultSettings)
+                state.currentUserID = action.payload.id || ""
             })
             .addMatcher(isFulfilled(getUsers), (state, action) => {
                 state.users = action.payload.content;
             })
-            .addMatcher(isRejected(saveUser), (state, action) => {
+            .addMatcher(isRejected(saveUser), (_state, action) => {
                 const test = action.error.message
-                toast.error(test, toastDefaultSettings)
+                toast.error(test, {...toastDefaultSettings, autoClose:6000 })
             })
     }
 })
-
-export const {} = UserSlice.actions;
 
 // Reducer
 export default UserSlice.reducer;

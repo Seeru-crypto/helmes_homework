@@ -1,4 +1,5 @@
 import axios, { AxiosError, AxiosResponse } from 'axios';
+import {ERROR_TRANSLATIONS} from "../util/errorTranslations.constants.ts";
 
 const TIMEOUT = 1 * 60 * 1000;
 axios.defaults.timeout = TIMEOUT;
@@ -20,8 +21,9 @@ export const setupAxiosInterceptors = async (): Promise<void> => {
 
     // TODO: Implement a better Axios Error handler, where each error will be thrown independently
     console.log({originalErrorMessages})
-    const translatedMessage = originalErrorMessages[0];
-    throw new Error(translatedMessage);
+    const translatedMessage = ERROR_TRANSLATIONS.get(originalErrorMessages[0])
+    const response = translatedMessage || originalErrorMessages[0];
+    throw new Error(response);
   };
   axios.interceptors.response.use(onResponseSuccess, onResponseError);
 };

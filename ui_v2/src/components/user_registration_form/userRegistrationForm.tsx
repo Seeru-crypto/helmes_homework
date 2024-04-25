@@ -18,8 +18,8 @@ function UserRegistrationForm() {
     const sectors = useAppSelector((state) => state.sectors.sectors)
 
     useEffect(() => {
-        dispatch(getSectors())
-    }, [dispatch])
+        if (sectors.length === 0) dispatch(getSectors())
+    }, [dispatch, sectors])
 
     function submitForm() {
         const payload: ISaveUser = {
