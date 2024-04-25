@@ -1,5 +1,6 @@
 import {createSlice} from "@reduxjs/toolkit";
-import {toast} from 'react-toastify';
+import {Slide, toast} from 'react-toastify';
+import {toastDefaultSettings} from "../util/utils.ts";
 
 interface ISettings {
     count: number,
@@ -15,11 +16,10 @@ export const settingSlice = createSlice({
     reducers: {
         increaseCount: (state) => {
             state.count = state.count + 1;
-            toast("increase")
-
+            toast.success("increase", toastDefaultSettings)
         }, decreaseCount: (state) => {
             state.count = state.count - 1;
-            toast("decrease")
+            toast.warning("decrease", toastDefaultSettings)
         }
     },
 })

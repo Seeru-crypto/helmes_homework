@@ -1,0 +1,10 @@
+.button {
+  max-width: 50%;
+  color: #f582ae;
+  border: none;
+
+  &:hover {
+    color: black;
+    background-color: #f582ae;
+  }
+}

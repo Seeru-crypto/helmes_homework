@@ -21,6 +21,7 @@ const CascaderInput = (props: CascaderProps) => {
     return (
         <div className={styles.container}>
             <Cascader
+                className={styles.cascader}
                 options={props.options}
                 onChange={onChange}
                 showSearch={true}

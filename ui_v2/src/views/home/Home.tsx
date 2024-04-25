@@ -1,5 +1,4 @@
 import {useAppDispatch, useAppSelector} from "../../store/store.ts";
-import {increaseCount} from "../../entities/setting.reducer.ts";
 import UserRegistrationForm from "../../components/user_registration_form/userRegistrationForm.tsx";
 import styles from "./Home.module.scss"
 
@@ -9,12 +8,6 @@ function Home() {
 
     return (
         <div className={styles.container}>
-            <div>
-                <button onClick={() => dispatch(increaseCount())}>
-                    click me
-                </button>
-                <p>current count is {count}</p>
-            </div>
             <UserRegistrationForm/>
         </div>
     )

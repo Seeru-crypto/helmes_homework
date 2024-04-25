@@ -2,6 +2,7 @@ import {MessageInstance} from "antd/es/message/interface";
 import {ISaveUser} from "../entities/interfaces/ISaveUser.ts";
 import {ICascaderOptions} from "../components/user_registration_form/CascaderInput/CascaderInput.tsx";
 import {ISector} from "../entities/interfaces/ISector.ts";
+import {Bounce, ToastOptions} from "react-toastify";
 
 export function mapToOptions(data: ISector[]): ICascaderOptions[] {
     if (!data) return ([] as ICascaderOptions[]);
@@ -12,6 +13,18 @@ export function mapToOptions(data: ISector[]): ICascaderOptions[] {
             children: sector.children ? mapToOptions(sector.children) : []
         }
     })
+}
+
+export const toastDefaultSettings: ToastOptions<unknown> =  {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
 }
 
 export function isUserDataValid(dto: ISaveUser, messageApi: MessageInstance ) {

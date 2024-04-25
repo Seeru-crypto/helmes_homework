@@ -1,9 +1,10 @@
 import axios from 'axios';
-import {createAsyncThunk, createSlice, isRejected} from '@reduxjs/toolkit';
+import {createAsyncThunk, createSlice, isFulfilled, isRejected} from '@reduxjs/toolkit';
 import {IUser} from "./interfaces/IUser.ts";
 import {IPageableWrapper} from "./interfaces/IPageableWrapper.ts";
 import {ISaveUser} from "./interfaces/ISaveUser.ts";
-import {toast} from "react-toastify";
+import {Slide, toast} from "react-toastify";
+import {toastDefaultSettings} from "../util/utils.ts";
 
 interface Iusers {
     users: IUser[];
@@ -21,6 +22,7 @@ export const getUsers = createAsyncThunk('getUsers', async () => {
     const pathParams = `?sort=id&page=0&size=10`
     const fullPAth = "http://localhost:8880/" + apiUrl + pathParams
     const response = await axios.get<IPageableWrapper<IUser>>(fullPAth);
+    console.log({response})
     return response.data
 });
 
@@ -41,9 +43,12 @@ export const UserSlice = createSlice({
             .addCase(saveUser.fulfilled, () => {
                 toast("user saved")
             })
+            .addMatcher(isFulfilled(getUsers), (state, action) => {
+                state.users = action.payload.content;
+            })
             .addMatcher(isRejected(saveUser), (state, action) => {
                 const test = action.error.message
-                toast(test)
+                toast.error(test, toastDefaultSettings)
             })
     }
 })

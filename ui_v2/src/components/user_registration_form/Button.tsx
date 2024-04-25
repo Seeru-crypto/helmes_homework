@@ -1,5 +1,4 @@
-import { Button } from 'antd';
-
+import styles from "./button.module.scss"
 interface ButtonProps {
     onClick: () => void
     label: string
@@ -7,9 +6,7 @@ interface ButtonProps {
 
 const CustomButton = (props: ButtonProps) => {
     return (
-        <div>
-            <Button onClick={() => props.onClick()} type="primary">{props.label}</Button>
-        </div>
+            <button className={styles.button} onClick={() => props.onClick()}>{props.label}</button>
     )
 }
 export default CustomButton;

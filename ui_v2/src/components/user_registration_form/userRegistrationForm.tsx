@@ -21,29 +21,36 @@ function UserRegistrationForm() {
         dispatch(getSectors())
     }, [dispatch])
 
-   function submitForm() {
-       const payload: ISaveUser = {
-           name: username,
-           agreeToTerms: agreeToTerms,
-           sectorIds: mapSectorsToIds(selectedSectors, sectors)
-       }
-       dispatch(saveUser(payload))
+    function submitForm() {
+        const payload: ISaveUser = {
+            name: username,
+            agreeToTerms: agreeToTerms,
+            sectorIds: mapSectorsToIds(selectedSectors, sectors)
+        }
+        dispatch(saveUser(payload))
     }
 
     return (
         <div className={styles.container}>
-                <div className="left">
-                    <span>Username</span>
-                    <TextInput placeholder="username" onChange={setUsername}/>
-                    <span>Agree to terms</span>
-                    <CheckboxInput label="agree to terms"
-                                   checkboxState={(newValue: boolean) => setAgreeToTerms(newValue)}/>
-                </div>
-                <div className="right">
-                    <span>Sectors</span>
-                    <CascaderInput selectedSectorsCallback={(e) => setSelectedSectors(e)} options={mapToOptions(sectors)}/>
-                    <CustomButton label="submit" onClick={() => submitForm()}/>
-                </div>
+
+            <div className={styles.inputContainer}>
+                <span>Username</span>
+                <TextInput placeholder="username" onChange={setUsername}/>
+            </div>
+
+            <div className={styles.inputContainer}>
+                <span>Sectors</span>
+                <CascaderInput selectedSectorsCallback={(e) => setSelectedSectors(e)} options={mapToOptions(sectors)}/>
+            </div>
+
+            <div className={styles.inputContainer}>
+                <CheckboxInput label="agree to terms"
+                               checkboxState={(newValue: boolean) => setAgreeToTerms(newValue)}/>
+            </div>
+            <div className={styles.buttonContainer}>
+                <CustomButton label="submit" onClick={() => submitForm()}/>
+
+            </div>
         </div>
     )
 }
