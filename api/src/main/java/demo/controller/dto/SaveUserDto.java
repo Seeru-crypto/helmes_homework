@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.time.Instant;
 import java.util.List;
 
 @Getter
@@ -27,4 +28,6 @@ public class SaveUserDto {
 
     @AssertTrue
     private boolean agreeToTerms;
+
+    private Instant dob;
 }

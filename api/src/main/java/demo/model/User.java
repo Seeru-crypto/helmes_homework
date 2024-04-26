@@ -46,7 +46,7 @@ public class User extends AbstractAuditingEntity<UUID> {
 
     @Column(unique = true)
     @Size(max = MAX_EMAIL_LEN, message = "Email is too long")
-    @Email(regexp = EMAIL_REGEX, message = "INVALID_USER_EMAIL")
+//    @Email(regexp = EMAIL_REGEX, message = "INVALID_USER_EMAIL")
     private String email;
 
     @DateTimeFormat()

@@ -9,11 +9,18 @@ import {mapSectorsToIds, mapToOptions} from "../../util/utils.ts";
 import {ISaveUser} from "../../entities/interfaces/ISaveUser.ts";
 import {saveUser, updateUser} from "../../entities/users.reducer.ts";
 import {getSectors} from "../../entities/sector.reducer.ts";
+import PhoneNumberInput, {IPhoneNumberPayload} from "./phoneNumberInput/phoneNumberInput.tsx";
+import DateSelector from "./datePicker/dateSelector.tsx";
+
+const defaultPhoneNumber: IPhoneNumberPayload = {prefix: "+123", mainBody: "12345678"}
 
 function UserRegistrationForm() {
     const [username, setUsername] = useState('')
     const [selectedSectors, setSelectedSectors] = useState<string[][]>([[]])
     const [agreeToTerms, setAgreeToTerms] = useState<boolean>(false)
+    const [phoneNumber, setPhoneNumber] = useState<IPhoneNumberPayload>(defaultPhoneNumber)
+    const [email, setEmail] = useState("")
+    const [dob, setDob] = useState("")
     const dispatch = useAppDispatch();
     const sectors = useAppSelector((state) => state.sectors.sectors)
     const userId = useAppSelector((state) => state.user.currentUserID)
@@ -22,11 +29,22 @@ function UserRegistrationForm() {
         if (sectors.length === 0) dispatch(getSectors())
     }, [dispatch, sectors])
 
+
+    useEffect(() => {
+        console.log(phoneNumber.prefix, " ", phoneNumber.mainBody)
+    }, [phoneNumber])
+
     function submitForm() {
+        const formattedPhoneNumber = `${phoneNumber?.prefix} ${phoneNumber?.mainBody}`
+        console.log({formattedPhoneNumber})
+
         const payload: ISaveUser = {
             name: username,
             agreeToTerms: agreeToTerms,
-            sectorIds: mapSectorsToIds(selectedSectors, sectors)
+            sectorIds: mapSectorsToIds(selectedSectors, sectors),
+            email,
+            phoneNumber: formattedPhoneNumber,
+            dob
         }
 
         userId === "" ? dispatch(saveUser(payload)) : dispatch(updateUser({userId, payload}))
@@ -43,6 +61,21 @@ function UserRegistrationForm() {
             <div className={styles.inputContainer}>
                 <span>Sectors</span>
                 <CascaderInput selectedSectorsCallback={(e) => setSelectedSectors(e)} options={mapToOptions(sectors)}/>
+            </div>
+
+            <div className={styles.inputContainer}>
+                <span>Phone number</span>
+                <PhoneNumberInput onChange={(e) => setPhoneNumber(e)} defaultValues={phoneNumber} />
+            </div>
+
+            <div className={styles.inputContainer}>
+                <span>Email aadress</span>
+                <TextInput placeholder="email" onChange={setEmail}/>
+            </div>
+
+            <div className={styles.inputContainer}>
+                <span>Date of birth</span>
+                <DateSelector />
             </div>
 
             <div className={styles.inputContainer}>

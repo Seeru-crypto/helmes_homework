@@ -1,5 +1,6 @@
 package demo.exception;
 
+import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -24,6 +25,11 @@ public class RestResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleHttpRequestMethodNotSupportedException( HttpRequestMethodNotSupportedException ex ) {
         log.warn(ex.toString(), ex);
         return ResponseEntity.badRequest().body(ex.getBody());
+    }
+    @ExceptionHandler(ConstraintViolationException.class)
+    protected ResponseEntity<Object> handleConstraintViolationException( ConstraintViolationException ex ) {
+        log.warn(ex.toString(), ex);
+        return ResponseEntity.badRequest().body(ex);
     }
 
     @ExceptionHandler(MissingServletRequestParameterException.class)
