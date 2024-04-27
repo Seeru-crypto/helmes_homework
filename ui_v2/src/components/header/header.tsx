@@ -16,8 +16,8 @@ function Header() {
         formatUsers()
     }, [users])
 
-
     function formatUsers(): void {
+        console.log("formating")
         const options: ISelectorOptions[] = users.map(user => {
             return {
                 value: user.id,

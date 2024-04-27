@@ -1,6 +1,6 @@
 import {MessageInstance} from "antd/es/message/interface";
 import {ISaveUser} from "../entities/interfaces/ISaveUser.ts";
-import {ICascaderOptions} from "../components/user_registration_form/CascaderInput/CascaderInput.tsx";
+import {ICascaderOptions} from "../views/users/userRegistration/CascaderInput/CascaderInput.tsx";
 import {ISector} from "../entities/interfaces/ISector.ts";
 import {Bounce, ToastOptions} from "react-toastify";
 import {IPage} from "../entities/interfaces/IPage.ts";

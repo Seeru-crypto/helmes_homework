@@ -1,6 +1,6 @@
-import UserRegistrationForm from "../../components/user_registration_form/userRegistrationForm.tsx";
+import UserRegistrationForm from "../users/userRegistration/userRegistrationForm.tsx";
 import styles from "./Home.module.scss"
-import UserCardList from "../../components/user_card_list/userCardList.tsx";
+import UserCardList from "../users/userRegistration/userCardList/userCardList.tsx";
 
 function Home() {
 

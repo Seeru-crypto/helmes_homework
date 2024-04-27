@@ -1,10 +1,10 @@
-import {IUser} from "../../entities/interfaces/IUser.ts";
+import {IUser} from "../../../../entities/interfaces/IUser.ts";
 import UserCard from "./UserCard/UserCard.tsx";
 import styles from "./userCardList.module.scss"
-import {useAppDispatch, useAppSelector} from "../../store/store.ts";
+import {useAppDispatch, useAppSelector} from "../../../../store/store.ts";
 import {useEffect} from "react";
-import {IPage} from "../../entities/interfaces/IPage.ts";
-import {getUsers} from "../../entities/users.reducer.ts";
+import {IPage} from "../../../../entities/interfaces/IPage.ts";
+import {getUsers} from "../../../../entities/users.reducer.ts";
 
 export interface IUserCardList {
 }

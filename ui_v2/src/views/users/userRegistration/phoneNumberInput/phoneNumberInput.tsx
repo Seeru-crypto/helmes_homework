@@ -1,7 +1,7 @@
 import styles from "./phoneNumberInput.module.scss"
-import {Input, Select, Space} from "antd";
+import {Input, Space} from "antd";
 import {useEffect, useState} from "react";
-import Selector, {ISelectorOptions} from "../../selector/selector.tsx";
+import Selector, {ISelectorOptions} from "../../../../components/selector/selector.tsx";
 
 export interface IPhoneNumberInput {
     onChange: (arg0: IPhoneNumberPayload) => void
@@ -12,7 +12,6 @@ export interface IPhoneNumberPayload {
     prefix: string,
     mainBody: string
 }
-
 
 export function PhoneNumberInput(props: IPhoneNumberInput) {
     const [prefix, setPrefix] = useState(props.defaultValues.prefix);
@@ -29,7 +28,6 @@ export function PhoneNumberInput(props: IPhoneNumberInput) {
         {value: "+33", label: "+33"},
         {value: "+49", label: "+49"}
     ]
-
 
     useEffect(() => {
         const payload: IPhoneNumberPayload = {

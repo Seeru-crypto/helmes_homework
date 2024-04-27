@@ -3,12 +3,12 @@ import TextInput from "./TextInput/TextInput.tsx";
 import CheckboxInput from "./CheckboxInput/CheckboxInput.tsx";
 import {useEffect, useState} from "react";
 import CascaderInput from "./CascaderInput/CascaderInput.tsx";
-import CustomButton from "./Button.tsx";
-import {useAppDispatch, useAppSelector} from "../../store/store.ts";
-import {mapSectorsToIds, mapToOptions} from "../../util/utils.ts";
-import {ISaveUser} from "../../entities/interfaces/ISaveUser.ts";
-import {saveUser, updateUser} from "../../entities/users.reducer.ts";
-import {getSectors} from "../../entities/sector.reducer.ts";
+import CustomButton from "../../../components/button/Button.tsx";
+import {useAppDispatch, useAppSelector} from "../../../store/store.ts";
+import {mapSectorsToIds, mapToOptions} from "../../../util/utils.ts";
+import {ISaveUser} from "../../../entities/interfaces/ISaveUser.ts";
+import {saveUser, updateUser} from "../../../entities/users.reducer.ts";
+import {getSectors} from "../../../entities/sector.reducer.ts";
 import PhoneNumberInput, {IPhoneNumberPayload} from "./phoneNumberInput/phoneNumberInput.tsx";
 import DateSelector from "./datePicker/dateSelector.tsx";
 import dayjs, {Dayjs} from 'dayjs'
