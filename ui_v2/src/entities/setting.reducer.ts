@@ -2,15 +2,18 @@ import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import {toast} from 'react-toastify';
 import {toastDefaultSettings} from "../util/utils.ts";
 import axios from "axios";
+import {IUser} from "./interfaces/IUser.ts";
 
 interface ISettings {
     count: number,
-    isApiUp: boolean
+    isApiUp: boolean,
+    currentUser: IUser | null
 }
 
 const initialState: ISettings = {
     count: 0,
-    isApiUp: false
+    isApiUp: false,
+    currentUser: null
 };
 
 const apiUrl = 'api/actuator/health';
@@ -36,6 +39,8 @@ export const settingSlice = createSlice({
         }, decreaseCount: (state) => {
             state.count = state.count - 1;
             toast.warning("decrease", toastDefaultSettings)
+        }, setCurrentUser: (state, action) => {
+            state.currentUser = action.payload;
         }
     },
     extraReducers(builder) {
@@ -47,5 +52,5 @@ export const settingSlice = createSlice({
     }
 })
 
-export const {increaseCount, decreaseCount} = settingSlice.actions;
+export const {increaseCount, decreaseCount, setCurrentUser} = settingSlice.actions;
 export default settingSlice.reducer;
