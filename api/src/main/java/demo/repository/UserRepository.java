@@ -15,4 +15,7 @@ public interface UserRepository extends JpaRepository<User, UUID> {
 
     List<User> findAllBySectorsContains(Sector sector);
 
+    boolean existsByPhoneNumber(String phoneNumber);
+
+    boolean existsByEmail(String email);
 }

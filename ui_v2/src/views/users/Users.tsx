@@ -18,8 +18,41 @@ function Users() {
             title: 'Name',
             dataIndex: 'name',
             key: 'name',
+        },
+        {
+            title: 'Email',
+            dataIndex: 'email',
+            key: 'email',
+        },
+        {
+            title: 'Date of birth',
+            dataIndex: 'dob',
+            key: 'dob',
+            render: (dob: string) => formatDob(dob)
+        },
+        {
+            title: 'Phone number',
+            dataIndex: 'phoneNumber',
+            key: 'phoneNumber',
+        },
+        {
+            title: 'Sectors',
+            dataIndex: 'sectors',
+            key: 'sectors',
+            render: (sector: string[]) => formatSectors(sector)
         }
     ];
+
+    function formatDob(dob: string) {
+        if (!dob) return ""
+        return new Date(dob).toLocaleDateString()
+    }
+
+    function formatSectors(sectors: string[]) {
+        return sectors.map((sector, index) => {
+            return <span key={index}>{sector}, </span>
+        })
+    }
 
     useEffect(() => {
         const initialPage: IPage = {

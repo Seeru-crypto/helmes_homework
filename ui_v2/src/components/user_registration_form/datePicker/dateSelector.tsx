@@ -1,19 +1,22 @@
 import {DatePicker} from "antd";
 import {Dayjs} from "dayjs";
+import {useEffect, useState} from "react";
 
+interface IDateSelector {
+    initialValue: Dayjs
+    onChange: (arg0: Dayjs) => void
+}
 
-export function DateSelector() {
-    // const test: Dayjs = new Dayjs().format("2024-04-09")
+export function DateSelector(props: IDateSelector) {
+    const [dateValue, setDateValue] = useState<Dayjs>(props.initialValue);
 
-
-    function onChange_2 (date: Dayjs, dateString: string | string[]) {
-        console.log({dateString});
-    }
+    useEffect(() => {
+        props.onChange(dateValue)
+    }, [dateValue])
 
     return (
-        <DatePicker onChange={onChange_2} />
+        <DatePicker value={dateValue} onChange={setDateValue} />
     )
-
 }
 
 export default DateSelector

@@ -4,6 +4,8 @@ import demo.service.validation.ValidationErrors;
 
 public enum UserErrors implements ValidationErrors {
   NAME_NOT_UNIQUE,
+  PHONE_NR_NOT_UNIQUE,
+  EMAIL_NOT_UNIQUE,
   INCORRECT_LENGTH,
   USER_NOT_EXIST,
   ID_IS_NULL,

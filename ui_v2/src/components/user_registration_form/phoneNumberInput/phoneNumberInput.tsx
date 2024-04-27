@@ -18,32 +18,15 @@ export function PhoneNumberInput(props: IPhoneNumberInput) {
     const [mainBody, setMainBody] = useState(props.defaultValues.mainBody);
 
     const prefixes = [
-        {
-            value: "+372", label: "+372"
-        },
-        {
-            value: "+1 ", label: "+1 ",
-        },
-        {
-            value: "+44", label: "+44",
-
-        }, {
-            value: "+86", label: "+86",
-
-        }, {
-            value: "+81", label: "+81",
-
-        }, {
-            value: "+91", label: "+91",
-        }, {
-
-            value: "+61", label: "+61",
-        }, {
-
-            value: "+33", label: "+33",
-        }, {
-            value: "+49", label: "+49",
-        }
+        {value: "+372", label: "+372"},
+        {value: "+1 ", label: "+1 "},
+        {value: "+44", label: "+44"},
+        {value: "+86", label: "+86"},
+        {value: "+81", label: "+81"},
+        {value: "+91", label: "+91"},
+        {value: "+61", label: "+61"},
+        {value: "+33", label: "+33"},
+        {value: "+49", label: "+49"}
     ]
 
 

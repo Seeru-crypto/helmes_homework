@@ -11,6 +11,7 @@ import {saveUser, updateUser} from "../../entities/users.reducer.ts";
 import {getSectors} from "../../entities/sector.reducer.ts";
 import PhoneNumberInput, {IPhoneNumberPayload} from "./phoneNumberInput/phoneNumberInput.tsx";
 import DateSelector from "./datePicker/dateSelector.tsx";
+import dayjs, {Dayjs} from 'dayjs'
 
 const defaultPhoneNumber: IPhoneNumberPayload = {prefix: "+123", mainBody: "12345678"}
 
@@ -20,7 +21,7 @@ function UserRegistrationForm() {
     const [agreeToTerms, setAgreeToTerms] = useState<boolean>(false)
     const [phoneNumber, setPhoneNumber] = useState<IPhoneNumberPayload>(defaultPhoneNumber)
     const [email, setEmail] = useState("")
-    const [dob, setDob] = useState("")
+    const [dob, setDob] = useState<Dayjs>(dayjs(new Date()))
     const dispatch = useAppDispatch();
     const sectors = useAppSelector((state) => state.sectors.sectors)
     const userId = useAppSelector((state) => state.user.currentUserID)
@@ -44,7 +45,7 @@ function UserRegistrationForm() {
             sectorIds: mapSectorsToIds(selectedSectors, sectors),
             email,
             phoneNumber: formattedPhoneNumber,
-            dob
+            dob: dob.format()
         }
 
         userId === "" ? dispatch(saveUser(payload)) : dispatch(updateUser({userId, payload}))
@@ -75,7 +76,7 @@ function UserRegistrationForm() {
 
             <div className={styles.inputContainer}>
                 <span>Date of birth</span>
-                <DateSelector />
+                <DateSelector initialValue={dob} onChange={(e) => setDob(e)} />
             </div>
 
             <div className={styles.inputContainer}>

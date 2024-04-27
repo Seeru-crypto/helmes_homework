@@ -2,6 +2,7 @@ package demo.exception;
 
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -26,10 +27,17 @@ public class RestResponseEntityExceptionHandler {
         log.warn(ex.toString(), ex);
         return ResponseEntity.badRequest().body(ex.getBody());
     }
+
     @ExceptionHandler(ConstraintViolationException.class)
     protected ResponseEntity<Object> handleConstraintViolationException( ConstraintViolationException ex ) {
         log.warn(ex.toString(), ex);
         return ResponseEntity.badRequest().body(ex);
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    protected ResponseEntity<Object> handleDataIntegrityViolationException( DataIntegrityViolationException ex ) {
+        log.warn(ex.toString(), ex);
+        return ResponseEntity.badRequest().body(List.of("SQL_EXCEPTION"));
     }
 
     @ExceptionHandler(MissingServletRequestParameterException.class)
