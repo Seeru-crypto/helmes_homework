@@ -1,5 +1,5 @@
 import styles from "./userRegistrationForm.module.scss"
-import TextInput from "./TextInput/TextInput.tsx";
+import TextInput from "../../../components/TextInput/TextInput.tsx";
 import CheckboxInput from "./CheckboxInput/CheckboxInput.tsx";
 import {useEffect, useState} from "react";
 import CascaderInput from "./CascaderInput/CascaderInput.tsx";

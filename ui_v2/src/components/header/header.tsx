@@ -5,6 +5,7 @@ import Selector, {ISelectorOptions} from "../selector/selector.tsx";
 import {useEffect, useState} from "react";
 import {IUser} from "../../entities/interfaces/IUser.ts";
 import {setCurrentUser} from "../../entities/setting.reducer.ts";
+import CustomButton from "../button/Button.tsx";
 
 function Header() {
     const navigate = useNavigate();
@@ -44,18 +45,16 @@ function Header() {
     return (
         <div className={styles.container}>
             <nav className={styles.navigationButtons}>
-                <button
-                    onClick={(event) => navigateToPage({event, destination: "/"})}
-                >
-                    Landing
-                </button>
-                <button
-                    onClick={(event) => navigateToPage({event, destination: "/users"})}
-                >
-                    users
-                </button>
-                <Selector defaultValue={""} options={formattedUsers} onChange={(id) => updateUser(id)}></Selector>
+                    <CustomButton
+                        onClick={(event) => navigateToPage({event, destination: "/"})}>
+                        Home
+                    </CustomButton>
+                    <CustomButton
+                        onClick={(event) => navigateToPage({event, destination: "/users"})}>
+                        users
+                    </CustomButton>
             </nav>
+            <Selector value={""} options={formattedUsers} onChange={(id) => updateUser(id)}></Selector>
         </div>
     )
 }

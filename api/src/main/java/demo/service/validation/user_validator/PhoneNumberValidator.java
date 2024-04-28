@@ -25,6 +25,10 @@ public class PhoneNumberValidator implements Validator<User> {
   public ValidationResult validate(User data) {
     ValidationResult result = new ValidationResult();
 
+    if (Objects.equals(data.getPhoneNumber(), null) || Objects.equals(data.getPhoneNumber(), "")) {
+      return result.setValid(true);
+    }
+
     if (userRepository.existsByPhoneNumber(data.getPhoneNumber()) && !Objects.equals(data.getPhoneNumber(), "")) {
       return result.setValid(false).setMessage(PHONE_NR_NOT_UNIQUE);
     }

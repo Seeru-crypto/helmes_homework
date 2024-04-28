@@ -18,7 +18,7 @@ export function UserCardList() {
         if (users.length !== 0) return;
         const page: IPage = {
             sort: "createdAt,desc",
-            size: 3,
+            size: 10,
             page: 0
         }
         dispatch(getUsers(page))

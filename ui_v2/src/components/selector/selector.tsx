@@ -1,9 +1,11 @@
 import {Select} from "antd";
+import styles from "./selector.module.scss"
 
 export interface ISelector {
     options: ISelectorOptions[],
     onChange: (arg0: string) => void
-    defaultValue: string
+    value: string,
+    isDisabled?: boolean
 }
 
 export interface ISelectorOptions {
@@ -13,13 +15,15 @@ export interface ISelectorOptions {
 
 export function Selector (props: ISelector) {
     return (
-        <Select
-            showSearch
-            defaultValue={props.defaultValue}
-            style={{width: '40%'}}
-            onChange={(e) => props.onChange(e)}
-            options={props.options}
-        />
+            <Select
+                disabled={props.isDisabled}
+                className={styles.container}
+                showSearch
+                value={props.value}
+                onChange={(e) => props.onChange(e)}
+                options={props.options}
+            />
+
     )
 }
 

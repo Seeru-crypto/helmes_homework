@@ -104,10 +104,10 @@ class FilterIntegrationTest extends ContextIntegrationTest {
     mockMvc.perform(get("/filters")
                     .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$[0].field").value("name"))
+            .andExpect(jsonPath("$[0].fieldName").value("NAME"))
             .andExpect(jsonPath("$[0].allowedValue").value("STRING"))
             .andExpect(jsonPath("$[0].criteria[*]").value(containsInAnyOrder("CONTAINS", "EQUALS", "DOES_NOT_CONTAIN")))
-            .andExpect(jsonPath("$[1].field").value("dob"))
+            .andExpect(jsonPath("$[1].fieldName").value("DOB"))
             .andExpect(jsonPath("$[1].allowedValue").value("DATE"))
             .andExpect(jsonPath("$[1].criteria[*]").value(containsInAnyOrder("BEFORE", "AFTER", "EQUALS")))
     ;

@@ -3,11 +3,13 @@ import {TypedUseSelectorHook, useDispatch, useSelector} from 'react-redux';
 import usersReducer from "../entities/users.reducer.ts";
 import settingReducer from "../entities/setting.reducer.ts";
 import sectorReducer from "../entities/sector.reducer.ts";
+import filtersReducer from "../entities/filters.reducer.ts";
 
 const rootReducer = combineReducers({
   user: usersReducer,
   setting: settingReducer,
-  sectors: sectorReducer
+  sectors: sectorReducer,
+  filters: filtersReducer
 })
 
 export const store = configureStore({

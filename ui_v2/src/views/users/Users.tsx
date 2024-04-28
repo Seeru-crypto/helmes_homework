@@ -1,13 +1,17 @@
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 import {IPage} from "../../entities/interfaces/IPage.ts";
 import {getUsers} from "../../entities/users.reducer.ts";
 import {useAppDispatch, useAppSelector} from "../../store/store.ts";
 import {Pagination, PaginationProps, Table} from "antd";
+import FilterModal from "./createFilter/FilterModal.tsx";
+import {getFilterOptions} from "../../entities/filters.reducer.ts";
 
 function Users() {
     const users = useAppSelector((state) => state.user.users);
     const totalUsers = useAppSelector((state) => state.user.totalUsers);
+    const filterOptions = useAppSelector((state) => state.filters.filterOptions);
     const dispatch = useAppDispatch();
+    const [isModalOpen, setIsModalOpen] = useState(false)
     const columns = [
         {
             title: 'user id',
@@ -61,31 +65,49 @@ function Users() {
             page: 0
         }
         dispatch(getUsers(initialPage))
+
+        if (filterOptions.length === 0) dispatch(getFilterOptions())
     }, [dispatch]);
 
     const onChange: PaginationProps['onChange'] = (pageNumber, pageSize) => {
         const initialPage: IPage = {
             sort: "createdAt,desc",
             size: pageSize,
-            page: pageNumber-1
+            page: pageNumber - 1
         }
         dispatch(getUsers(initialPage))
     };
 
     return (
         <div>
-            <h1>Users</h1>
-            <Table
-                rowKey="id"
-                pagination={false}
-                dataSource={users}
-                columns={columns} />
-            <Pagination
-                showSizeChanger
-                onShowSizeChange={onChange}
-                onChange={onChange} defaultCurrent={0} total={totalUsers} />
+            <div>
+                <h2>Filters</h2><p>
+            </p>
+                <button>Select existing filter</button>
+                <br/>
+                <button onClick={() => setIsModalOpen(true)}>
+                    Open Modal
+                </button>
+
+                <FilterModal isModalOpen={isModalOpen} isModalOpenCallback={(e) => setIsModalOpen(e)}/>
+
+            </div>
+
+            <div>
+                <h2>Users</h2>
+                <Table
+                    rowKey="id"
+                    pagination={false}
+                    dataSource={users}
+                    columns={columns}/>
+                <Pagination
+                    showSizeChanger
+                    onShowSizeChange={onChange}
+                    onChange={onChange} defaultCurrent={0} total={totalUsers}/>
+            </div>
+
         </div>
     )
 }
 
-export  default Users
+export default Users

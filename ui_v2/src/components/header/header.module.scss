@@ -1,14 +1,19 @@
 .container {
+  z-index: 100;
   position: fixed;
   top: 0;
-  width: 100%;
-  margin: 1rem;
+  width: 100vw;
+  padding: 1rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  background-color: #f3d2c1;
 }
 
 .navigationButtons {
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  gap: 1rem;
+  gap: 2rem;
   flex-direction: row;
 }

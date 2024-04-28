@@ -10,6 +10,7 @@ import demo.repository.FilterRepository;
 import demo.repository.UserFilterRepository;
 import demo.service.filter.DateCriteria;
 import demo.service.filter.StringCriteria;
+import demo.service.filter.UserFieldNames;
 import demo.service.validation.ValidationService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,8 @@ import java.util.List;
 
 import static demo.service.filter.DataTypes.DATE;
 import static demo.service.filter.DataTypes.STRING;
+import static demo.service.filter.UserFieldNames.DOB;
+import static demo.service.filter.UserFieldNames.NAME;
 
 @Slf4j
 @Service
@@ -31,12 +34,12 @@ public class FilterService {
   private final ValidationService validationService;
 
   private static final FilterOptionsDto nameOption = new FilterOptionsDto()
-          .setField("name")
+          .setFieldName(NAME)
           .setAllowedValue(STRING)
           .setCriteria(StringCriteria.getStringCriterias());
 
   private static final FilterOptionsDto dateOptions = new FilterOptionsDto()
-          .setField("dob")
+          .setFieldName(DOB)
           .setAllowedValue(DATE)
           .setCriteria(DateCriteria.getDateCriterias());
 

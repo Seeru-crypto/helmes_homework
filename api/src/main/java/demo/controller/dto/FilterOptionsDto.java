@@ -2,6 +2,7 @@ package demo.controller.dto;
 
 import demo.service.filter.DataTypes;
 import demo.service.filter.Filters;
+import demo.service.filter.UserFieldNames;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,7 +15,7 @@ import java.util.List;
 @ToString
 public class FilterOptionsDto {
     @NotNull
-    private String field;
+    private UserFieldNames fieldName;
 
     @NotNull
     private List<Filters> criteria;

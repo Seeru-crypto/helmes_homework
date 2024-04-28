@@ -39,7 +39,7 @@ export function PhoneNumberInput(props: IPhoneNumberInput) {
 
     return (
         <Space.Compact className={styles.container}>
-            <Selector defaultValue={"+372"}
+            <Selector value={"+372"}
                       onChange={(e) => setPrefix(e)}
                       options={prefixes}/>
             <Input style={{width: '80%'}}

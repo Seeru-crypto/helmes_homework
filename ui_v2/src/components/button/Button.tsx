@@ -1,13 +1,15 @@
 import styles from "./button.module.scss"
+
 interface ButtonProps {
-    onClick: () => void
-    label: string
+    onClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+    children: React.ReactNode
 }
 
-const CustomButton = (props: ButtonProps) => {
+const CustomButton: React.FC<ButtonProps> = ({ onClick, children }) => {
     return (
-            <button className={styles.button} onClick={() => props.onClick()}>{props.label}</button>
-    )
-}
+        <button className={styles.button} onClick={onClick}>
+            {children}
+        </button>
+    );
+};
 export default CustomButton;
-

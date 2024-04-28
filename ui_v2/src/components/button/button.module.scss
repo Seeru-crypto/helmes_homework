@@ -2,9 +2,17 @@
   max-width: 50%;
   color: #f582ae;
   border: none;
+  padding: .5rem 1rem;
+  border-radius: .5rem;
+  background-color: #fef6e4;
+  cursor: pointer;
 
   &:hover {
     color: black;
     background-color: #f582ae;
   }
+}
+
+.active {
+  background-color: red;
 }

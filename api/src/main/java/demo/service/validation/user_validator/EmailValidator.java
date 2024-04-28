@@ -14,21 +14,25 @@ import static demo.service.validation.user_validator.UserErrors.EMAIL_NOT_UNIQUE
 @Component
 public class EmailValidator implements Validator<User> {
 
-  private final UserRepository userRepository;
+    private final UserRepository userRepository;
 
-  @Autowired
-  public EmailValidator(UserRepository userRepository) {
-    this.userRepository = userRepository;
-  }
-
-  @Override
-  public ValidationResult validate(User data) {
-    ValidationResult result = new ValidationResult();
-
-    if (userRepository.existsByEmail(data.getEmail()) && !Objects.equals(data.getEmail(), "")) {
-      return result.setValid(false).setMessage(EMAIL_NOT_UNIQUE);
+    @Autowired
+    public EmailValidator(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
-    return result.setValid(true);
-  }
+    @Override
+    public ValidationResult validate(User data) {
+        ValidationResult result = new ValidationResult();
+
+        if (Objects.equals(data.getEmail(), null) || Objects.equals(data.getEmail(), "")) {
+            return result.setValid(true);
+        }
+
+        if (userRepository.existsByEmail(data.getEmail())) {
+            return result.setValid(false).setMessage(EMAIL_NOT_UNIQUE);
+        }
+
+        return result.setValid(true);
+    }
 }
