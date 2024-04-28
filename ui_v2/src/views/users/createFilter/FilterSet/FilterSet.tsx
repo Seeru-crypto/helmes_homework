@@ -5,8 +5,9 @@ import {AllowedValies, IFilterOptions} from "../../../../entities/interfaces/IFi
 import Selector, {ISelectorOptions} from "../../../../components/selector/selector.tsx";
 
 interface IFilterSet {
-
+    removeCallback:() => void
 }
+
 function FilterSet(props: IFilterSet) {
     const filterOptions = useAppSelector((state) => state.filters.filterOptions);
     const fieldNames = useAppSelector((state) => state.filters.allFieldNames);
@@ -27,7 +28,6 @@ function FilterSet(props: IFilterSet) {
         setFormattedCriteria([]);
         setCriteria("")
         getCriteria(selectedFieldName)
-
     }
 
     function getCriteria(selectedFieldName: string) {
@@ -56,7 +56,6 @@ function FilterSet(props: IFilterSet) {
             case "NUMBER":
                 return (<p>NUMBER</p>)
         }
-
     }
 
     return (
@@ -75,6 +74,8 @@ function FilterSet(props: IFilterSet) {
                 <p>Select Value</p>
                 {getValueFiled()}
             </div>
+
+            <p onClick={() => props.removeCallback()}>remove</p>
 
         </div>
     )
