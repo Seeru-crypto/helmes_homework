@@ -65,9 +65,11 @@ function Users() {
             page: 0
         }
         dispatch(getUsers(initialPage))
-
-        if (filterOptions.length === 0) dispatch(getFilterOptions())
     }, [dispatch]);
+
+    useEffect(() => {
+        if (filterOptions.length === 0) dispatch(getFilterOptions())
+    }, [dispatch, filterOptions]);
 
     const onChange: PaginationProps['onChange'] = (pageNumber, pageSize) => {
         const initialPage: IPage = {
@@ -81,16 +83,13 @@ function Users() {
     return (
         <div>
             <div>
-                <h2>Filters</h2><p>
-            </p>
+                <h2>Filters</h2>
                 <button>Select existing filter</button>
                 <br/>
                 <button onClick={() => setIsModalOpen(true)}>
                     Open Modal
                 </button>
-
                 <FilterModal isModalOpen={isModalOpen} isModalOpenCallback={(e) => setIsModalOpen(e)}/>
-
             </div>
 
             <div>
