@@ -1,3 +1,10 @@
 .container {
 
+  &.ant-select {
+    border: red 1px solid;
+  }
+}
+
+.selector {
+  min-width: 5rem;
 }

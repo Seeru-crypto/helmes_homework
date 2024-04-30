@@ -12,27 +12,27 @@ function Header() {
     const dispatch = useAppDispatch();
     const users = useAppSelector(state => state.user.users)
     const [formattedUsers, setFormatedUSers] = useState<ISelectorOptions[]>([])
+    const [userNameLabel, setUserNameLabel] = useState("")
 
     useEffect(() => {
         formatUsers()
     }, [users])
 
     function formatUsers(): void {
-        console.log("formating")
         const options: ISelectorOptions[] = users.map(user => {
             return {
                 value: user.id,
                 label: user.name
-            }
+            } as ISelectorOptions
         })
         setFormatedUSers(options)
     }
 
     function updateUser(id: string) {
-        const user: IUser = users.filter(user => user.id == id)
+        const user: IUser[] = users.filter(user => user.id == id)
+        setUserNameLabel(user[0].name)
         dispatch(setCurrentUser(user))
     }
-
 
     function navigateToPage({event, destination}: {
         event: React.MouseEvent<HTMLElement, MouseEvent>;
@@ -54,7 +54,9 @@ function Header() {
                         users
                     </CustomButton>
             </nav>
-            <Selector value={""} options={formattedUsers} onChange={(id) => updateUser(id)}></Selector>
+            <div className={styles.userSelector}>
+                <Selector value={userNameLabel} options={formattedUsers} onChange={(id) => updateUser(id)}></Selector>
+            </div>
         </div>
     )
 }

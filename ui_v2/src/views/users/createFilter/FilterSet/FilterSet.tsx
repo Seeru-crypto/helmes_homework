@@ -3,9 +3,14 @@ import {useAppSelector} from "../../../../store/store.ts";
 import {useEffect, useState} from "react";
 import {AllowedValies, IFilterOptions} from "../../../../entities/interfaces/IFilterOption.ts";
 import Selector, {ISelectorOptions} from "../../../../components/selector/selector.tsx";
+import Button from "../../../../components/button/Button.tsx";
+import TextInput from "../../../../components/TextInput/TextInput.tsx";
+import DateSelector from "../../../../components/datePicker/dateSelector.tsx";
+import dayjs, {Dayjs} from "dayjs";
 
 interface IFilterSet {
     removeCallback:() => void
+    numberOfRows: number
 }
 
 function FilterSet(props: IFilterSet) {
@@ -17,6 +22,8 @@ function FilterSet(props: IFilterSet) {
     const [fieldName, setFieldNAme] = useState("")
     const [allowedValue, setAllowedValue] = useState<AllowedValies | undefined>()
     const [criteria, setCriteria] = useState<string>("")
+    const [value, setValue] = useState("")
+    const [dateValue, setDateValue] = useState<Dayjs>(dayjs(new Date()))
 
     useEffect(() => {
         const res: ISelectorOptions[] = getSelectorOptions(fieldNames)
@@ -50,9 +57,13 @@ function FilterSet(props: IFilterSet) {
     function getValueFiled() {
         switch (allowedValue) {
             case "STRING":
-                return (<p>string</p>)
+                return (
+                    <TextInput value={value} onChange={(e) => setValue(e)} />
+                )
             case "DATE":
-                return (<p>DATE</p>)
+                return (
+                    <DateSelector initialValue={dateValue} onChange={setDateValue} />
+                )
             case "NUMBER":
                 return (<p>NUMBER</p>)
         }
@@ -74,9 +85,10 @@ function FilterSet(props: IFilterSet) {
                 <p>Select Value</p>
                 {getValueFiled()}
             </div>
-
-            <p onClick={() => props.removeCallback()}>remove</p>
-
+            <div>
+                <p>action</p>
+                <Button variant={"removeButton"} isDisabled={props.numberOfRows <= 1} onClick={() => props.removeCallback()}>remove</Button>
+            </div>
         </div>
     )
 

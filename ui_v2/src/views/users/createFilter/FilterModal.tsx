@@ -1,9 +1,9 @@
 import styles from "./FilterModal.module.scss"
 import {Modal} from "antd";
 import {useEffect, useState} from "react";
-import {useAppDispatch, useAppSelector} from "../../../store/store.ts";
 import TextInput from "../../../components/TextInput/TextInput.tsx";
 import FilterSet from "./FilterSet/FilterSet.tsx";
+import Button from "../../../components/button/Button.tsx";
 
 interface IFilterModal {
     isModalOpen: boolean,
@@ -18,10 +18,10 @@ function FilterModal(props: IFilterModal) {
     useEffect(() => {
         const items = [];
         for (let i = 0; i < numberOfFilters; i++) {
-            items.push(<FilterSet key={i} removeCallback={() => removeElementFromFilterSet(i)}/>);
+            items.push(<FilterSet numberOfRows={numberOfFilters} key={i} removeCallback={() => removeElementFromFilterSet(i)}/>);
         }
         setFilters(items)
-    }, [numberOfFilters, removeElementFromFilterSet])
+    }, [numberOfFilters])
 
     const handleCancel = () => {
         props.isModalOpenCallback(false)
@@ -40,15 +40,14 @@ function FilterModal(props: IFilterModal) {
     }
 
     return (
-        <Modal className={styles.container} title="Filter builder" open={props.isModalOpen} onOk={handleOk}
+        <Modal width={"80vw"} className={styles.container} title="Filter builder" open={props.isModalOpen} onOk={handleOk}
                onCancel={handleCancel}>
             {/*STEP 0: add filter group name*/}
             <div>
                 <p>Filter group name</p>
                 <TextInput placeholder={"filter group name"} onChange={setGroupName}/>
             </div>
-
-            <button onClick={() => setNumberOfFilters(numberOfFilters + 1)}>add filters</button>
+            <Button onClick={() => setNumberOfFilters(numberOfFilters + 1)}>add filters</Button>
             {filters}
         </Modal>
     )

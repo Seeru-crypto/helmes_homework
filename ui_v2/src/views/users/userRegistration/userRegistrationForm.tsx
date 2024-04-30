@@ -10,7 +10,7 @@ import {ISaveUser} from "../../../entities/interfaces/ISaveUser.ts";
 import {saveUser, updateUser} from "../../../entities/users.reducer.ts";
 import {getSectors} from "../../../entities/sector.reducer.ts";
 import PhoneNumberInput, {IPhoneNumberPayload} from "./phoneNumberInput/phoneNumberInput.tsx";
-import DateSelector from "./datePicker/dateSelector.tsx";
+import DateSelector from "../../../components/datePicker/dateSelector.tsx";
 import dayjs, {Dayjs} from 'dayjs'
 
 const defaultPhoneNumber: IPhoneNumberPayload = {prefix: "+123", mainBody: "12345678"}
@@ -84,8 +84,7 @@ function UserRegistrationForm() {
                                checkboxState={(newValue: boolean) => setAgreeToTerms(newValue)}/>
             </div>
             <div className={styles.buttonContainer}>
-                <CustomButton label="submit" onClick={() => submitForm()}/>
-
+                <CustomButton onClick={() => submitForm()}>Submit</CustomButton>
             </div>
         </div>
     )

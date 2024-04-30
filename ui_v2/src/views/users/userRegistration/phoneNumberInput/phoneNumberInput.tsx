@@ -1,7 +1,7 @@
 import styles from "./phoneNumberInput.module.scss"
-import {Input, Space} from "antd";
+import {Input, Select, Space} from "antd";
 import {useEffect, useState} from "react";
-import Selector, {ISelectorOptions} from "../../../../components/selector/selector.tsx";
+import {ISelectorOptions} from "../../../../components/selector/selector.tsx";
 
 export interface IPhoneNumberInput {
     onChange: (arg0: IPhoneNumberPayload) => void
@@ -39,9 +39,12 @@ export function PhoneNumberInput(props: IPhoneNumberInput) {
 
     return (
         <Space.Compact className={styles.container}>
-            <Selector value={"+372"}
-                      onChange={(e) => setPrefix(e)}
-                      options={prefixes}/>
+            <Select
+                className={styles.selector}
+                value={prefix}
+                onChange={(e) => setPrefix(e)}
+                options={prefixes}
+            />
             <Input style={{width: '80%'}}
                    defaultValue={props.defaultValues.mainBody}
                    onChange={(e) => setMainBody(e.target.value)}/>
