@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import static demo.service.filter.DataTypes.DATE;
 import static demo.service.filter.DataTypes.STRING;
@@ -29,6 +30,7 @@ public class FilterService {
   private final UserFilterRepository userFilterRepository;
   private final FilterRepository filterRepository;
   private final ValidationService validationService;
+  private final UserService userService;
 
   private static final FilterOptionsDto nameOption = new FilterOptionsDto()
           .setField("name")
@@ -41,8 +43,8 @@ public class FilterService {
           .setCriteria(DateCriteria.getDateCriterias());
 
   @Transactional
-  public UserFilter saveFilters(UserFilterDto userFilter, User user) {
-    // validate User filter
+  public UserFilter saveFilters(UserFilterDto userFilter, UUID userId) {
+    User user = userService.findById(userId);
 
     validationService.validateEntity(userFilter, validationService.getUserFilterDtoValidator());
     var createdUserFilter = userFilterRepository.save(new UserFilter()
@@ -71,7 +73,8 @@ public class FilterService {
     return response;
   }
 
-  public List<UserFilter> findByUser(User user) {
+  public List<UserFilter> findByUser(UUID userId) {
+    User user = userService.findById(userId);
     return userFilterRepository.findAllByUser(user);
   }
 

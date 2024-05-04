@@ -178,6 +178,7 @@ class UserIntegrationTest extends ContextIntegrationTest {
 
   @Test
   void findAllBySector_shouldReturnUsersBySector() throws Exception {
+    createFullSectorTree();
     var users = createDefaultUsers();
 
     mockMvc.perform(get("/users/sector/1"))
@@ -202,6 +203,8 @@ class UserIntegrationTest extends ContextIntegrationTest {
 
   @Test
   void findAllByFilterId_STRING_CONTAINS_shouldReturnUsers() throws Exception {
+    createFullSectorTree();
+
     var users = createDefaultUsers();
     var mainUser = users.get(0);
 
@@ -227,6 +230,8 @@ class UserIntegrationTest extends ContextIntegrationTest {
 
   @Test
   void findAllByFilterId_STRING_DOES_NOT_CONTAIN_shouldReturnUsers() throws Exception {
+    createFullSectorTree();
+
     var users = createDefaultUsers();
     var mainUser = users.get(0);
 
@@ -243,6 +248,7 @@ class UserIntegrationTest extends ContextIntegrationTest {
 
   @Test
   void findAllByFilterId_STRING_COMPOSITE_shouldReturnUsers() throws Exception {
+    createFullSectorTree();
     var users = createDefaultUsers();
     var mainUser = users.get(0);
 
@@ -262,6 +268,8 @@ class UserIntegrationTest extends ContextIntegrationTest {
   // Date
   @Test
   void findAllByFilterId_DATE_shouldReturnUsers() throws Exception {
+    createFullSectorTree();
+
     var users = createDefaultUsers();
     var mainUser = users.get(0);
 // Instant.parse("1995-04-10T21:00:25.451157400Z")

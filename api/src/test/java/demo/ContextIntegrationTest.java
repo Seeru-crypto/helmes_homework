@@ -27,9 +27,6 @@ public class ContextIntegrationTest extends BaseIntegrationTest {
   }
 
   protected List<User> createDefaultUsers() {
-    if (!sectorExists(1L)) {
-      createFullSectorTree();
-    }
     List<User> users = new ArrayList<>();
     users.add(createUser("qJohn Does", true, List.of(findSectorById(1L)), "johndoe1234@gmail.com", "+123 123456789", Instant.parse("1995-04-10T21:00:25.451157400Z")));
     users.add(createUser("qJane Does", true, List.of(findSectorById(2L), findSectorById(11L)), "jane_smith123@example.com", "+372 1234567",Instant.parse("2000-04-10T21:00:25.451157400Z")));
@@ -154,7 +151,7 @@ public class ContextIntegrationTest extends BaseIntegrationTest {
 
   protected UserFilter createUserFilter(List<FilterDto> filters, String name, User user) {
     UserFilterDto filterDto = new UserFilterDto().setName(name).setFilters(filters);
-    return filterService.saveFilters(filterDto, user);
+    return filterService.saveFilters(filterDto, user.getId());
   }
 
   protected List<FilterDto> getFilterDtoList() {

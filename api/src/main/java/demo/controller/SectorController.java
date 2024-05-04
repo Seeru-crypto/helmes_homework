@@ -4,6 +4,7 @@ import demo.controller.dto.SectorDto;
 import demo.mapper.SectorMapper;
 import demo.model.Sector;
 import demo.service.SectorService;
+import demo.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,7 @@ import java.util.List;
 @RequestMapping(path = "/sectors")
 public class SectorController {
     private final SectorService sectorService;
+    private final UserService userService;
     private final SectorMapper sectorMapper;
 
     @GetMapping
@@ -40,6 +42,7 @@ public class SectorController {
     public void deleteById(@PathVariable Long id) {
         log.info("REST request to delete sector by id: {}", id);
         sectorService.deleteById(id);
+        userService.removeSectorFromAllUsers(id);
     }
 
     @PostMapping

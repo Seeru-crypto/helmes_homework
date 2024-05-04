@@ -24,6 +24,7 @@ import java.util.UUID;
 public class UserService {
     private final UserRepository userRepository;
     private final ValidationService validationService;
+    private final SectorService sectorService;
     private final FilteringLogicService filteringLogicService;
 
     @Transactional
@@ -73,15 +74,18 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
-    public void removeSectorFromAllUsers(Sector sector) {
+    public void removeSectorFromAllUsers(Long sectorId) {
+        Sector sector = sectorService.findById(sectorId);
+
         userRepository
                 .findAllBySectorsContains(sector)
                 .forEach(user ->
                         user.removeSector(sector));
     }
 
-    public List<User> findAllBySector(Sector existingSector) {
-        return userRepository.findAllBySectorsContains(existingSector);
+    public List<User> findAllBySector(Long sectorId) {
+        Sector sector = sectorService.findById(sectorId);
+        return userRepository.findAllBySectorsContains(sector);
     }
 
     public List<User> findAllByUserFilter(UserFilter existingFilter) {

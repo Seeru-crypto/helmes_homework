@@ -3,7 +3,6 @@ package demo.controller;
 import demo.controller.dto.SaveUserDto;
 import demo.controller.dto.UserDto;
 import demo.mapper.UserMapper;
-import demo.model.Sector;
 import demo.model.User;
 import demo.model.UserFilter;
 import demo.service.FilterService;
@@ -73,8 +72,7 @@ public class UserController {
   @Operation(summary = "Get all users by sector id")
   public ResponseEntity<List<UserDto>> findAllBySector(@PathVariable Long sectorId) {
     log.info("REST request to get all users by sector: " + sectorId);
-    Sector existingSector = sectorService.findById(sectorId);
-    List<User> users = userService.findAllBySector(existingSector);
+    List<User> users = userService.findAllBySector(sectorId);
     List<UserDto> dto = users.stream().map(userMapper::toDto).toList();
     return ResponseEntity.ok(dto);
   }

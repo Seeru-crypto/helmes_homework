@@ -67,9 +67,6 @@ public class FilteringLogicService {
                 criteriaBuilder.greaterThanOrEqualTo(dateField, filterDate),
                 criteriaBuilder.lessThan(dateField, nextDay));
       }
-      case BETWEEN ->
-              // TODO: implement BETWEEN logic, for that filter value has to be array or a new value must be added
-              null;
     };
   }
 

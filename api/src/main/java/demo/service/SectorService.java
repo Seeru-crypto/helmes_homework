@@ -16,8 +16,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SectorService {
     private final SectorRepository sectorRepository;
-
-    private final UserService userService;
     private final ValidationService validationService;
 
     public Sector save(Sector sector) {
@@ -56,10 +54,6 @@ public class SectorService {
     public void deleteById(Long id) {
         Sector sector = findById(id);
         // update existing parent-child connections
-
-        // remove from user
-        userService.removeSectorFromAllUsers(sector);
-
         updateParentChildConnections(sector);
         // delete the sector
         sector.removeAllChildren();

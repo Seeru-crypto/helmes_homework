@@ -27,6 +27,7 @@ class FilterIntegrationTest extends ContextIntegrationTest {
 
   @Test
   void save_shouldSaveNewFilter() throws Exception {
+    createFullSectorTree();
     List<User> users = createDefaultUsers();
 
     List<FilterDto> filterDtos = getFilterDtoList();
@@ -109,7 +110,7 @@ class FilterIntegrationTest extends ContextIntegrationTest {
             .andExpect(jsonPath("$[0].criteria[*]").value(containsInAnyOrder("CONTAINS", "EQUALS", "DOES_NOT_CONTAIN")))
             .andExpect(jsonPath("$[1].field").value("dob"))
             .andExpect(jsonPath("$[1].allowedValue").value("DATE"))
-            .andExpect(jsonPath("$[1].criteria[*]").value(containsInAnyOrder("BEFORE", "AFTER", "EQUALS", "BETWEEN")))
+            .andExpect(jsonPath("$[1].criteria[*]").value(containsInAnyOrder("BEFORE", "AFTER", "EQUALS")))
     ;
   }
 }
