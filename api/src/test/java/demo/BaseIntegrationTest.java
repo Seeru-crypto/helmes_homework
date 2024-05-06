@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import demo.controller.dto.SaveUserDto;
 import demo.controller.dto.SectorDto;
+import demo.controller.dto.UserDto;
 import demo.controller.dto.UserFilterDto;
 import demo.service.FilterService;
 import demo.service.SectorService;
@@ -70,6 +71,10 @@ public abstract class BaseIntegrationTest {
         return allQuery.getResultList();
     }
     protected byte[] getBytes( SaveUserDto dto ) throws JsonProcessingException {
+        return objectMapper.writeValueAsBytes(dto);
+    }
+
+    protected byte[] getBytes( UserDto dto ) throws JsonProcessingException {
         return objectMapper.writeValueAsBytes(dto);
     }
 

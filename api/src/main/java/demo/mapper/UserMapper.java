@@ -4,13 +4,13 @@ import demo.controller.dto.SaveUserDto;
 import demo.controller.dto.UserDto;
 import demo.model.Sector;
 import demo.model.User;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.Named;
+import demo.service.SectorService;
+import org.mapstruct.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
-@Mapper(componentModel = "spring", uses = { SectorMapper.class })
+@Mapper(componentModel = "spring", uses = { SectorMapper.class})
 public interface UserMapper {
 
     @Mapping(target = "createdBy", ignore = true)
@@ -20,11 +20,9 @@ public interface UserMapper {
     @Mapping(target = "sectors", source = "sectorIds")
     User toEntity(SaveUserDto saveUserDto);
 
-    @Mapping(target  = "sectors", source = "sectors", qualifiedByName = "mapSectors")
+    @Mapping(target  = "sectorNames", source = "sectors")
     UserDto toDto(User user);
 
-    @Named("mapSectors")
-    default List<String> mapSectors(List<Sector> value) {
-        return value.stream().map(Sector::getName).toList();
-    }
+    @Mapping(target = "sectors", source = "sectorNames")
+    User toEntity(UserDto userDto);
 }

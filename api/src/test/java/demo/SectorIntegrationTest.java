@@ -112,8 +112,8 @@ class SectorIntegrationTest extends ContextIntegrationTest {
                 )
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.content[0].sectors.length()").value(3))
-                .andExpect(jsonPath("$.content[0].sectors[*]").value(containsInAnyOrder("Manufacturing", "Food and Beverage", "Beverages")))
+                .andExpect(jsonPath("$.content[0].sectorNames.length()").value(3))
+                .andExpect(jsonPath("$.content[0].sectorNames[*]").value(containsInAnyOrder("Manufacturing", "Food and Beverage", "Beverages")))
         ;
 
         mockMvc.perform(delete("/sectors/{id}", 4L))
@@ -128,8 +128,8 @@ class SectorIntegrationTest extends ContextIntegrationTest {
                 )
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.content[0].sectors.length()").value(2))
-                .andExpect(jsonPath("$.content[0].sectors[*]").value(containsInAnyOrder("Manufacturing", "Beverages")))
+                .andExpect(jsonPath("$.content[0].sectorNames.length()").value(2))
+                .andExpect(jsonPath("$.content[0].sectorNames[*]").value(containsInAnyOrder("Manufacturing", "Beverages")))
         ;
     }
 

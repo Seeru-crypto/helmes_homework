@@ -51,6 +51,10 @@ public class SectorService {
         });
     }
 
+    public Sector findByName(String name) {
+        return sectorRepository.findByName(name);
+    }
+
     public void deleteById(Long id) {
         Sector sector = findById(id);
         // update existing parent-child connections
@@ -73,5 +77,17 @@ public class SectorService {
         // for now we only update the sector name
         // moving a child from parent_A to parent_B is not allowed
         return findById(entity.getId()).setName(entity.getName());
+    }
+
+    public List<String> getSectorNames(List<Sector> value) {
+        return value.stream().map(Sector::getName).toList();
+    }
+
+    public List<Long> getSectorsBySectorIds(List<Long> sectorIds) {
+        return sectorIds.stream().map(this::findById).map(Sector::getId).toList();
+    };
+
+    public String getSectorName(Sector value) {
+        return value.getName();
     }
 }

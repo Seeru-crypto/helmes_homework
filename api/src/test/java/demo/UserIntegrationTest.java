@@ -2,6 +2,7 @@ package demo;
 
 import demo.controller.dto.FilterDto;
 import demo.controller.dto.SaveUserDto;
+import demo.controller.dto.UserDto;
 import demo.model.Sector;
 import demo.model.User;
 import demo.service.filter.DataTypes;
@@ -43,8 +44,8 @@ class UserIntegrationTest extends ContextIntegrationTest {
             .andExpect(jsonPath("$.content.length()").value(1))
             .andExpect(jsonPath("$.content[0].name").value("user_a_q"))
             .andExpect(jsonPath("$.content[0].agreeToTerms").value(true))
-            .andExpect(jsonPath("$.content[0].sectors.length()").value(1))
-            .andExpect(jsonPath("$.content[0].sectors[0]").value("sector_a"))
+            .andExpect(jsonPath("$.content[0].sectorNames.length()").value(1))
+            .andExpect(jsonPath("$.content[0].sectorNames[0]").value("sector_a"))
             .andExpect(jsonPath("$.pageable.pageNumber").value(0))
             .andExpect(jsonPath("$.pageable.pageSize").value(1));
 
@@ -56,7 +57,7 @@ class UserIntegrationTest extends ContextIntegrationTest {
             .andExpect(jsonPath("$.content.length()").value(2))
             .andExpect(jsonPath("$.content[1].name").value("user_a_q"))
             .andExpect(jsonPath("$.content[1].agreeToTerms").value(true))
-            .andExpect(jsonPath("$.content[1].sectors.length()").value(1))
+            .andExpect(jsonPath("$.content[1].sectorNames.length()").value(1))
             .andExpect(jsonPath("$.pageable.pageNumber").value(0))
             .andExpect(jsonPath("$.pageable.pageSize").value(10));
   }
@@ -81,7 +82,7 @@ class UserIntegrationTest extends ContextIntegrationTest {
             .andExpect(jsonPath("$.agreeToTerms").value(true))
             .andExpect(jsonPath("$.phoneNumber").value("+372 1234567"))
             .andExpect(jsonPath("$.email").value("tere@gmail.com"))
-            .andExpect(jsonPath("$.sectors.length()").value(2));
+            .andExpect(jsonPath("$.sectorNames.length()").value(2));
   }
 
   @Test
@@ -127,31 +128,33 @@ class UserIntegrationTest extends ContextIntegrationTest {
     Sector sector_b = createSector("sector_b", sector_a.getId(), 2);
     User createdUser = createUser("user_a_q", true, List.of(sector_b, sector_a));
 
-    SaveUserDto dto = new SaveUserDto()
-            .setSectorIds(List.of(1L))
+    UserDto dto = new UserDto()
+            .setSectorNames(List.of(sector_a.getName()))
             .setName("newquser 2")
+            .setId(createdUser.getId())
             .setAgreeToTerms(true);
     byte[] bytes = getBytes(dto);
 
-    mockMvc.perform(put(String.format("/users/%s", createdUser.getId()))
+    mockMvc.perform(put("/users")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(bytes))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.name").value("newquser 2"))
             .andExpect(jsonPath("$.agreeToTerms").value(true))
             .andExpect(jsonPath("$.id").value(createdUser.getId().toString()))
-            .andExpect(jsonPath("$.sectors.length()").value(1));
+            .andExpect(jsonPath("$.sectorNames.length()").value(1));
   }
 
   @Test
   void update_shouldThrowError_ifUserDoesNotExist() throws Exception {
-    SaveUserDto dto = new SaveUserDto()
-            .setSectorIds(List.of(3L))
+    UserDto dto = new UserDto()
+            .setSectorNames(List.of("tere"))
+            .setId(UUID.randomUUID())
             .setName("new@user 2")
             .setAgreeToTerms(true);
     byte[] bytes = getBytes(dto);
 
-    mockMvc.perform(put(String.format("/users/%s", UUID.randomUUID()))
+    mockMvc.perform(put("/users")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(bytes))
             .andExpect(status().isNotFound());
@@ -186,11 +189,11 @@ class UserIntegrationTest extends ContextIntegrationTest {
             .andDo(print())
             .andExpect(jsonPath("$.length()").value(2))
             .andExpect(jsonPath("$[0].name").value(users.get(0).getName()))
-            .andExpect(jsonPath("$[0].sectors.length()").value(users.get(0).getSectors().size()))
-            .andExpect(jsonPath("$[0].sectors[0]").value("Manufacturing"))
+            .andExpect(jsonPath("$[0].sectorNames.length()").value(users.get(0).getSectors().size()))
+            .andExpect(jsonPath("$[0].sectorNames[0]").value("Manufacturing"))
             .andExpect(jsonPath("$[1].name").value(users.get(3).getName()))
-            .andExpect(jsonPath("$[1].sectors.length()").value(users.get(3).getSectors().size()))
-            .andExpect(jsonPath("$[1].sectors[*]").value(containsInAnyOrder("Manufacturing", "Project furniture")))
+            .andExpect(jsonPath("$[1].sectorNames.length()").value(users.get(3).getSectors().size()))
+            .andExpect(jsonPath("$[1].sectorNames[*]").value(containsInAnyOrder("Manufacturing", "Project furniture")))
     ;
   }
 
