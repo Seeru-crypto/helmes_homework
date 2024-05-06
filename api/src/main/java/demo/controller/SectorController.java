@@ -41,8 +41,8 @@ public class SectorController {
     @Operation(summary = "Delete an existing sector by id, deletes all relationships as well")
     public void deleteById(@PathVariable Long id) {
         log.info("REST request to delete sector by id: {}", id);
-        sectorService.deleteById(id);
         userService.removeSectorFromAllUsers(id);
+        sectorService.deleteById(id);
     }
 
     @PostMapping
