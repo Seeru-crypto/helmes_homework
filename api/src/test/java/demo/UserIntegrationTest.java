@@ -2,7 +2,7 @@ package demo;
 
 import demo.controller.dto.SaveUserDto;
 import demo.controller.dto.UserDto;
-import demo.model.Sector;
+import demo.model.SectorEntity;
 import demo.model.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
@@ -23,8 +23,8 @@ class UserIntegrationTest extends ContextIntegrationTest {
 
   @Test
   void findAll_shouldReturnPaginatedUsers() throws Exception {
-    Sector sector_a = createSector("sector_a", null, 1);
-    Sector sector_b = createSector("sector_b", sector_a.getId(), 2);
+    SectorEntity sector_a = createSector("sector_a", null, 1);
+    SectorEntity sector_b = createSector("sector_b", sector_a.getId(), 2);
     createUser("user_a_q", true, List.of(sector_a));
     createUser("user_b_q", true, List.of(sector_a, sector_b));
 
@@ -57,7 +57,7 @@ class UserIntegrationTest extends ContextIntegrationTest {
 
   @Test
   void save_shouldSaveANewUser() throws Exception {
-    Sector sector_a = createSector("sector_a", null, 1);
+    SectorEntity sector_a = createSector("sector_a", null, 1);
     createSector("sector_b", sector_a.getId(), 2);
 
     SaveUserDto dto = new SaveUserDto()
@@ -80,7 +80,7 @@ class UserIntegrationTest extends ContextIntegrationTest {
 
   @Test
   void save_shouldThrowError_ifNameIncorrect() throws Exception {
-    Sector sector_a = createSector("sector_a", null, 1);
+    SectorEntity sector_a = createSector("sector_a", null, 1);
     createSector("sector_b", sector_a.getId(), 2);
 
     SaveUserDto dto = new SaveUserDto()
@@ -98,8 +98,8 @@ class UserIntegrationTest extends ContextIntegrationTest {
 
   @Test
   void save_shouldThrowError_ifNameExists() throws Exception {
-    Sector sector_a = createSector("sector_a", null, 1);
-    Sector sector_b = createSector("sector_b", sector_a.getId(), 2);
+    SectorEntity sector_a = createSector("sector_a", null, 1);
+    SectorEntity sector_b = createSector("sector_b", sector_a.getId(), 2);
     createUser("user_a_q", true, List.of(sector_a, sector_b));
 
     SaveUserDto dto = new SaveUserDto()
@@ -117,8 +117,8 @@ class UserIntegrationTest extends ContextIntegrationTest {
 
   @Test
   void update_shouldUpdateExistingUser() throws Exception {
-    Sector sector_a = createSector("sector_a", null, 1);
-    Sector sector_b = createSector("sector_b", sector_a.getId(), 2);
+    SectorEntity sector_a = createSector("sector_a", null, 1);
+    SectorEntity sector_b = createSector("sector_b", sector_a.getId(), 2);
     User createdUser = createUser("initial nameQ", true, List.of(sector_b, sector_a));
 
     String updatedName = "updated nameQ";
@@ -157,7 +157,7 @@ class UserIntegrationTest extends ContextIntegrationTest {
 
   @Test
   void delete_shouldDeleteUser_byId() throws Exception {
-    Sector sector_a = createSector("sector_a", null, 1);
+    SectorEntity sector_a = createSector("sector_a", null, 1);
     User existingUser = createUser("user_a_q", true, List.of(sector_a));
 
     mockMvc.perform(delete(String.format("/users/%s", existingUser.getId())))

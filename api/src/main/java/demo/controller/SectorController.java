@@ -2,7 +2,7 @@ package demo.controller;
 
 import demo.controller.dto.SectorDto;
 import demo.mapper.SectorMapper;
-import demo.model.Sector;
+import demo.model.SectorEntity;
 import demo.service.SectorService;
 import demo.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -49,7 +49,7 @@ public class SectorController {
     @Operation(summary = "Save new sector")
     public ResponseEntity<SectorDto> save(@Valid @RequestBody SectorDto sectorDto) {
         log.info("REST request to save sector: {}", sectorDto);
-        Sector createdSector = sectorService.save(sectorMapper.toEntity(sectorDto));
+        SectorEntity createdSector = sectorService.save(sectorMapper.toEntity(sectorDto));
         return ResponseEntity.ok(sectorMapper.toDto(createdSector));
     }
 
@@ -57,7 +57,7 @@ public class SectorController {
     @Operation(summary = "update existing sector")
     public ResponseEntity<SectorDto> update(@Valid @RequestBody SectorDto dto) {
         log.info("REST request to update sector: " + dto);
-        Sector updatedSector = sectorService.update(sectorMapper.toEntity(dto));
+        SectorEntity updatedSector = sectorService.update(sectorMapper.toEntity(dto));
         return ResponseEntity.ok(sectorMapper.toDto(updatedSector));
         }
 }

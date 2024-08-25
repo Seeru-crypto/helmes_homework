@@ -1,7 +1,7 @@
 package demo.service.validation.sector_validator;
 
-import demo.model.Sector;
-import demo.repository.SectorRepository;
+import demo.model.SectorEntity;
+import demo.repository.SectorJPARepository;
 import demo.service.validation.ValidationResult;
 import demo.service.validation.Validator;
 import org.springframework.stereotype.Component;
@@ -10,18 +10,18 @@ import static demo.service.validation.sector_validator.SectorErrors.INCORRECT_LE
 import static demo.service.validation.sector_validator.SectorErrors.NAME_EXISTS;
 
 @Component
-public class SectorNameValidator implements Validator<Sector> {
+public class SectorNameValidator implements Validator<SectorEntity> {
 
   public static final int SECTOR_MIN_NAME_LENGTH = 3;
   public static final int SECTOR_MAX_NAME_LENGTH = 50;
-  private final SectorRepository sectorRepository;
+  private final SectorJPARepository sectorRepository;
 
-  public SectorNameValidator(SectorRepository sectorRepository) {
+  public SectorNameValidator(SectorJPARepository sectorRepository) {
     this.sectorRepository = sectorRepository;
   }
 
   @Override
-  public ValidationResult validate(Sector sector) {
+  public ValidationResult validate(SectorEntity sector) {
     ValidationResult result = new ValidationResult();
 
     // Check if the sector name already exists

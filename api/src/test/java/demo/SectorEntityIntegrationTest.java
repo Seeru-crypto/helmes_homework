@@ -1,7 +1,7 @@
 package demo;
 
 import demo.controller.dto.SectorDto;
-import demo.model.Sector;
+import demo.model.SectorEntity;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
@@ -17,7 +17,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-class SectorIntegrationTest extends ContextIntegrationTest {
+class SectorEntityIntegrationTest extends ContextIntegrationTest {
     @Test
     void findAll_shouldReturnAllSectors() throws Exception {
         createFullSectorTree();
@@ -57,7 +57,7 @@ class SectorIntegrationTest extends ContextIntegrationTest {
     void remove_shouldRemoveSector_onTopLeaf() throws Exception {
         createFullSectorTree();
 
-        List<Long> childIds = findSectorById(1L).getChildren().stream().map(Sector::getId).toList();
+        List<Long> childIds = findSectorById(1L).getChildren().stream().map(SectorEntity::getId).toList();
         assertEquals(10, childIds.size());
 
         mockMvc.perform(delete("/sectors/{id}", 1L))
@@ -74,14 +74,14 @@ class SectorIntegrationTest extends ContextIntegrationTest {
     void remove_shouldRemoveSector_onMiddleLeaf() throws Exception {
         createFullSectorTree();
 
-        Sector createdSector = findSectorById(4L);
+        SectorEntity createdSector = findSectorById(4L);
 
-        List<Sector> children = createdSector
+        List<SectorEntity> children = createdSector
                 .getChildren();
 
         List<Long> childIds = children
                 .stream()
-                .map(Sector::getId)
+                .map(SectorEntity::getId)
                 .toList();
 
         assertEquals(6, childIds.size());
@@ -100,7 +100,7 @@ class SectorIntegrationTest extends ContextIntegrationTest {
     @Test
     void remove_shouldRemoveSector_fromUser_sectorTable() throws Exception {
         createFullSectorTree();
-        List<Sector> list = List.of(findSectorById(1L), findSectorById(4L), findSectorById(6L));
+        List<SectorEntity> list = List.of(findSectorById(1L), findSectorById(4L), findSectorById(6L));
         createUser("userq1", true, list);
 
         // assert user has 3 sectors connected
@@ -150,7 +150,7 @@ class SectorIntegrationTest extends ContextIntegrationTest {
 
     @Test
     void save_shouldReturnBadRequest_ifNameExists() throws Exception {
-        Sector existingSetor = createSector("tere", null, 2);
+        SectorEntity existingSetor = createSector("tere", null, 2);
 
         SectorDto sectorDto = new SectorDto().setName(existingSetor.getName()).setParentId(1L).setValue(23);
         byte[] bytes = getBytes(sectorDto);
@@ -164,7 +164,7 @@ class SectorIntegrationTest extends ContextIntegrationTest {
 
     @Test
     void save_shouldReturnBadRequest_ifValueExists() throws Exception {
-        Sector existingSetor = createSector("tere", null, 2);
+        SectorEntity existingSetor = createSector("tere", null, 2);
 
         SectorDto sectorDto = new SectorDto().setName("pere").setParentId(1L).setValue(existingSetor.getValue());
         byte[] bytes = getBytes(sectorDto);
@@ -178,7 +178,7 @@ class SectorIntegrationTest extends ContextIntegrationTest {
 
     @Test
     void update_shouldUpdateSector() throws Exception {
-        Sector existingSetor = createSector("tere", null, 2);
+        SectorEntity existingSetor = createSector("tere", null, 2);
 
         SectorDto sectorDto = new SectorDto().setName("pere").setParentId(null).setValue(2).setId(existingSetor.getId());
         byte[] bytes = getBytes(sectorDto);
@@ -197,7 +197,7 @@ class SectorIntegrationTest extends ContextIntegrationTest {
         createFullSectorTree();
         var initialSectorNames = List.of("Manufacturing", "Moulding", "Translation services");
 
-        List<Sector> output = sectorService.findByNames(initialSectorNames);
+        List<SectorEntity> output = sectorService.findByNames(initialSectorNames);
         assertEquals(3, output.size());
         assertTrue(output.stream().allMatch((sector -> initialSectorNames.contains(sector.getName())
         )));

@@ -2,7 +2,7 @@ package demo.service;
 
 import demo.exception.BusinessException;
 import demo.exception.NotFoundException;
-import demo.model.Sector;
+import demo.model.SectorEntity;
 import demo.model.User;
 import demo.model.UserFilter;
 import demo.repository.UserRepository;
@@ -75,7 +75,7 @@ public class UserService {
     }
 
     public void removeSectorFromAllUsers(Long sectorId) {
-        Sector sector = sectorService.findById(sectorId);
+        SectorEntity sector = sectorService.findById(sectorId);
 
         userRepository
                 .findAllBySectorsContains(sector)
@@ -84,7 +84,7 @@ public class UserService {
     }
 
     public List<User> findAllBySector(Long sectorId) {
-        Sector sector = sectorService.findById(sectorId);
+        SectorEntity sector = sectorService.findById(sectorId);
         return userRepository.findAllBySectorsContains(sector);
     }
 

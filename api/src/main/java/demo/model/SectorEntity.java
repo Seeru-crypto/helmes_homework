@@ -15,24 +15,36 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Getter
 @Setter
+@Entity
+@Table(name = "sector")
 @ToString
-public class Sector {
+public class SectorEntity extends AbstractAuditingEntity<Long> {
 
+    @Id
+    @Column(unique = true)
+    @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
+    @Column(nullable = false, unique = true)
+    @NotBlank(message = "Name is mandatory")
     private String name;
 
     private int value;
 
+    @Column
     private Long parentId;
 
-    private List<Sector> children = new ArrayList<>();
+    @OneToMany(cascade = MERGE,
+            fetch = FetchType.EAGER
+    )
+    @JoinColumn(name = "parentId")
+    private List<SectorEntity> children = new ArrayList<>();
 
-    public void addChild(Sector child) {
+    public void addChild(SectorEntity child) {
         children.add(child);
     }
 
-    public void removeChild(Sector child) {
+    public void removeChild(SectorEntity child) {
         children.remove(child);
     }
 
@@ -40,7 +52,7 @@ public class Sector {
         children.clear();
     }
 
-    public Sector setChildren(List<Sector> sectors) {
+    public SectorEntity setChildren(List<SectorEntity> sectors) {
         this.children.clear();
         this.children.addAll(sectors);
         return this;

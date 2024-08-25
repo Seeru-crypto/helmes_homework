@@ -1,6 +1,6 @@
 package demo.repository;
 
-import demo.model.Sector;
+import demo.model.SectorEntity;
 import demo.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -13,6 +13,6 @@ public interface UserRepository extends JpaRepository<User, UUID> {
 
     boolean existsByName (String name);
 
-    List<User> findAllBySectorsContains(Sector sector);
+    List<User> findAllBySectorsContains(SectorEntity sector);
 
 }

@@ -2,13 +2,8 @@ package demo.mapper;
 
 import demo.controller.dto.SaveUserDto;
 import demo.controller.dto.UserDto;
-import demo.model.Sector;
 import demo.model.User;
-import demo.service.SectorService;
 import org.mapstruct.*;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring", uses = { SectorMapper.class})
 public interface UserMapper {

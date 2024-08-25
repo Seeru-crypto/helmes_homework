@@ -4,7 +4,7 @@ import demo.controller.dto.FilterDto;
 import demo.controller.dto.UserFilterDto;
 import demo.exception.BusinessException;
 import demo.model.Filter;
-import demo.model.Sector;
+import demo.model.SectorEntity;
 import demo.model.User;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +23,7 @@ public class ValidationService {
   private final List<Validator<Filter>> filterValidator;
   private final List<Validator<FilterDto>> filterDtoValidator;
   private final List<Validator<UserFilterDto>> userFilterDtoValidator;
-  private final List<Validator<Sector>> sectorValidators;
+  private final List<Validator<SectorEntity>> sectorValidators;
   private final List<Validator<Pageable>> pageableValidator;
 
   public <T> void validateEntity(T entity, List<Validator<T>> validators) {

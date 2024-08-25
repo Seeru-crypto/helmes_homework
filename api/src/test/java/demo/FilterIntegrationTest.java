@@ -3,7 +3,7 @@ package demo;
 import demo.controller.dto.FilterDto;
 import demo.controller.dto.UserFilterDto;
 import demo.model.Filter;
-import demo.model.Sector;
+import demo.model.SectorEntity;
 import demo.model.User;
 import demo.model.UserFilter;
 import demo.service.filter.DataTypes;
@@ -56,7 +56,7 @@ class FilterIntegrationTest extends ContextIntegrationTest {
 
   @Test
   void findByUserId_ShouldReturnUserFilters() throws Exception {
-    Sector sector = createSector("sector", null, 1);
+    SectorEntity sector = createSector("sector", null, 1);
     User user = createUser("userq", true, List.of(sector));
 
     List<FilterDto> filterDtos = getFilterDtoList();

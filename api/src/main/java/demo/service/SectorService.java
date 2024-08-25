@@ -1,8 +1,8 @@
 package demo.service;
 
 import demo.exception.NotFoundException;
-import demo.model.Sector;
-import demo.repository.SectorRepository;
+import demo.model.SectorEntity;
+import demo.repository.SectorJPARepository;
 import demo.service.validation.ValidationService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -15,32 +15,27 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class SectorService {
-    private final SectorRepository sectorRepository;
+    private final SectorJPARepository sectorRepository;
     private final ValidationService validationService;
 
-    public Sector save(Sector sector) {
+    public SectorEntity save(SectorEntity sector) {
         validationService.validateEntity(sector, validationService.getSectorValidators());
         return sectorRepository.save(sector);
     }
 
     @Transactional
-    public List<Sector> findAllByParent() {
+    public List<SectorEntity> findAllByParent() {
         return sectorRepository.findAllByParentId(null);
     }
 
-    @Transactional
-    public List<Sector> findAll() {
-        return sectorRepository.findAll();
-    }
-
-    private void addChildren(Sector child) {
-        Sector parent = findById(child.getParentId());
+    private void addChildren(SectorEntity child) {
+        SectorEntity parent = findById(child.getParentId());
         parent.addChild(child);
     }
 
     @Transactional
-    public Sector save(Long parentId, String name, int value) {
-        Sector child = sectorRepository.save(new Sector()
+    public SectorEntity save(Long parentId, String name, int value) {
+        SectorEntity child = sectorRepository.save(new SectorEntity()
                 .setName(name)
                 .setValue(value)
                 .setParentId(parentId)
@@ -49,7 +44,7 @@ public class SectorService {
         return child;
     }
 
-    public Sector findById(Long id) {
+    public SectorEntity findById(Long id) {
         return sectorRepository.findById(id).orElseThrow(() -> {
             log.warn("Sector not found: {}", id);
             return new NotFoundException("Sector not found") {
@@ -57,12 +52,12 @@ public class SectorService {
         });
     }
 
-    public Sector findByName(String name) {
+    public SectorEntity findByName(String name) {
         return sectorRepository.findByName(name);
     }
 
     public void deleteById(Long id) {
-        Sector sector = findById(id);
+        SectorEntity sector = findById(id);
         // update existing parent-child connections
         updateParentChildConnections(sector);
         // delete the sector
@@ -70,7 +65,7 @@ public class SectorService {
         sectorRepository.deleteById(id);
     }
 
-    private void updateParentChildConnections(Sector sector) {
+    private void updateParentChildConnections(SectorEntity sector) {
         if (sector.getChildren().isEmpty()) return;
 
         sector.getChildren().forEach(child -> {
@@ -79,17 +74,17 @@ public class SectorService {
         });
     }
 
-    public Sector update(Sector entity) {
+    public SectorEntity update(SectorEntity entity) {
         // for now we only update the sector name
         // moving a child from parent_A to parent_B is not allowed
         return findById(entity.getId()).setName(entity.getName());
     }
 
-    public String getSectorName(Sector value) {
+    public String getSectorName(SectorEntity value) {
         return value.getName();
     }
 
-    public List<Sector> findByNames(List<String> names) {
+    public List<SectorEntity> findByNames(List<String> names) {
         return sectorRepository.findAllByNameIn(names);
     }
 }

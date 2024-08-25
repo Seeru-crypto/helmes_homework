@@ -1,22 +1,34 @@
 package demo.repository;
 
-import demo.model.Sector;
-import org.springframework.data.jpa.repository.JpaRepository;
+import demo.model.SectorEntity;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
-public interface SectorRepository extends JpaRepository<Sector, Long> {
+@RequiredArgsConstructor
+public class SectorRepository {
 
-    List<Sector> findAllByParentId(Long parentId);
+    private final SectorJPARepository sectorJPARepository;
 
-    List<Sector> findAllByNameIn(List<String> names);
+    public List<SectorEntity> findAllByParentId(Long parentId) {
+        var initialRes = sectorJPARepository.findAllByParentId(parentId);
 
-    // võiks kasutada JQUERIT
-    Sector findByName (String name);
+        //  MAP things with Mapstruct or smth other
+        var mappedResult = initialRes;
 
-    boolean existsByName(String name);
 
-    boolean existsByValue(int value);
+        return mappedResult;
+    }
+//
+//        List<Sector> findAllByNameIn(List<String> names);
+//
+//        // võiks kasutada JQUERIT
+//        Sector findByName (String name);
+//
+//        boolean existsByName(String name);
+//
+//        boolean existsByValue(int value);
+//
 }
