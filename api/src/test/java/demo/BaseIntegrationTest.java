@@ -6,6 +6,7 @@ import demo.controller.dto.SaveUserDto;
 import demo.controller.dto.SectorDto;
 import demo.controller.dto.UserDto;
 import demo.controller.dto.UserFilterDto;
+import demo.mapper.SectorMapper;
 import demo.service.FilterService;
 import demo.service.SectorService;
 import demo.service.UserService;
@@ -52,6 +53,9 @@ public abstract class BaseIntegrationTest {
 
     @Autowired
     protected SectorService sectorService;
+
+    @Autowired
+    protected SectorMapper sectorMapper;
 
     @Autowired
     protected FilteringLogicService filteringLogicService;

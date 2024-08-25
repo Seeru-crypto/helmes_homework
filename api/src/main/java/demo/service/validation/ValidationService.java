@@ -39,12 +39,12 @@ public class ValidationService {
   private void validationCleanup(ValidationResult validationResult) {
     if (validationResult.isValid()) return;
 
-    log.warn("data validation failed: {}", validationResult.getMessage());
+    log.warn("data validation failed with error: {}. On field: {}", validationResult.getMessage(), validationResult.getFailedField());
     throw new BusinessException("DEFAULT_ERROR") {
       // Override getMessage() to provide a custom error message
       @Override
       public String getMessage() {
-        return validationResult.getMessage().getKood();
+        return validationResult.getMessage().getCode();
       }
     };
   }

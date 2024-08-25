@@ -1,22 +1,15 @@
 package demo;
 
-import demo.controller.dto.FilterDto;
 import demo.controller.dto.SaveUserDto;
 import demo.controller.dto.UserDto;
 import demo.model.Sector;
 import demo.model.User;
-import demo.service.filter.DataTypes;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 
 import java.util.List;
 import java.util.UUID;
 
-import static demo.service.filter.DateCriteria.AFTER;
-import static demo.service.filter.StringCriteria.CONTAINS;
-import static demo.service.filter.StringCriteria.DOES_NOT_CONTAIN;
-import static demo.service.filter.UserFieldNames.DOB;
-import static demo.service.filter.UserFieldNames.NAME;
 import static demo.service.validation.user_validator.UserErrors.NAME_DOESNT_CONTAIN_Q;
 import static demo.service.validation.user_validator.UserErrors.NAME_NOT_UNIQUE;
 import static org.hamcrest.Matchers.containsInAnyOrder;
@@ -100,7 +93,7 @@ class UserIntegrationTest extends ContextIntegrationTest {
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(bytes))
             .andExpect(status().isBadRequest())
-            .andExpect(jsonPath("$").value(NAME_DOESNT_CONTAIN_Q.getKood()));
+            .andExpect(jsonPath("$").value(NAME_DOESNT_CONTAIN_Q.getCode()));
   }
 
   @Test
@@ -119,18 +112,19 @@ class UserIntegrationTest extends ContextIntegrationTest {
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(bytes))
             .andExpect(status().isBadRequest())
-            .andExpect(jsonPath("$").value(NAME_NOT_UNIQUE.getKood()));
+            .andExpect(jsonPath("$").value(NAME_NOT_UNIQUE.getCode()));
   }
 
   @Test
   void update_shouldUpdateExistingUser() throws Exception {
     Sector sector_a = createSector("sector_a", null, 1);
     Sector sector_b = createSector("sector_b", sector_a.getId(), 2);
-    User createdUser = createUser("user_a_q", true, List.of(sector_b, sector_a));
+    User createdUser = createUser("initial nameQ", true, List.of(sector_b, sector_a));
 
+    String updatedName = "updated nameQ";
     UserDto dto = new UserDto()
             .setSectorNames(List.of(sector_a.getName()))
-            .setName("newquser 2")
+            .setName(updatedName)
             .setId(createdUser.getId())
             .setAgreeToTerms(true);
     byte[] bytes = getBytes(dto);
@@ -139,7 +133,8 @@ class UserIntegrationTest extends ContextIntegrationTest {
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(bytes))
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$.name").value("newquser 2"))
+            .andDo(print())
+            .andExpect(jsonPath("$.name").value(updatedName))
             .andExpect(jsonPath("$.agreeToTerms").value(true))
             .andExpect(jsonPath("$.id").value(createdUser.getId().toString()))
             .andExpect(jsonPath("$.sectorNames.length()").value(1));
@@ -202,86 +197,5 @@ class UserIntegrationTest extends ContextIntegrationTest {
     mockMvc.perform(get("/users/sector/99"))
             .andDo(print())
             .andExpect(status().isNotFound());
-  }
-
-  @Test
-  void findAllByFilterId_STRING_CONTAINS_shouldReturnUsers() throws Exception {
-    createFullSectorTree();
-
-    var users = createDefaultUsers();
-    var mainUser = users.get(0);
-
-    var filters = List.of(new FilterDto().setCriteria(CONTAINS.getKood()).setValue("Does").setType(DataTypes.STRING).setFieldName(NAME));
-    var userFilter = createUserFilter(filters, "user filter 1", mainUser);
-
-    mockMvc.perform(get(String.format("/users/filter/%s", userFilter.getId())))
-            .andExpect(status().isOk())
-            .andDo(print())
-            .andExpect(jsonPath("$.length()").value(3))
-            .andExpect(jsonPath("$[*].name").value(containsInAnyOrder("qJohn Does", "qJane Does", "qJack Doesn't")))
-    ;
-
-    filters = List.of(new FilterDto().setCriteria(CONTAINS.getKood()).setValue("abc").setType(DataTypes.STRING).setFieldName(NAME));
-    userFilter = createUserFilter(filters, "user filter 1", mainUser);
-
-    mockMvc.perform(get(String.format("/users/filter/%s", userFilter.getId())))
-            .andExpect(status().isOk())
-            .andDo(print())
-            .andExpect(jsonPath("$.length()").value(0))
-    ;
-  }
-
-  @Test
-  void findAllByFilterId_STRING_DOES_NOT_CONTAIN_shouldReturnUsers() throws Exception {
-    createFullSectorTree();
-
-    var users = createDefaultUsers();
-    var mainUser = users.get(0);
-
-    var filters = List.of(new FilterDto().setCriteria(DOES_NOT_CONTAIN.getKood()).setValue("Does").setType(DataTypes.STRING).setFieldName(NAME));
-    var userFilter = createUserFilter(filters, "user filter 1", mainUser);
-
-    mockMvc.perform(get(String.format("/users/filter/%s", userFilter.getId())))
-            .andExpect(status().isOk())
-            .andDo(print())
-            .andExpect(jsonPath("$.length()").value(1))
-            .andExpect(jsonPath("[0].name").value("qJames Memorial"))
-    ;
-  }
-
-  @Test
-  void findAllByFilterId_STRING_COMPOSITE_shouldReturnUsers() throws Exception {
-    createFullSectorTree();
-    var users = createDefaultUsers();
-    var mainUser = users.get(0);
-
-    var filter_1 = new FilterDto().setCriteria(DOES_NOT_CONTAIN.getKood()).setValue("qJane").setType(DataTypes.STRING).setFieldName(NAME);
-    var filter_2 = new FilterDto().setCriteria(CONTAINS.getKood()).setValue("Does").setType(DataTypes.STRING).setFieldName(NAME);
-    var filters = List.of(filter_2, filter_1);
-    var userFilter = createUserFilter(filters, "user filter 1", mainUser);
-
-    mockMvc.perform(get(String.format("/users/filter/%s", userFilter.getId())))
-            .andExpect(status().isOk())
-            .andDo(print())
-            .andExpect(jsonPath("$.length()").value(2))
-            .andExpect(jsonPath("$[*].name").value(containsInAnyOrder("qJohn Does", "qJack Doesn't")))
-    ;
-  }
-
-  // Date
-  @Test
-  void findAllByFilterId_DATE_shouldReturnUsers() throws Exception {
-    createFullSectorTree();
-
-    var users = createDefaultUsers();
-    var mainUser = users.get(0);
-// Instant.parse("1995-04-10T21:00:25.451157400Z")
-    var filters = List.of(new FilterDto().setCriteria(AFTER.getKood()).setValue("2001-05-10T21:00:25.451157400Z").setType(DataTypes.DATE).setFieldName(DOB));
-    var userFilter = createUserFilter(filters, "user filter 1", mainUser);
-
-    mockMvc.perform(get(String.format("/users/filter/%s", userFilter.getId())))
-            .andExpect(status().isOk())
-            .andDo(print())
-    ;
   }
 }

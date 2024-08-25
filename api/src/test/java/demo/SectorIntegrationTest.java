@@ -11,8 +11,7 @@ import java.util.List;
 import static demo.service.validation.sector_validator.SectorErrors.NAME_EXISTS;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.junit.Assert.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -159,7 +158,7 @@ class SectorIntegrationTest extends ContextIntegrationTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(bytes))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$").value(NAME_EXISTS.getKood()))
+                .andExpect(jsonPath("$").value(NAME_EXISTS.getCode()))
         ;
     }
 
@@ -173,7 +172,7 @@ class SectorIntegrationTest extends ContextIntegrationTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(bytes))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$").value(NAME_EXISTS.getKood()))
+                .andExpect(jsonPath("$").value(NAME_EXISTS.getCode()))
         ;
     }
 
@@ -191,5 +190,16 @@ class SectorIntegrationTest extends ContextIntegrationTest {
                 .andExpect(jsonPath("$.id").value(1))
                 .andExpect(jsonPath("$.children.length()").value(0))
         ;
+    }
+
+    @Test
+    void findByNames_shouldReturnSectors() {
+        createFullSectorTree();
+        var initialSectorNames = List.of("Manufacturing", "Moulding", "Translation services");
+
+        List<Sector> output = sectorService.findByNames(initialSectorNames);
+        assertEquals(3, output.size());
+        assertTrue(output.stream().allMatch((sector -> initialSectorNames.contains(sector.getName())
+        )));
     }
 }

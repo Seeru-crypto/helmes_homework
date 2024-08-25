@@ -79,15 +79,11 @@ public class SectorService {
         return findById(entity.getId()).setName(entity.getName());
     }
 
-    public List<String> getSectorNames(List<Sector> value) {
-        return value.stream().map(Sector::getName).toList();
-    }
-
-    public List<Long> getSectorsBySectorIds(List<Long> sectorIds) {
-        return sectorIds.stream().map(this::findById).map(Sector::getId).toList();
-    };
-
     public String getSectorName(Sector value) {
         return value.getName();
+    }
+
+    public List<Sector> findByNames(List<String> names) {
+        return sectorRepository.findAllByNameIn(names);
     }
 }

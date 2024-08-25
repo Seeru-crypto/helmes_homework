@@ -13,7 +13,7 @@ public enum FilterErrors implements ValidationErrors {
   ;
 
   @Override
-  public String getKood() {
+  public String getCode() {
     return this.name();
   }
   public static FilterErrors getValue(String kood) { return FilterErrors.valueOf(kood);}
