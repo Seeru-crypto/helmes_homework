@@ -27,7 +27,7 @@ public class SectorController {
     @Operation(summary = "Find all paginated sectors")
     public List<SectorDto> findAll() {
         log.info("REST request to findAll sectors");
-        return sectorMapper.toDtos(sectorService.findAll());
+        return sectorMapper.toDtos(sectorService.findAllByParent());
     }
 
     @GetMapping("/{id}")

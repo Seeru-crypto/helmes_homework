@@ -6,15 +6,15 @@ import demo.service.SectorService;
 import org.mapstruct.Context;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.Named;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring", uses = { SectorService.class})
 public interface SectorMapper {
     List<SectorDto> toDtos(List<Sector> sectors);
 
-    List<Sector> toEntity(List<SectorDto> dtos);
+//    List<Sector> toEntity(List<SectorDto> dtos);
 
     @Mapping(target = "createdBy", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
@@ -26,9 +26,7 @@ public interface SectorMapper {
 
     List<Sector> toEntityList(List<Long> sectorIds);
 
-    List<Sector> mapToSector(List<String> sectorNames);
+    List<Sector> mapToSector(List<String> names);
 
-    List<String> mapToSectorNames(List<Sector> sectorNames);
-
-
+    List<String> mapToName(List<Sector> sectors);
 }

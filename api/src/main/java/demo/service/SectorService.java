@@ -24,9 +24,15 @@ public class SectorService {
     }
 
     @Transactional
-    public List<Sector> findAll() {
+    public List<Sector> findAllByParent() {
         return sectorRepository.findAllByParentId(null);
     }
+
+    @Transactional
+    public List<Sector> findAll() {
+        return sectorRepository.findAll();
+    }
+
     private void addChildren(Sector child) {
         Sector parent = findById(child.getParentId());
         parent.addChild(child);
