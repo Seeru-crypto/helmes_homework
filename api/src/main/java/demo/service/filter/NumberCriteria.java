@@ -8,7 +8,7 @@ public enum NumberCriteria implements Filters {
   BIGGER_THAN;
 
   @Override
-public String getKood() {
+public String getCode() {
     return this.name();
   }
 

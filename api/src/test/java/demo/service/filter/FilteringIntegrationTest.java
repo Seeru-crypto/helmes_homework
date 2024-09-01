@@ -29,7 +29,7 @@ class FilteringIntegrationTest extends ContextIntegrationTest {
     @ParameterizedTest
     @MethodSource("DateCriteriaProvider")
     void filterByDate_ShouldReturnCorrectList(DateCriteria criteria, String value, int expectedSize) {
-        FilterDto f1 = new FilterDto().setCriteria(criteria.getKood()).setValue(value).setType(DataTypes.DATE).setFieldName(DOB);
+        FilterDto f1 = new FilterDto().setCriteria(criteria.getCode()).setValue(value).setType(DataTypes.DATE).setFieldName(DOB);
         var userFilter = createUserFilter(List.of(f1), "user filter 1", mainUser);
 
         var res = filteringLogicService.findAllByFilter(userFilter, User.class);
@@ -48,8 +48,8 @@ class FilteringIntegrationTest extends ContextIntegrationTest {
 
     @Test
     void filteringByDate_composite_shouldReturnList() {
-        FilterDto f1 = new FilterDto().setCriteria(AFTER.getKood()).setValue("1996-04-10T21:00:25.451157400Z").setType(DataTypes.DATE).setFieldName(DOB);
-        FilterDto f2 = new FilterDto().setCriteria(BEFORE.getKood()).setValue("2009-04-10T21:00:25.451157400Z").setType(DataTypes.DATE).setFieldName(DOB);
+        FilterDto f1 = new FilterDto().setCriteria(AFTER.getCode()).setValue("1996-04-10T21:00:25.451157400Z").setType(DataTypes.DATE).setFieldName(DOB);
+        FilterDto f2 = new FilterDto().setCriteria(BEFORE.getCode()).setValue("2009-04-10T21:00:25.451157400Z").setType(DataTypes.DATE).setFieldName(DOB);
         var userFilter_v2 = createUserFilter(List.of(f1, f2), "user filter 1", mainUser);
 
         var test_v2 = filteringLogicService.findAllByFilter(userFilter_v2, User.class);
@@ -61,7 +61,7 @@ class FilteringIntegrationTest extends ContextIntegrationTest {
   @ParameterizedTest
   @MethodSource("StringCriteriaProvider")
   void filterByString_ShouldReturnCorrectList(StringCriteria criteria, String value, int expectedSize) {
-    FilterDto f1 = new FilterDto().setCriteria(criteria.getKood()).setValue(value).setType(DataTypes.STRING).setFieldName(NAME);
+    FilterDto f1 = new FilterDto().setCriteria(criteria.getCode()).setValue(value).setType(DataTypes.STRING).setFieldName(NAME);
     var userFilter = createUserFilter(List.of(f1), "user filter 1", mainUser);
 
     var res = filteringLogicService.findAllByFilter(userFilter, User.class);
@@ -80,8 +80,8 @@ class FilteringIntegrationTest extends ContextIntegrationTest {
 
     @Test
     void filteringByString_composite_shouldReturnList() {
-        FilterDto f1 = new FilterDto().setCriteria(StringCriteria.CONTAINS.getKood()).setValue("Does").setType(DataTypes.STRING).setFieldName(NAME);
-        FilterDto f2 = new FilterDto().setCriteria(StringCriteria.DOES_NOT_CONTAIN.getKood()).setValue("qJane").setType(DataTypes.STRING).setFieldName(NAME);
+        FilterDto f1 = new FilterDto().setCriteria(StringCriteria.CONTAINS.getCode()).setValue("Does").setType(DataTypes.STRING).setFieldName(NAME);
+        FilterDto f2 = new FilterDto().setCriteria(StringCriteria.DOES_NOT_CONTAIN.getCode()).setValue("qJane").setType(DataTypes.STRING).setFieldName(NAME);
         var userFilter_v2 = createUserFilter(List.of(f1, f2), "user filter 1", mainUser);
 
         var test_v2 = filteringLogicService.findAllByFilter(userFilter_v2, User.class);

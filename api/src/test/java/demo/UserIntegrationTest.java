@@ -126,6 +126,25 @@ class UserIntegrationTest extends ContextIntegrationTest {
     }
 
     @Test
+    void save_shouldThrowError_ifIdExists() throws Exception {
+        Sector sector_a = createSector("sector_a", null, 1);
+        Sector sector_b = createSector("sector_b", sector_a.getId(), 2);
+        createUser("user_a_q", true, List.of(sector_a, sector_b));
+
+        SaveUserDto dto = new SaveUserDto()
+                .setSectorIds(List.of(sector_a.getId(), sector_b.getId()))
+                .setName("user_a_q")
+                .setAgreeToTerms(true);
+
+        byte[] bytes = getBytes(dto);
+        mockMvc.perform(post("/users")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(bytes))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$").value(NAME_NOT_UNIQUE.getCode()));
+    }
+
+    @Test
     void update_shouldUpdateExistingUser() throws Exception {
         Sector sector_a = createSector("sector_a", null, 1);
         Sector sector_b = createSector("sector_b", sector_a.getId(), 2);
@@ -176,7 +195,7 @@ class UserIntegrationTest extends ContextIntegrationTest {
                 .setAgreeToTerms(true);
         byte[] bytes = getBytes(dto);
 
-        mockMvc.perform(put("/users")
+        mockMvc.perform(put("/users/2edb3143-acb1-4883-96a5-58e96e3b2639")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(bytes))
                 .andExpect(status().isNotFound());

@@ -36,7 +36,7 @@ class FilterValidatorDateTest {
     void validateDateValues_shouldReturnTrue() {
         FilterDto filterDto = new FilterDto()
                 .setType(DataTypes.DATE)
-                .setCriteria(DateCriteria.BEFORE.getKood())
+                .setCriteria(DateCriteria.BEFORE.getCode())
                 .setValue(Instant.now().toString());
         ValidationResult result = filterDtoValidator.validate(filterDto);
         assertTrue(result.isValid());
@@ -57,7 +57,7 @@ class FilterValidatorDateTest {
 
     private static Stream<Arguments> invalidDateCriteria() {
         return Stream.of(
-                Arguments.of(NumberCriteria.SMALLER_THAN.getKood(), INVALID_CRITERIA_ERROR),
+                Arguments.of(NumberCriteria.SMALLER_THAN.getCode(), INVALID_CRITERIA_ERROR),
                 Arguments.of("invalidCriteria", INVALID_CRITERIA_ERROR),
                 Arguments.of(null, INVALID_CRITERIA_ERROR)
 
@@ -69,7 +69,7 @@ class FilterValidatorDateTest {
     void validateDateValues_shouldReturnFalse_whenValueIsNotValid(String value, FilterErrors error) {
         FilterDto filterDto = new FilterDto()
                 .setType(DataTypes.DATE)
-                .setCriteria(DateCriteria.BEFORE.getKood())
+                .setCriteria(DateCriteria.BEFORE.getCode())
                 .setValue(value);
         ValidationResult result = filterDtoValidator.validate(filterDto);
         assertFalse(result.isValid());

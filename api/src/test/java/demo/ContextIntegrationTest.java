@@ -157,9 +157,9 @@ public class ContextIntegrationTest extends BaseIntegrationTest {
   }
 
   protected List<FilterDto> getFilterDtoList() {
-    FilterDto filter1 = new FilterDto().setCriteria(AFTER.getKood()).setValue(Instant.now().toString()).setType(DataTypes.DATE).setFieldName(DOB);
-    FilterDto filter2 = new FilterDto().setCriteria(CONTAINS.getKood()).setValue("value 2").setType(DataTypes.STRING).setFieldName(NAME);
-    FilterDto filter3 = new FilterDto().setCriteria(SMALLER_THAN.getKood()).setValue("3").setType(DataTypes.NUMBER).setFieldName(NAME);
+    FilterDto filter1 = new FilterDto().setCriteria(AFTER.getCode()).setValue(Instant.now().toString()).setType(DataTypes.DATE).setFieldName(DOB);
+    FilterDto filter2 = new FilterDto().setCriteria(CONTAINS.getCode()).setValue("value 2").setType(DataTypes.STRING).setFieldName(NAME);
+    FilterDto filter3 = new FilterDto().setCriteria(SMALLER_THAN.getCode()).setValue("3").setType(DataTypes.NUMBER).setFieldName(NAME);
     return List.of(filter2, filter1, filter3);
   }
 

@@ -62,7 +62,7 @@ class FilterIntegrationTest extends ContextIntegrationTest {
     List<FilterDto> filterDtos = getFilterDtoList();
     createUserFilter(filterDtos, "new filter profile", user);
 
-    FilterDto filter3 = new FilterDto().setCriteria(StringCriteria.EQUALS.getKood())
+    FilterDto filter3 = new FilterDto().setCriteria(StringCriteria.EQUALS.getCode())
             .setValue("value 3")
             .setFieldName(UserFieldNames.NAME)
             .setType(DataTypes.STRING);
@@ -70,7 +70,7 @@ class FilterIntegrationTest extends ContextIntegrationTest {
 
     User hiddenUser = createUser("hidden_user_q", true, List.of(sector));
     FilterDto filter4 = new FilterDto()
-            .setCriteria(NumberCriteria.BIGGER_THAN.getKood())
+            .setCriteria(NumberCriteria.BIGGER_THAN.getCode())
             .setValue("2")
             .setFieldName(UserFieldNames.NAME)
             .setType(DataTypes.NUMBER);

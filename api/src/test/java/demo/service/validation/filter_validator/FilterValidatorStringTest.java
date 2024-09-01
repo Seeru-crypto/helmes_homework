@@ -33,7 +33,7 @@ class FilterValidatorStringTest {
     void validateString_shouldReturnTrue(String value) {
         FilterDto filterDto = new FilterDto()
                 .setType(DataTypes.STRING)
-                .setCriteria(StringCriteria.CONTAINS.getKood())
+                .setCriteria(StringCriteria.CONTAINS.getCode())
                 .setValue(value);
         ValidationResult result = filterDtoValidator.validate(filterDto);
         assertTrue(result.isValid());
@@ -57,6 +57,6 @@ class FilterValidatorStringTest {
     }
 
     private static Stream<String> invalidStringCriteriaNumericCriteria() {
-        return Stream.of(DateCriteria.BEFORE.getKood(), "invalidCriteria");
+        return Stream.of(DateCriteria.BEFORE.getCode(), "invalidCriteria");
     }
 }

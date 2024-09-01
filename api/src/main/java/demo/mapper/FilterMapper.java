@@ -1,13 +1,11 @@
 package demo.mapper;
 
 import demo.controller.dto.FilterDto;
-import demo.controller.dto.UserFilterDto;
 import demo.model.Filter;
-import demo.model.UserFilter;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper(componentModel = "spring", uses = {SectorMapper.class, UserMapper.class})
+@Mapper(componentModel = "spring")
 public interface FilterMapper {
 
   @Mapping(target = "createdBy", ignore = true)

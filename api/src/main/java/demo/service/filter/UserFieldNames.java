@@ -2,10 +2,10 @@ package demo.service.filter;
 
 public enum UserFieldNames {
   NAME,
-  DOB
+  DOB,
   ;
-  public String getKood() {
+
+  public String getCode() {
     return this.name();
   }
-
 }

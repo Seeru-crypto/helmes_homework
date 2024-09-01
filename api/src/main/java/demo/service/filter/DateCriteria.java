@@ -8,7 +8,7 @@ public enum DateCriteria implements Filters {
   EQUALS;
 
   @Override
-public String getKood() {
+public String getCode() {
     return this.name();
   }
 
