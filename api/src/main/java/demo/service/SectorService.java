@@ -28,6 +28,12 @@ public class SectorService {
         return sectorRepository.findAllByParentId(null);
     }
 
+
+    @Transactional
+    public List<Sector> findAll() {
+        return sectorRepository.findAll();
+    }
+
     private void addChildren(Sector child) {
         Sector parent = findById(child.getParentId());
         parent.addChild(child);
