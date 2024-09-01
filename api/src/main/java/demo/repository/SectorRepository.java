@@ -11,10 +11,9 @@ public interface SectorRepository extends JpaRepository<Sector, Long> {
 
     List<Sector> findAllByParentId(Long parentId);
 
-    List<Sector> findAllByNameIn(List<String> names);
+    List<Sector> findByIdIn(List<Long> id);
 
-    // võiks kasutada JQUERIT
-    Sector findByName (String name);
+    List<Sector> findAllByNameIn(List<String> names);
 
     boolean existsByName(String name);
 

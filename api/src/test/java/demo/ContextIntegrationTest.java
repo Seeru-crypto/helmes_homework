@@ -7,7 +7,9 @@ import demo.model.User;
 import demo.model.UserFilter;
 import demo.service.filter.DataTypes;
 import jakarta.persistence.EntityManager;
+import org.springframework.test.web.servlet.MvcResult;
 
+import java.io.UnsupportedEncodingException;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -168,5 +170,11 @@ public class ContextIntegrationTest extends BaseIntegrationTest {
   public static void persistCreatedEntities(EntityManager em) {
     createdEntities.forEach(em::persist);
     em.flush();
+  }
+
+  protected static void logTestResult (MvcResult result, byte[] bytes) throws UnsupportedEncodingException {
+    System.out.println("Test failed! Logging request and response details:");
+    System.out.println("Request Content: " + new String(bytes));
+    System.out.println("Response Content: " + result.getResponse().getContentAsString());
   }
 }

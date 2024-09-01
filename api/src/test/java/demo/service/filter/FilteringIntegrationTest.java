@@ -17,7 +17,7 @@ import static demo.service.filter.UserFieldNames.DOB;
 import static demo.service.filter.UserFieldNames.NAME;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class FilteringLogicServiceTest extends ContextIntegrationTest {
+class FilteringIntegrationTest extends ContextIntegrationTest {
     User mainUser;
 
     @BeforeEach

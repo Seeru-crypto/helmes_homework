@@ -76,14 +76,4 @@ public class UserController {
     List<UserDto> dto = users.stream().map(userMapper::toDto).toList();
     return ResponseEntity.ok(dto);
   }
-
-  @GetMapping(path="filter/{userFilterId}")
-  @Operation(summary = "Get all users by filter id")
-  public ResponseEntity<List<UserDto>> findAllByUserFilter(@PathVariable Long userFilterId) {
-    log.info("REST request to get all users by userFilter: " + userFilterId);
-    UserFilter existingFilter = filterService.findById(userFilterId);
-    List<User> users = userService.findAllByUserFilter(existingFilter);
-    List<UserDto> dto = users.stream().map(userMapper::toDto).toList();
-    return ResponseEntity.ok(dto);
-  }
 }

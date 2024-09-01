@@ -24,10 +24,10 @@ public class SectorController {
     private final SectorMapper sectorMapper;
 
     @GetMapping
-    @Operation(summary = "Find all paginated sectors")
-    public List<SectorDto> findAll() {
+    @Operation(summary = "Find all paginated sectors by parentId")
+    public List<SectorDto> findAllByParentId() {
         log.info("REST request to findAll sectors");
-        return sectorMapper.toDtos(sectorService.findAll());
+        return sectorMapper.toDtos(sectorService.findAllByParent());
     }
 
     @GetMapping("/{id}")
@@ -59,5 +59,5 @@ public class SectorController {
         log.info("REST request to update sector: " + dto);
         Sector updatedSector = sectorService.update(sectorMapper.toEntity(dto));
         return ResponseEntity.ok(sectorMapper.toDto(updatedSector));
-        }
+    }
 }

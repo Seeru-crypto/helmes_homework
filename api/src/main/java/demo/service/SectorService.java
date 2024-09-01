@@ -24,9 +24,10 @@ public class SectorService {
     }
 
     @Transactional
-    public List<Sector> findAll() {
+    public List<Sector> findAllByParent() {
         return sectorRepository.findAllByParentId(null);
     }
+
     private void addChildren(Sector child) {
         Sector parent = findById(child.getParentId());
         parent.addChild(child);
@@ -51,8 +52,8 @@ public class SectorService {
         });
     }
 
-    public Sector findByName(String name) {
-        return sectorRepository.findByName(name);
+    public List<Sector> findByIds(List<Long> ids) {
+        return sectorRepository.findByIdIn(ids);
     }
 
     public void deleteById(Long id) {
@@ -77,10 +78,6 @@ public class SectorService {
         // for now we only update the sector name
         // moving a child from parent_A to parent_B is not allowed
         return findById(entity.getId()).setName(entity.getName());
-    }
-
-    public String getSectorName(Sector value) {
-        return value.getName();
     }
 
     public List<Sector> findByNames(List<String> names) {

@@ -12,7 +12,7 @@ public enum UserErrors implements ValidationErrors {
   NAME_DOESNT_CONTAIN_Q;
 
   @Override
-  public String getKood() {
+  public String getCode() {
     return this.name();
   }
   public static UserErrors getValue(String kood) { return UserErrors.valueOf(kood);}

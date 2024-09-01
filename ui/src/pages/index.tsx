@@ -66,7 +66,6 @@ export default function Home({sectors, existingUsers}: LandingProps): ReactEleme
         if (!isUserDataValid(dto, messageApi)) return
 
         const userId = sessionStorage.getItem("USER_ID");
-        console.log({userId})
         if (userId === null) {
             await PostRequest(SlugUsers, dto, messageApi, "user created successfully").then(async (res) => {
                 sessionStorage.setItem("USER_ID", res.id.toString());
@@ -103,7 +102,7 @@ export default function Home({sectors, existingUsers}: LandingProps): ReactEleme
                         users.length > 0 ?
                             users.map((user: UserDto) => {
                                     return (
-                                        <UserCard key={user.name} title={user.name} size={"small"} sectors={user.sectors}/>
+                                        <UserCard key={user.name} title={user.name} size={"small"} sectors={user.sectorNames}/>
                                     )
                                 }
                             ) : <p>no users</p>
