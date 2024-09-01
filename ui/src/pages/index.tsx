@@ -102,7 +102,7 @@ export default function Home({sectors, existingUsers}: LandingProps): ReactEleme
                         users.length > 0 ?
                             users.map((user: UserDto) => {
                                     return (
-                                        <UserCard key={user.name} title={user.name} size={"small"} sectors={user.sectors}/>
+                                        <UserCard key={user.name} title={user.name} size={"small"} sectors={user.sectorNames}/>
                                     )
                                 }
                             ) : <p>no users</p>
@@ -159,5 +159,3 @@ export const getServerSideProps: GetServerSideProps = async () => {
     const existingUsers: UserProps = await GetRequest(SlugUsers, 'inner')
     return {props: {sectors, existingUsers}};
 };
-
-

@@ -7,7 +7,7 @@ public enum PageableErrors implements ValidationErrors {
   INVALID_SORT_BY_VALUE;
 
   @Override
-  public String getKood() {
+  public String getCode() {
     return this.name();
   }
   public static PageableErrors getValue(String kood) { return PageableErrors.valueOf(kood);}

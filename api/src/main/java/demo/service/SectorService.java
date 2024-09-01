@@ -16,8 +16,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SectorService {
     private final SectorRepository sectorRepository;
-
-    private final UserService userService;
     private final ValidationService validationService;
 
     public Sector save(Sector sector) {
@@ -26,9 +24,10 @@ public class SectorService {
     }
 
     @Transactional
-    public List<Sector> findAll() {
+    public List<Sector> findAllByParent() {
         return sectorRepository.findAllByParentId(null);
     }
+
     private void addChildren(Sector child) {
         Sector parent = findById(child.getParentId());
         parent.addChild(child);
@@ -53,13 +52,13 @@ public class SectorService {
         });
     }
 
+    public List<Sector> findByIds(List<Long> ids) {
+        return sectorRepository.findByIdIn(ids);
+    }
+
     public void deleteById(Long id) {
         Sector sector = findById(id);
         // update existing parent-child connections
-
-        // remove from user
-        userService.removeSectorFromAllUsers(sector);
-
         updateParentChildConnections(sector);
         // delete the sector
         sector.removeAllChildren();
@@ -75,9 +74,19 @@ public class SectorService {
         });
     }
 
-    public Sector update(Sector entity) {
+    public Sector update(Sector entity, Long sectorId) {
         // for now we only update the sector name
         // moving a child from parent_A to parent_B is not allowed
-        return findById(entity.getId()).setName(entity.getName());
+        if (!sectorRepository.existsById(sectorId)) {
+            log.warn("Sector not found: {}", sectorId);
+            throw new NotFoundException("Sector not found") {
+            };
+        }
+        return findById(sectorId)
+                .setName(entity.getName());
+    }
+
+    public List<Sector> findByNames(List<String> names) {
+        return sectorRepository.findAllByNameIn(names);
     }
 }

@@ -1,15 +1,24 @@
 package demo;
 
+import demo.controller.dto.FilterDto;
+import demo.controller.dto.UserFilterDto;
 import demo.model.Sector;
 import demo.model.User;
+import demo.model.UserFilter;
+import demo.service.filter.DataTypes;
 import jakarta.persistence.EntityManager;
+import org.springframework.test.web.servlet.MvcResult;
 
+import java.io.UnsupportedEncodingException;
 import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+
+import static demo.service.filter.DateCriteria.AFTER;
+import static demo.service.filter.NumberCriteria.SMALLER_THAN;
+import static demo.service.filter.StringCriteria.CONTAINS;
+import static demo.service.filter.UserFieldNames.DOB;
+import static demo.service.filter.UserFieldNames.NAME;
 
 public class ContextIntegrationTest extends BaseIntegrationTest {
 
@@ -19,21 +28,21 @@ public class ContextIntegrationTest extends BaseIntegrationTest {
     return sectorService.save(parentId, name, value);
   }
 
-  protected Instant getInstantFromString(String dateString) {
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-    LocalDateTime localDateTime = LocalDateTime.parse(dateString, formatter);
-    return localDateTime.toInstant(ZoneOffset.UTC);
+  protected List<User> createDefaultUsers() {
+    List<User> users = new ArrayList<>();
+    users.add(createUser("qJohn Does", true, List.of(findSectorById(1L)), "johndoe1234@gmail.com", "+123 123456789", Instant.parse("1995-04-10T21:00:25.451157400Z")));
+    users.add(createUser("qJane Does", true, List.of(findSectorById(2L), findSectorById(11L)), "jane_smith123@example.com", "+372 1234567",Instant.parse("2000-04-10T21:00:25.451157400Z")));
+    users.add(createUser("qJack Doesn't", true, List.of(findSectorById(8L), findSectorById(11L), findSectorById(13L)), "bob.smith@company.co.uk", "+44 1234567890",Instant.parse("2005-04-10T21:00:25.451157400Z")));
+    users.add(createUser("qJames Memorial", true, List.of(findSectorById(1L), findSectorById(20L)), "mary.smith@email.com", "+1 1234567890",Instant.parse("2010-04-10T21:00:25.451157400Z")));
+    return users;
   }
 
-  protected List<User> createDefaultUsers() {
-    if (!sectorExists(1L)) {
-      createFullSectorTree();
-    }
+  protected List<User> createUsersWithoutSectors() {
     List<User> users = new ArrayList<>();
-    users.add(createUser("qJohn Does", true, List.of(findSectorById(1L)), "johndoe1234@gmail.com", "+123 123456789",getInstantFromString("1985-07-15 12:30:00")));
-    users.add(createUser("qJane Does", true, List.of(findSectorById(2L), findSectorById(11L)), "jane_smith123@example.com", "+372 1234567",getInstantFromString("1990-04-28 08:15:00")));
-    users.add(createUser("qJack Doesn't", true, List.of(findSectorById(8L), findSectorById(11L), findSectorById(13L)), "bob.smith@company.co.uk", "+44 1234567890",getInstantFromString("1995-10-10 17:45:00")));
-    users.add(createUser("qJames Memorial", true, List.of(findSectorById(1L), findSectorById(20L)), "mary.smith@email.com", "+1 1234567890",getInstantFromString("1998-12-01 20:00:00")));
+    users.add(createUser("qJohn Does", true, List.of(), "johndoe1234@gmail.com", "+123 123456789", Instant.parse("1995-04-10T21:00:25.451157400Z")));
+    users.add(createUser("qJane Does", true, List.of(), "jane_smith123@example.com", "+372 1234567",Instant.parse("2000-04-10T21:00:25.451157400Z")));
+    users.add(createUser("qJack Doesn't", true, List.of(), "bob.smith@company.co.uk", "+44 1234567890",Instant.parse("2005-04-10T21:00:25.451157400Z")));
+    users.add(createUser("qJames Memorial", true, List.of(), "mary.smith@email.com", "+1 1234567890",Instant.parse("2010-04-10T21:00:25.451157400Z")));
     return users;
   }
 
@@ -142,6 +151,18 @@ public class ContextIntegrationTest extends BaseIntegrationTest {
             .setSectors(sectors));
   }
 
+  protected UserFilter createUserFilter(List<FilterDto> filters, String name, User user) {
+    UserFilterDto filterDto = new UserFilterDto().setName(name).setFilters(filters);
+    return filterService.saveFilters(filterDto, user.getId());
+  }
+
+  protected List<FilterDto> getFilterDtoList() {
+    FilterDto filter1 = new FilterDto().setCriteria(AFTER.getCode()).setValue(Instant.now().toString()).setType(DataTypes.DATE).setFieldName(DOB);
+    FilterDto filter2 = new FilterDto().setCriteria(CONTAINS.getCode()).setValue("value 2").setType(DataTypes.STRING).setFieldName(NAME);
+    FilterDto filter3 = new FilterDto().setCriteria(SMALLER_THAN.getCode()).setValue("3").setType(DataTypes.NUMBER).setFieldName(NAME);
+    return List.of(filter2, filter1, filter3);
+  }
+
   public static void clear() {
     createdEntities.clear();
   }
@@ -149,5 +170,11 @@ public class ContextIntegrationTest extends BaseIntegrationTest {
   public static void persistCreatedEntities(EntityManager em) {
     createdEntities.forEach(em::persist);
     em.flush();
+  }
+
+  protected static void logTestResult (MvcResult result, byte[] bytes) throws UnsupportedEncodingException {
+    System.out.println("Test failed! Logging request and response details:");
+    System.out.println("Request Content: " + new String(bytes));
+    System.out.println("Response Content: " + result.getResponse().getContentAsString());
   }
 }

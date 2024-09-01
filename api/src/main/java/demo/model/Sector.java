@@ -3,6 +3,7 @@ package demo.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -25,8 +26,8 @@ public class Sector extends AbstractAuditingEntity<Long> {
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
+    @Column(nullable = false, unique = true)
     @NotBlank(message = "Name is mandatory")
-    @Column(nullable = false)
     private String name;
 
     private int value;

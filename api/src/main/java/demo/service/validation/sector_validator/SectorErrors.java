@@ -8,7 +8,7 @@ public enum SectorErrors implements ValidationErrors {
   VALUE_EXISTS;
 
   @Override
-  public String getKood() {
+  public String getCode() {
     return this.name();
   }
   public static SectorErrors getValue(String kood) { return SectorErrors.valueOf(kood);}

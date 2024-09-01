@@ -8,4 +8,5 @@ import lombok.Setter;
 public class ValidationResult {
   private boolean isValid;
   private ValidationErrors message;
+  private String failedField;
 }

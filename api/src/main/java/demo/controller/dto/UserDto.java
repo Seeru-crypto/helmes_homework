@@ -34,5 +34,5 @@ public class UserDto {
     private boolean agreeToTerms;
 
     @Size(min=1)
-    private List<String> sectors;
+    private List<String> sectorNames;
 }
