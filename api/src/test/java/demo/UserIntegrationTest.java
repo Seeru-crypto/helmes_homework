@@ -139,7 +139,8 @@ class UserIntegrationTest extends ContextIntegrationTest {
                 .setAgreeToTerms(true);
         byte[] bytes = getBytes(dto);
 
-        MvcResult result = mockMvc.perform(put("/users")
+        var url = "/users/" + createdUser.getId();
+        MvcResult result = mockMvc.perform(put(url)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(bytes))
                 .andDo(print())

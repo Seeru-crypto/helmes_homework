@@ -53,11 +53,11 @@ public class UserController {
             .body(userMapper.toDto(createdUser));
   }
 
-  @PutMapping
+  @PutMapping("/{userId}")
   @Operation(summary = "Update user")
-  public ResponseEntity<UserDto> update(@Valid @RequestBody UserDto dto) {
-    log.info("REST request to update user: " + dto);
-    User updatedUser = userService.update(userMapper.toEntity(dto));
+  public ResponseEntity<UserDto> update(@PathVariable UUID userId, @Valid @RequestBody UserDto dto) {
+    log.info("REST request to update user with id: {}; dto: {}", userId, dto);
+    User updatedUser = userService.update(userMapper.toEntity(dto), userId);
     return ResponseEntity.ok(userMapper.toDto(updatedUser));
   }
 

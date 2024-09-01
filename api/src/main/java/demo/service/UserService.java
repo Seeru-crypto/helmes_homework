@@ -54,8 +54,8 @@ public class UserService {
     }
 
     @Transactional
-    public User update(User entity) {
-        User existingUser = findById(entity.getId());
+    public User update(User entity, UUID userId) {
+        User existingUser = findById(userId);
         validationService.validateEntity(entity, validationService.getUserValidator());
 
         return existingUser

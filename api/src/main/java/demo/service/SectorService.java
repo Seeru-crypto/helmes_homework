@@ -74,10 +74,16 @@ public class SectorService {
         });
     }
 
-    public Sector update(Sector entity) {
+    public Sector update(Sector entity, Long sectorId) {
         // for now we only update the sector name
         // moving a child from parent_A to parent_B is not allowed
-        return findById(entity.getId()).setName(entity.getName());
+        if (!sectorRepository.existsById(sectorId)) {
+            log.warn("Sector not found: {}", sectorId);
+            throw new NotFoundException("Sector not found") {
+            };
+        }
+        return findById(sectorId)
+                .setName(entity.getName());
     }
 
     public List<Sector> findByNames(List<String> names) {

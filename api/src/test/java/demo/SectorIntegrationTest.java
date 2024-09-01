@@ -178,11 +178,12 @@ class SectorIntegrationTest extends ContextIntegrationTest {
 
     @Test
     void update_shouldUpdateSector() throws Exception {
-        Sector existingSetor = createSector("tere", null, 2);
+        Sector existingSector = createSector("tere", null, 2);
 
-        SectorDto sectorDto = new SectorDto().setName("pere").setParentId(null).setValue(2).setId(existingSetor.getId());
+        SectorDto sectorDto = new SectorDto().setName("pere").setParentId(null).setValue(2).setId(existingSector.getId());
         byte[] bytes = getBytes(sectorDto);
-        mockMvc.perform(put("/sectors")
+        var url = "/sectors/" + existingSector.getId();
+        mockMvc.perform(put(url)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(bytes))
                 .andExpect(status().isOk())

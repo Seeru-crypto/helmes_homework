@@ -53,11 +53,11 @@ public class SectorController {
         return ResponseEntity.ok(sectorMapper.toDto(createdSector));
     }
 
-    @PutMapping
+    @PutMapping("/{id}")
     @Operation(summary = "update existing sector")
-    public ResponseEntity<SectorDto> update(@Valid @RequestBody SectorDto dto) {
-        log.info("REST request to update sector: " + dto);
-        Sector updatedSector = sectorService.update(sectorMapper.toEntity(dto));
+    public ResponseEntity<SectorDto> update(@PathVariable Long id, @Valid @RequestBody SectorDto dto) {
+        log.info("REST request to update sector with id {}: {} ", id, dto);
+        Sector updatedSector = sectorService.update(sectorMapper.toEntity(dto), id);
         return ResponseEntity.ok(sectorMapper.toDto(updatedSector));
     }
 }
