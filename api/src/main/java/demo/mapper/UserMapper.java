@@ -35,6 +35,10 @@ public interface UserMapper {
         return sectors.stream().map(Sector::getName).toList();
     }
 
+    @Mapping(target = "createdBy", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "modifiedBy", ignore = true)
+    @Mapping(target = "modifiedAt", ignore = true)
     @Mapping(target = "sectors", source = "sectorNames")
     User toEntity(UserDto userDto);
 }
