@@ -7,9 +7,9 @@ import demo.model.Sector;
 import demo.model.User;
 import demo.model.UserFilter;
 import demo.service.filter.DataTypes;
-import demo.service.filter.UserFieldNames;
 import demo.service.filter.NumberCriteria;
 import demo.service.filter.StringCriteria;
+import demo.service.filter.UserFieldNames;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 
@@ -19,7 +19,6 @@ import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -37,7 +36,6 @@ class FilterIntegrationTest extends ContextIntegrationTest {
     mockMvc.perform(post(String.format("/filters/%s", users.get(0).getId()))
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(bytes))
-            .andDo(print())
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.name").value("hello world"))
             .andExpect(jsonPath("$.filters[*].type").value(containsInAnyOrder("STRING", "DATE", "NUMBER")))
@@ -86,7 +84,6 @@ class FilterIntegrationTest extends ContextIntegrationTest {
     mockMvc.perform(get(path)
                     .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
-            .andDo(print())
             .andExpect(jsonPath("$.length()").value(2))
             .andExpect(jsonPath("$[*].name").value(containsInAnyOrder("new filter profile", "second profile")))
             .andExpect(jsonPath("$[0].filters.length()").value(3))

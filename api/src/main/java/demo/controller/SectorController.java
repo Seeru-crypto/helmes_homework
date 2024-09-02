@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Slf4j
+@Valid
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(path = "/sectors")
@@ -47,7 +48,7 @@ public class SectorController {
 
     @PostMapping
     @Operation(summary = "Save new sector")
-    public ResponseEntity<SectorDto> save(@Valid @RequestBody SectorDto sectorDto) {
+    public ResponseEntity<SectorDto> save(@RequestBody SectorDto sectorDto) {
         log.info("REST request to save sector: {}", sectorDto);
         Sector createdSector = sectorService.save(sectorMapper.toEntity(sectorDto));
         return ResponseEntity.ok(sectorMapper.toDto(createdSector));
@@ -55,7 +56,7 @@ public class SectorController {
 
     @PutMapping("/{id}")
     @Operation(summary = "update existing sector")
-    public ResponseEntity<SectorDto> update(@PathVariable Long id, @Valid @RequestBody SectorDto dto) {
+    public ResponseEntity<SectorDto> update(@PathVariable Long id, @RequestBody SectorDto dto) {
         log.info("REST request to update sector with id {}: {} ", id, dto);
         Sector updatedSector = sectorService.update(sectorMapper.toEntity(dto), id);
         return ResponseEntity.ok(sectorMapper.toDto(updatedSector));
