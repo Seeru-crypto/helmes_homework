@@ -15,6 +15,11 @@ import org.springframework.http.MediaType;
 
 import java.util.List;
 
+import static demo.service.filter.DateCriteria.AFTER;
+import static demo.service.filter.DateCriteria.BEFORE;
+import static demo.service.filter.NumberCriteria.*;
+import static demo.service.filter.StringCriteria.CONTAINS;
+import static demo.service.filter.StringCriteria.DOES_NOT_CONTAIN;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -105,10 +110,15 @@ class FilterIntegrationTest extends ContextIntegrationTest {
             .andExpect(status().isOk())
             .andExpect(jsonPath("$[0].field").value("name"))
             .andExpect(jsonPath("$[0].fieldType").value("STRING"))
-            .andExpect(jsonPath("$[0].criteriaValues[*]").value(containsInAnyOrder("CONTAINS", "EQUALS", "DOES_NOT_CONTAIN")))
+            .andExpect(jsonPath("$[0].criteriaValues[*]").value(containsInAnyOrder(CONTAINS.getCode(), EQUALS.getCode(), DOES_NOT_CONTAIN.getCode())))
+
             .andExpect(jsonPath("$[1].field").value("dob"))
             .andExpect(jsonPath("$[1].fieldType").value("DATE"))
-            .andExpect(jsonPath("$[1].criteriaValues[*]").value(containsInAnyOrder("BEFORE", "AFTER", "EQUALS")))
+            .andExpect(jsonPath("$[1].criteriaValues[*]").value(containsInAnyOrder(BEFORE.getCode(), AFTER.getCode(), EQUALS.getCode())))
+
+            .andExpect(jsonPath("$[2].field").value("height"))
+            .andExpect(jsonPath("$[2].fieldType").value("NUMBER"))
+            .andExpect(jsonPath("$[2].criteriaValues[*]").value(containsInAnyOrder(SMALLER_THAN.getCode(), EQUALS.getCode(), BIGGER_THAN.getCode())))
     ;
   }
 }

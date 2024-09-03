@@ -23,6 +23,6 @@ public String getCode() {
   }
 
   public static List<String> getStringCriterias() {
-    return Arrays.stream(StringCriteria.values()).map(Enum::toString).toList();
+    return Arrays.stream(NumberCriteria.values()).map(Enum::toString).toList();
   }
 }
