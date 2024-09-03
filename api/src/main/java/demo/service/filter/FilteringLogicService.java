@@ -12,6 +12,7 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
 import java.util.List;
+import java.util.Objects;
 
 @Slf4j
 @Service
@@ -19,27 +20,23 @@ import java.util.List;
 public class FilteringLogicService {
   private final EntityManager entityManager;
 
-  public <T> List<T> findAllByFilter(UserFilter existingFilter, Class<T> entityClass) {
+  public <T> List<T> findAllByFilter(UserFilter userFilter, Class<T> entityClass) {
     CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
     CriteriaQuery<T> criteriaQuery = criteriaBuilder.createQuery(entityClass);
     Root<T> itemRoot = criteriaQuery.from(entityClass);
 
-    List<Predicate> predicateList = existingFilter
-            .getFilters()
+    Predicate predicate = userFilter.getFilters()
             .stream()
             .map(filter -> generatePredicateFromFilter(filter, criteriaBuilder, itemRoot))
-            .toList();
+            .filter(Objects::nonNull)  // Filter out null values
+            .reduce(criteriaBuilder::and)
+            .orElse(null);
 
-    Predicate finalPredicate = null;
-    for (Predicate predicate : predicateList) {
-      if (finalPredicate == null) {
-        finalPredicate = predicate;
-      } else {
-        finalPredicate = criteriaBuilder.and(finalPredicate, predicate);
-      }
+    if (predicate == null) {
+      log.info("prediacte is null, with userFilter: {}", userFilter);
     }
 
-    criteriaQuery.where(finalPredicate);
+    criteriaQuery.where(predicate);
     return entityManager.createQuery(criteriaQuery).getResultList();
   }
 
