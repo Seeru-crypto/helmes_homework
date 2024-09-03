@@ -59,10 +59,9 @@ public class User extends AbstractAuditingEntity<UUID> {
     private String phoneNumber;
 
     @Column
-    @NotNull
     @Min(value = 1L, message = "height exceeds minimum value")
     @Max(value = 1000L, message = "height exceeds maximum value")
-    private int height;
+    private Integer height;
 
     @ManyToMany(fetch = LAZY,
             cascade = MERGE)
