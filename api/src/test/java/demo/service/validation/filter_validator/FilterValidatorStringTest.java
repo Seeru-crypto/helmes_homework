@@ -1,7 +1,7 @@
 package demo.service.validation.filter_validator;
 
 import demo.controller.dto.FilterDto;
-import demo.service.filter.DataTypes;
+import demo.service.filter.FieldType;
 import demo.service.filter.DateCriteria;
 import demo.service.filter.StringCriteria;
 import demo.service.validation.ValidationResult;
@@ -32,8 +32,8 @@ class FilterValidatorStringTest {
     @MethodSource("validStringValues")
     void validateString_shouldReturnTrue(String value) {
         FilterDto filterDto = new FilterDto()
-                .setType(DataTypes.STRING)
-                .setCriteria(StringCriteria.CONTAINS.getCode())
+                .setType(FieldType.STRING)
+                .setCriteriaValue(StringCriteria.CONTAINS.getCode())
                 .setValue(value);
         ValidationResult result = filterDtoValidator.validate(filterDto);
         assertTrue(result.isValid());
@@ -48,8 +48,8 @@ class FilterValidatorStringTest {
     @MethodSource("invalidStringCriteriaNumericCriteria")
     void validateString_shouldReturnFalse_whenCriteriaInvalid(String criteria) {
         FilterDto filterDto = new FilterDto()
-                .setType(DataTypes.STRING)
-                .setCriteria(criteria)
+                .setType(FieldType.STRING)
+                .setCriteriaValue(criteria)
                 .setValue("abc");
         ValidationResult result = filterDtoValidator.validate(filterDto);
         assertFalse(result.isValid());

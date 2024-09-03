@@ -49,7 +49,7 @@ public class FilteringLogicService {
   }
 
   private <T> Predicate dateFiltering(Filter filter, CriteriaBuilder criteriaBuilder, Root<T> itemRoot) {
-    DateCriteria criteria = DateCriteria.valueOf(filter.getCriteria());
+    DateCriteria criteria = DateCriteria.valueOf(filter.getCriteriaValue());
     Expression<LocalDate> dateField = itemRoot.get(filter.getFieldName().name().toLowerCase());
     LocalDate filterDate = Instant.parse(filter.getValue()).atZone(ZoneOffset.UTC).toLocalDate();
 
@@ -68,7 +68,7 @@ public class FilteringLogicService {
   }
 
   private <T> Predicate stringFiltering(Filter filter, CriteriaBuilder criteriaBuilder, Root<T> itemRoot) {
-    StringCriteria criteria = StringCriteria.valueOf(filter.getCriteria());
+    StringCriteria criteria = StringCriteria.valueOf(filter.getCriteriaValue());
     return switch (criteria) {
       case CONTAINS ->
               criteriaBuilder.like(itemRoot.get(filter.getFieldName().name().toLowerCase()), "%" + filter.getValue() + "%");
@@ -79,7 +79,7 @@ public class FilteringLogicService {
   }
 
   private <T> Predicate numberFiltering(Filter filter, CriteriaBuilder criteriaBuilder, Root<T> itemRoot) {
-    NumberCriteria criteria = NumberCriteria.valueOf(filter.getCriteria());
+    NumberCriteria criteria = NumberCriteria.valueOf(filter.getCriteriaValue());
     // TODO: implement number filtering
     return null;
   }

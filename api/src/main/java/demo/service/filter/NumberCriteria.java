@@ -1,5 +1,6 @@
 package demo.service.filter;
 
+import java.util.Arrays;
 import java.util.List;
 
 public enum NumberCriteria implements Filters {
@@ -23,5 +24,9 @@ public String getCode() {
 
   public static List<Filters> getNumberCriterias() {
     return List.of(SMALLER_THAN, EQUALS, BIGGER_THAN);
+  }
+
+  public static List<String> getStringCriterias() {
+    return Arrays.stream(StringCriteria.values()).map(Enum::toString).toList();
   }
 }

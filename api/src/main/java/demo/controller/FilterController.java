@@ -1,7 +1,9 @@
 package demo.controller;
 
-import demo.controller.dto.FilterOptionsDto;
+import demo.controller.dto.FilterOptionDto;
+import demo.controller.dto.FilterOptions;
 import demo.controller.dto.UserFilterDto;
+import demo.mapper.FilterOptionMapper;
 import demo.mapper.UserFilterMapper;
 import demo.model.UserFilter;
 import demo.service.FilterService;
@@ -23,12 +25,14 @@ import java.util.UUID;
 public class FilterController {
   private final FilterService filterService;
   private final UserFilterMapper userFilterMapper;
+  private final FilterOptionMapper filterOptionMapper;
 
   @GetMapping
   @Operation(summary = "Get filter options")
-  public ResponseEntity<List<FilterOptionsDto>> findAllOptions() {
+  public ResponseEntity<List<FilterOptionDto>> findAllOptions() {
     log.info("GET filter options request");
-    return ResponseEntity.ok(filterService.findAllOptions());
+    List<FilterOptions> res = filterService.findAllOptions();
+    return ResponseEntity.ok(filterOptionMapper.toDto(res));
   }
 
   @GetMapping(path = "/{userId}")

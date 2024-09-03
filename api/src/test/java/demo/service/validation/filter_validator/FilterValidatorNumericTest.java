@@ -1,7 +1,7 @@
 package demo.service.validation.filter_validator;
 
 import demo.controller.dto.FilterDto;
-import demo.service.filter.DataTypes;
+import demo.service.filter.FieldType;
 import demo.service.filter.DateCriteria;
 import demo.service.filter.NumberCriteria;
 import demo.service.validation.ValidationResult;
@@ -34,8 +34,8 @@ class FilterValidatorNumericTest {
     @MethodSource("validNumericValues")
     void validateNumeric_shouldReturnTrue(String value) {
         FilterDto filterDto = new FilterDto()
-                .setType(DataTypes.NUMBER)
-                .setCriteria(NumberCriteria.SMALLER_THAN.getCode())
+                .setType(FieldType.NUMBER)
+                .setCriteriaValue(NumberCriteria.SMALLER_THAN.getCode())
                 .setValue(value);
         ValidationResult result = filterDtoValidator.validate(filterDto);
         assertTrue(result.isValid());
@@ -52,8 +52,8 @@ class FilterValidatorNumericTest {
     @MethodSource("invalidNumericCriteria")
     void validateNumeric_shouldReturnFalse_whenCriteriaInvalid(String criteria, FilterErrors error) {
         FilterDto filterDto = new FilterDto()
-                .setType(DataTypes.NUMBER)
-                .setCriteria(criteria)
+                .setType(FieldType.NUMBER)
+                .setCriteriaValue(criteria)
                 .setValue("2");
         ValidationResult result = filterDtoValidator.validate(filterDto);
         assertFalse(result.isValid());
@@ -72,8 +72,8 @@ class FilterValidatorNumericTest {
     @MethodSource("invalidNumericValues")
     void validateNumeric_shouldReturnFalse_whenValueInvalid(String values, FilterErrors error) {
         FilterDto filterDto = new FilterDto()
-                .setType(DataTypes.NUMBER)
-                .setCriteria(NumberCriteria.SMALLER_THAN.getCode())
+                .setType(FieldType.NUMBER)
+                .setCriteriaValue(NumberCriteria.SMALLER_THAN.getCode())
                 .setValue(values);
         ValidationResult result = filterDtoValidator.validate(filterDto);
 

@@ -1,6 +1,6 @@
 package demo.controller.dto;
 
-import demo.service.filter.DataTypes;
+import demo.service.filter.FieldType;
 import demo.service.filter.UserFieldNames;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -15,10 +15,10 @@ import lombok.ToString;
 public class FilterDto {
     @NotNull
     @Enumerated(EnumType.STRING)
-    private DataTypes type;
+    private FieldType type;
 
     @NotNull
-    private String criteria;
+    private String criteriaValue;
 
     @NotNull
     private String value;

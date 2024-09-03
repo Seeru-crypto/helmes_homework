@@ -1,5 +1,6 @@
 package demo.service.filter;
 
+import java.util.Arrays;
 import java.util.List;
 
 public enum StringCriteria implements Filters {
@@ -21,7 +22,11 @@ public enum StringCriteria implements Filters {
         return false;
     }
 
-    public static List<Filters> getStringCriterias() {
-        return List.of(CONTAINS, EQUALS, DOES_NOT_CONTAIN);
+    public static List<Filters> getCriterias() {
+        return Arrays.asList(StringCriteria.values());
+    }
+
+    public static List<String> getStringCriterias() {
+        return Arrays.stream(StringCriteria.values()).map(Enum::toString).toList();
     }
 }

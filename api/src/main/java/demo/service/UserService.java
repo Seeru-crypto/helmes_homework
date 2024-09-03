@@ -1,6 +1,5 @@
 package demo.service;
 
-import demo.exception.BusinessException;
 import demo.exception.NotFoundException;
 import demo.model.Sector;
 import demo.model.User;

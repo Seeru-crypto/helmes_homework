@@ -42,7 +42,7 @@ public class FilterDtoValidator implements Validator<FilterDto> {
   }
 
   private ValidationResult numberValidator(FilterDto filterDto, ValidationResult result) {
-    if (!NumberCriteria.isStringInEnumList(filterDto.getCriteria())){
+    if (!NumberCriteria.isStringInEnumList(filterDto.getCriteriaValue())){
       return result.setValid(false).setMessage(INVALID_CRITERIA_ERROR);
     }
     if (!isNumberValid(filterDto.getValue())) {
@@ -52,14 +52,14 @@ public class FilterDtoValidator implements Validator<FilterDto> {
   }
 
   private ValidationResult stringValidator(FilterDto filterDto, ValidationResult result) {
-    if (!StringCriteria.isStringInEnumList(filterDto.getCriteria())){
+    if (!StringCriteria.isStringInEnumList(filterDto.getCriteriaValue())){
       return result.setValid(false).setMessage(INVALID_CRITERIA_ERROR);
     }
     return result.setValid(true);
   }
 
   private ValidationResult dateValidator(FilterDto filterDto, ValidationResult result) {
-    if (!DateCriteria.isStringInEnumList(filterDto.getCriteria())){
+    if (!DateCriteria.isStringInEnumList(filterDto.getCriteriaValue())){
       return result.setValid(false).setMessage(INVALID_CRITERIA_ERROR);
     }
 

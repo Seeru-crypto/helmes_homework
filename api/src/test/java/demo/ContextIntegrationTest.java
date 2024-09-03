@@ -5,7 +5,7 @@ import demo.controller.dto.UserFilterDto;
 import demo.model.Sector;
 import demo.model.User;
 import demo.model.UserFilter;
-import demo.service.filter.DataTypes;
+import demo.service.filter.FieldType;
 import jakarta.persistence.EntityManager;
 import org.springframework.test.web.servlet.MvcResult;
 
@@ -157,9 +157,9 @@ public class ContextIntegrationTest extends BaseIntegrationTest {
   }
 
   protected List<FilterDto> getFilterDtoList() {
-    FilterDto filter1 = new FilterDto().setCriteria(AFTER.getCode()).setValue(Instant.now().toString()).setType(DataTypes.DATE).setFieldName(DOB);
-    FilterDto filter2 = new FilterDto().setCriteria(CONTAINS.getCode()).setValue("value 2").setType(DataTypes.STRING).setFieldName(NAME);
-    FilterDto filter3 = new FilterDto().setCriteria(SMALLER_THAN.getCode()).setValue("3").setType(DataTypes.NUMBER).setFieldName(NAME);
+    FilterDto filter1 = new FilterDto().setCriteriaValue(AFTER.getCode()).setValue(Instant.now().toString()).setType(FieldType.DATE).setFieldName(DOB);
+    FilterDto filter2 = new FilterDto().setCriteriaValue(CONTAINS.getCode()).setValue("value 2").setType(FieldType.STRING).setFieldName(NAME);
+    FilterDto filter3 = new FilterDto().setCriteriaValue(SMALLER_THAN.getCode()).setValue("3").setType(FieldType.NUMBER).setFieldName(NAME);
     return List.of(filter2, filter1, filter3);
   }
 

@@ -1,15 +1,12 @@
 package demo.service.filter;
 
-import java.util.HashMap;
-import java.util.Map;
-
-public enum DataTypes {
+public enum FieldType {
   STRING,
   DATE,
   NUMBER;
 
   public static boolean isStringInEnumList(String string) {
-    for (DataTypes value : DataTypes.values()) {
+    for (FieldType value : FieldType.values()) {
       if (value.name().equals(string.toUpperCase())) {
         return true;
       }
