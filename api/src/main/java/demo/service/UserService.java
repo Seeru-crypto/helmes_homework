@@ -32,6 +32,10 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    protected List<User> findAll() {
+        return userRepository.findAll();
+    }
+
     public Page<User> findAll(Pageable pageable) {
         validationService.validateEntity(pageable, validationService.getPageableValidator());
         return userRepository.findAll(pageable);

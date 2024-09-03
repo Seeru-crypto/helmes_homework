@@ -22,10 +22,6 @@ public String getCode() {
     return false;
   }
 
-  public static List<Filters> getNumberCriterias() {
-    return List.of(SMALLER_THAN, EQUALS, BIGGER_THAN);
-  }
-
   public static List<String> getStringCriterias() {
     return Arrays.stream(StringCriteria.values()).map(Enum::toString).toList();
   }

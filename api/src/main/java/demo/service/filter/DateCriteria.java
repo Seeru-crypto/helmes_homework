@@ -26,10 +26,6 @@ public enum DateCriteria implements Filters {
         return false;
     }
 
-    public static List<Filters> getDateCriterias() {
-        return List.of(BEFORE, AFTER, EQUALS);
-    }
-
     public static List<String> getStringCriterias() {
         return Arrays.stream(DateCriteria.values()).map(Enum::toString).toList();
     }

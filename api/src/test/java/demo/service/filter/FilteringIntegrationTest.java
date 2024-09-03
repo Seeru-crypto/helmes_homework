@@ -13,8 +13,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import static demo.service.filter.DateCriteria.*;
-import static demo.service.filter.UserFieldNames.DOB;
-import static demo.service.filter.UserFieldNames.NAME;
+import static demo.service.filter.UserFieldNames.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class FilteringIntegrationTest extends ContextIntegrationTest {
@@ -88,5 +87,65 @@ class FilteringIntegrationTest extends ContextIntegrationTest {
         assertEquals(2, test_v2.size());
         assertEquals("qJohn Does", test_v2.get(0).getName());
         assertEquals("qJack Doesn't", test_v2.get(1).getName());
+    }
+
+    @Test
+    void filteringByNumber_greaterThan_shouldReturnList() {
+        FilterDto f1 = new FilterDto().setCriteriaValue(NumberCriteria.BIGGER_THAN.getCode()).setValue("165").setType(FieldType.NUMBER).setFieldName(HEIGHT);
+        var userFilter_v2 = createUserFilter(List.of(f1), "user filter 1", mainUser);
+
+        var test_v2 = filteringLogicService.findAllByFilter(userFilter_v2, User.class);
+        assertEquals(2, test_v2.size());
+        assertEquals("qJack Doesn't", test_v2.get(0).getName());
+        assertEquals("qJames Memorial", test_v2.get(1).getName());
+    }
+
+    @Test
+    void filteringByNumber_equal_shouldReturnList() {
+        FilterDto f1 = new FilterDto().setCriteriaValue(NumberCriteria.EQUALS.getCode()).setValue("162").setType(FieldType.NUMBER).setFieldName(HEIGHT);
+        var userFilter_v2 = createUserFilter(List.of(f1), "user filter 1", mainUser);
+
+        var test_v2 = filteringLogicService.findAllByFilter(userFilter_v2, User.class);
+        assertEquals(1, test_v2.size());
+        assertEquals("qJane Does", test_v2.get(0).getName());
+        assertEquals(162, test_v2.get(0).getHeight());
+    }
+
+    @Test
+    void filteringByNumber_smallerThan_shouldReturnList() {
+        User user1 = new User().setName("qJohn Does").setHeight(152);
+        User user2 = new User().setName("qJane Does").setHeight(162);
+
+        FilterDto f1 = new FilterDto().setCriteriaValue(NumberCriteria.SMALLER_THAN.getCode()).setValue("168").setType(FieldType.NUMBER).setFieldName(HEIGHT);
+        var userFilter_v2 = createUserFilter(List.of(f1), "user filter 1", mainUser);
+
+        List<User> users = filteringLogicService.findAllByFilter(userFilter_v2, User.class);
+        assertEquals(2, users.size());
+
+        assertEquals(user1.getName(), users.get(0).getName());
+        assertEquals(user1.getHeight(), users.get(0).getHeight());
+
+        assertEquals(user2.getName(), users.get(1).getName());
+        assertEquals(user2.getHeight(), users.get(1).getHeight());
+    }
+
+    @Test
+    void filteringByNumber_composite_shouldReturnList() {
+        User user1 = new User().setName("qJane Does").setHeight(162);
+        User user2 = new User().setName("qJack Doesn't").setHeight(170);
+
+        FilterDto f1 = new FilterDto().setCriteriaValue(NumberCriteria.BIGGER_THAN.getCode()).setValue("161").setType(FieldType.NUMBER).setFieldName(HEIGHT);
+        FilterDto f2 = new FilterDto().setCriteriaValue(NumberCriteria.SMALLER_THAN.getCode()).setValue("180").setType(FieldType.NUMBER).setFieldName(HEIGHT);
+
+        var userFilter_v2 = createUserFilter(List.of(f1, f2), "user filter 1", mainUser);
+
+        List<User> users = filteringLogicService.findAllByFilter(userFilter_v2, User.class);
+        assertEquals(2, users.size());
+
+        assertEquals(user1.getName(), users.get(0).getName());
+        assertEquals(user1.getHeight(), users.get(0).getHeight());
+
+        assertEquals(user2.getName(), users.get(1).getName());
+        assertEquals(user2.getHeight(), users.get(1).getHeight());
     }
 }

@@ -18,69 +18,74 @@ import java.util.Objects;
 @Service
 @RequiredArgsConstructor
 public class FilteringLogicService {
-  private final EntityManager entityManager;
+    private final EntityManager entityManager;
 
-  public <T> List<T> findAllByFilter(UserFilter userFilter, Class<T> entityClass) {
-    CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-    CriteriaQuery<T> criteriaQuery = criteriaBuilder.createQuery(entityClass);
-    Root<T> itemRoot = criteriaQuery.from(entityClass);
+    public <T> List<T> findAllByFilter(UserFilter userFilter, Class<T> entityClass) {
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<T> criteriaQuery = criteriaBuilder.createQuery(entityClass);
+        Root<T> itemRoot = criteriaQuery.from(entityClass);
 
-    Predicate predicate = userFilter.getFilters()
-            .stream()
-            .map(filter -> generatePredicateFromFilter(filter, criteriaBuilder, itemRoot))
-            .filter(Objects::nonNull)  // Filter out null values
-            .reduce(criteriaBuilder::and)
-            .orElse(null);
+        Predicate predicate = userFilter.getFilters()
+                .stream()
+                .map(filter -> generatePredicateFromFilter(filter, criteriaBuilder, itemRoot))
+                .filter(Objects::nonNull)  // Filter out null values
+                .reduce(criteriaBuilder::and)
+                .orElse(null);
 
-    if (predicate == null) {
-      log.info("prediacte is null, with userFilter: {}", userFilter);
+        if (predicate == null) {
+            log.info("predicate is null, with userFilter: {}", userFilter);
+        }
+
+        criteriaQuery.where(predicate);
+        return entityManager.createQuery(criteriaQuery).getResultList();
     }
 
-    criteriaQuery.where(predicate);
-    return entityManager.createQuery(criteriaQuery).getResultList();
-  }
+    private <T> Predicate generatePredicateFromFilter(Filter filter, CriteriaBuilder criteriaBuilder, Root<T> itemRoot) {
+        return switch (filter.getType()) {
+            case STRING -> stringFiltering(filter, criteriaBuilder, itemRoot);
+            case DATE -> dateFiltering(filter, criteriaBuilder, itemRoot);
+            case NUMBER -> numberFiltering(filter, criteriaBuilder, itemRoot);
+        };
+    }
 
-  private <T> Predicate generatePredicateFromFilter(Filter filter, CriteriaBuilder criteriaBuilder, Root<T> itemRoot) {
-    return switch (filter.getType()) {
-      case STRING -> stringFiltering(filter, criteriaBuilder, itemRoot);
-      case DATE -> dateFiltering(filter, criteriaBuilder, itemRoot);
-      case NUMBER ->  numberFiltering(filter, criteriaBuilder, itemRoot);
-    };
-  }
+    private <T> Predicate dateFiltering(Filter filter, CriteriaBuilder criteriaBuilder, Root<T> itemRoot) {
+        DateCriteria criteria = DateCriteria.valueOf(filter.getCriteriaValue());
+        Expression<LocalDate> dateField = itemRoot.get(filter.getFieldName().name().toLowerCase());
+        LocalDate filterDate = Instant.parse(filter.getValue()).atZone(ZoneOffset.UTC).toLocalDate();
 
-  private <T> Predicate dateFiltering(Filter filter, CriteriaBuilder criteriaBuilder, Root<T> itemRoot) {
-    DateCriteria criteria = DateCriteria.valueOf(filter.getCriteriaValue());
-    Expression<LocalDate> dateField = itemRoot.get(filter.getFieldName().name().toLowerCase());
-    LocalDate filterDate = Instant.parse(filter.getValue()).atZone(ZoneOffset.UTC).toLocalDate();
+        return switch (criteria) {
+            case BEFORE -> criteriaBuilder.lessThan(dateField, filterDate);
+            case AFTER -> criteriaBuilder.greaterThan(dateField, filterDate);
+            case EQUALS -> {
+                LocalDate nextDay = filterDate.plusDays(1);
+                yield criteriaBuilder.and(
+                        criteriaBuilder.greaterThanOrEqualTo(dateField, filterDate),
+                        criteriaBuilder.lessThan(dateField, nextDay));
+            }
+        };
+    }
 
-    return switch (criteria) {
-      case BEFORE ->
-              criteriaBuilder.lessThan(dateField, filterDate);
-      case AFTER ->
-              criteriaBuilder.greaterThan(dateField, filterDate);
-      case EQUALS -> {
-        LocalDate nextDay = filterDate.plusDays(1);
-        yield criteriaBuilder.and(
-                criteriaBuilder.greaterThanOrEqualTo(dateField, filterDate),
-                criteriaBuilder.lessThan(dateField, nextDay));
-      }
-    };
-  }
+    private <T> Predicate stringFiltering(Filter filter, CriteriaBuilder criteriaBuilder, Root<T> itemRoot) {
+        StringCriteria criteria = StringCriteria.valueOf(filter.getCriteriaValue());
+        return switch (criteria) {
+            case CONTAINS ->
+                    criteriaBuilder.like(itemRoot.get(filter.getFieldName().name().toLowerCase()), "%" + filter.getValue() + "%");
+            case DOES_NOT_CONTAIN ->
+                    criteriaBuilder.notLike(itemRoot.get(filter.getFieldName().name().toLowerCase()), "%" + filter.getValue() + "%");
+            case EQUALS ->
+                    criteriaBuilder.equal(itemRoot.get(filter.getFieldName().name().toLowerCase()), filter.getValue());
+        };
+    }
 
-  private <T> Predicate stringFiltering(Filter filter, CriteriaBuilder criteriaBuilder, Root<T> itemRoot) {
-    StringCriteria criteria = StringCriteria.valueOf(filter.getCriteriaValue());
-    return switch (criteria) {
-      case CONTAINS ->
-              criteriaBuilder.like(itemRoot.get(filter.getFieldName().name().toLowerCase()), "%" + filter.getValue() + "%");
-      case DOES_NOT_CONTAIN ->
-              criteriaBuilder.notLike(itemRoot.get(filter.getFieldName().name().toLowerCase()), "%" + filter.getValue() + "%");
-      case EQUALS -> criteriaBuilder.equal(itemRoot.get(filter.getFieldName().name().toLowerCase()), filter.getValue());
-    };
-  }
-
-  private <T> Predicate numberFiltering(Filter filter, CriteriaBuilder criteriaBuilder, Root<T> itemRoot) {
-    NumberCriteria criteria = NumberCriteria.valueOf(filter.getCriteriaValue());
-    // TODO: implement number filtering
-    return null;
-  }
+    private <T> Predicate numberFiltering(Filter filter, CriteriaBuilder criteriaBuilder, Root<T> itemRoot) {
+        NumberCriteria criteria = NumberCriteria.valueOf(filter.getCriteriaValue());
+        return switch (criteria) {
+            case SMALLER_THAN ->
+                    criteriaBuilder.lessThanOrEqualTo(itemRoot.get(filter.getFieldName().name().toLowerCase()), filter.getValue());
+            case EQUALS ->
+                    criteriaBuilder.equal(itemRoot.get(filter.getFieldName().name().toLowerCase()), filter.getValue());
+            case BIGGER_THAN ->
+                    criteriaBuilder.greaterThan(itemRoot.get(filter.getFieldName().name().toLowerCase()), filter.getValue());
+        };
+    }
 }

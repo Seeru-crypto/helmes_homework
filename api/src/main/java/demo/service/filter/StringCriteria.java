@@ -22,10 +22,6 @@ public enum StringCriteria implements Filters {
         return false;
     }
 
-    public static List<Filters> getCriterias() {
-        return Arrays.asList(StringCriteria.values());
-    }
-
     public static List<String> getStringCriterias() {
         return Arrays.stream(StringCriteria.values()).map(Enum::toString).toList();
     }

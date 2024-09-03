@@ -30,6 +30,8 @@ public class UserDto {
 
     private Instant dob;
 
+    private int height;
+
     @AssertTrue
     private boolean agreeToTerms;
 

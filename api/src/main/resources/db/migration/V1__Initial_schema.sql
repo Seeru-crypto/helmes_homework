@@ -7,6 +7,7 @@ CREATE TABLE IF NOT EXISTS "user"
     agree_terms  BOOLEAN,
     email        VARCHAR(50),
     dob          TIMESTAMP,
+    height       int,
     phone_number VARCHAR(100) UNIQUE,
     created_by   TEXT,
     created_at   TIMESTAMP,
