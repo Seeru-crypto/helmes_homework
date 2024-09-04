@@ -21,8 +21,8 @@ jobs:
     strategy:
       matrix:
         project:
-          - UI
-          - API
+          - ui
+          - api
 
     steps:
       # Checkout the code from the repo
