@@ -13,19 +13,6 @@ public enum DateCriteria implements Filters {
         return this.name();
     }
 
-    public static boolean isStringInEnumList(String string) {
-        for (DateCriteria value : DateCriteria.values()) {
-            try {
-                if (value.name().equals(string.toUpperCase())) {
-                    return true;
-                }
-            } catch (NullPointerException e) {
-                return false;
-            }
-        }
-        return false;
-    }
-
     public static List<String> getStringCriterias() {
         return Arrays.stream(DateCriteria.values()).map(Enum::toString).toList();
     }

@@ -1,9 +1,7 @@
 package demo.service.validation.filter_validator;
 
 import demo.controller.dto.FilterDto;
-import demo.service.filter.DateCriteria;
-import demo.service.filter.NumberCriteria;
-import demo.service.filter.StringCriteria;
+import demo.service.filter.*;
 import demo.service.validation.ValidationResult;
 import demo.service.validation.Validator;
 import org.springframework.stereotype.Component;
@@ -25,11 +23,9 @@ public class FilterDtoValidator implements Validator<FilterDto> {
 
     switch (filterDto.getType()) {
       case DATE -> {
-        // apply date validations
         return dateValidator(filterDto, result);
       }
       case NUMBER ->  {
-        // apply numeric validations
         return numberValidator(filterDto, result);
       }
       case STRING -> {
@@ -42,7 +38,7 @@ public class FilterDtoValidator implements Validator<FilterDto> {
   }
 
   private ValidationResult numberValidator(FilterDto filterDto, ValidationResult result) {
-    if (!NumberCriteria.isStringInEnumList(filterDto.getCriteriaValue())){
+    if (!Filters.isStringInEnumList(filterDto.getCriteriaValue(), NumberCriteria.class)){
       return result.setValid(false).setMessage(INVALID_CRITERIA_ERROR);
     }
     if (!isNumberValid(filterDto.getValue())) {
@@ -52,14 +48,14 @@ public class FilterDtoValidator implements Validator<FilterDto> {
   }
 
   private ValidationResult stringValidator(FilterDto filterDto, ValidationResult result) {
-    if (!StringCriteria.isStringInEnumList(filterDto.getCriteriaValue())){
+    if (!Filters.isStringInEnumList(filterDto.getCriteriaValue(), StringCriteria.class)){
       return result.setValid(false).setMessage(INVALID_CRITERIA_ERROR);
     }
     return result.setValid(true);
   }
 
   private ValidationResult dateValidator(FilterDto filterDto, ValidationResult result) {
-    if (!DateCriteria.isStringInEnumList(filterDto.getCriteriaValue())){
+    if (!Filters.isStringInEnumList(filterDto.getCriteriaValue(), DateCriteria.class)){
       return result.setValid(false).setMessage(INVALID_CRITERIA_ERROR);
     }
 

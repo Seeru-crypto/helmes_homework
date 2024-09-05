@@ -1,7 +1,10 @@
 package demo.controller.dto;
 
 import demo.model.AbstractAuditingEntity;
-import demo.service.filter.*;
+import demo.service.filter.DateCriteria;
+import demo.service.filter.FieldType;
+import demo.service.filter.NumberCriteria;
+import demo.service.filter.StringCriteria;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -10,8 +13,6 @@ import lombok.ToString;
 
 import java.util.List;
 
-import static demo.service.filter.FieldType.DATE;
-import static demo.service.filter.FieldType.STRING;
 import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Getter
@@ -40,16 +41,10 @@ public class FilterOptions extends AbstractAuditingEntity<Long> {
     private FieldType fieldType; // STRING, DATE, NUMBER
 
     public List<String> getCriteriaValues() {
-        if (this.fieldType == STRING) {
-            return StringCriteria.getStringCriterias();
-        }
-
-        else if (this.fieldType == DATE) {
-            return DateCriteria.getStringCriterias();
-        }
-
-        else {
-            return NumberCriteria.getStringCriterias();
-        }
+        return switch (this.fieldType) {
+            case STRING -> StringCriteria.getStringCriterias();
+            case DATE -> DateCriteria.getStringCriterias();
+            case NUMBER -> NumberCriteria.getStringCriterias();
+        };
     }
 }

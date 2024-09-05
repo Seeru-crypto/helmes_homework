@@ -13,15 +13,6 @@ public enum StringCriteria implements Filters {
         return this.name();
     }
 
-    public static boolean isStringInEnumList(String string) {
-        for (StringCriteria value : StringCriteria.values()) {
-            if (value.name().equals(string.toUpperCase())) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     public static List<String> getStringCriterias() {
         return Arrays.stream(StringCriteria.values()).map(Enum::toString).toList();
     }

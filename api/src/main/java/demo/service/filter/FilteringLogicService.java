@@ -41,6 +41,7 @@ public class FilteringLogicService {
     }
 
     private <T> Predicate generatePredicateFromFilter(Filter filter, CriteriaBuilder criteriaBuilder, Root<T> itemRoot) {
+        log.info("generating predicate from: {}", filter);
         return switch (filter.getType()) {
             case STRING -> stringFiltering(filter, criteriaBuilder, itemRoot);
             case DATE -> dateFiltering(filter, criteriaBuilder, itemRoot);
@@ -54,13 +55,13 @@ public class FilteringLogicService {
         LocalDate filterDate = Instant.parse(filter.getValue()).atZone(ZoneOffset.UTC).toLocalDate();
 
         return switch (criteria) {
-            case BEFORE -> criteriaBuilder.lessThan(dateField, filterDate);
+            case BEFORE -> criteriaBuilder.lessThanOrEqualTo(dateField, filterDate);
             case AFTER -> criteriaBuilder.greaterThan(dateField, filterDate);
             case EQUALS -> {
                 LocalDate nextDay = filterDate.plusDays(1);
                 yield criteriaBuilder.and(
-                        criteriaBuilder.greaterThanOrEqualTo(dateField, filterDate),
-                        criteriaBuilder.lessThan(dateField, nextDay));
+                        criteriaBuilder.greaterThan(dateField, filterDate),
+                        criteriaBuilder.lessThanOrEqualTo(dateField, nextDay));
             }
         };
     }
