@@ -29,7 +29,7 @@ public class FilterController {
 
   @GetMapping
   @Operation(summary = "Get filter options")
-  public ResponseEntity<List<FilterOptionDto>> findAllOptions() {
+  public ResponseEntity<List<FilterOptionDto>> findAllFilterOptions() {
     log.info("GET filter options request");
     List<FilterOptions> res = filterService.findAllOptions();
     return ResponseEntity.ok(filterOptionMapper.toDto(res));

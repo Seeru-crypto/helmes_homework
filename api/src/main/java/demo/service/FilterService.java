@@ -3,6 +3,8 @@ package demo.service;
 import demo.controller.dto.FilterDto;
 import demo.controller.dto.FilterOptions;
 import demo.controller.dto.UserFilterDto;
+import demo.mapper.FilterMapper;
+import demo.mapper.UserFilterMapper;
 import demo.model.Filter;
 import demo.model.User;
 import demo.model.UserFilter;
@@ -27,28 +29,32 @@ public class FilterService {
   private final FilterOptionsRepository filterOptionsRepository;
   private final ValidationService validationService;
   private final UserService userService;
+  private final UserFilterMapper userFilterMapper;
+  private final FilterMapper filterMapper;
 
   @Transactional
-  public UserFilter saveFilters(UserFilterDto userFilter, UUID userId) {
+  public UserFilter saveFilters(UserFilterDto userFilterDto, UUID userId) {
     User user = userService.findById(userId);
 
-    validationService.validateEntity(userFilter, validationService.getUserFilterDtoValidator());
-    var createdUserFilter = userFilterRepository.save(new UserFilter()
-            .setName(userFilter.getName())
-            .setUser(user));
+    validationService.validateEntity(userFilterDto, validationService.getUserFilterDtoValidator());
+    UserFilter createdUserFilter = userFilterRepository.save(userFilterMapper.toEntity(userFilterDto, user));
 
-    for (FilterDto filter : userFilter.getFilters()) {
-      validationService.validateEntity(filter, validationService.getFilterDtoValidator());
-      // validate filter against dataMap
-      var createdFilter = filterRepository.save(new Filter()
-              .setCriteriaValue(filter.getCriteriaValue())
-              .setUserFilterId(createdUserFilter.getId())
-              .setValue(filter.getValue())
-              .setFieldName(filter.getFieldName())
-              .setType(filter.getType()));
-      createdUserFilter.addFilter(createdFilter);
-    }
+    userFilterDto.getFilters().stream()
+            .map(this::validateFilterDto)
+            .map(filterMapper::toEntity)
+            .forEach(filter -> saveAndUpdateUserFilter(filter, createdUserFilter));
+
     return createdUserFilter;
+  }
+
+  private FilterDto validateFilterDto(FilterDto filterDto) {
+    validationService.validateEntity(filterDto, validationService.getFilterDtoValidator());
+    return filterDto;
+  }
+
+  private void saveAndUpdateUserFilter(Filter filter, UserFilter createdUserFilter) {
+    filterRepository.save(filter.setUserFilterId(createdUserFilter.getId()));
+    createdUserFilter.addFilter(filter);
   }
 
   public List<FilterOptions> findAllOptions() {

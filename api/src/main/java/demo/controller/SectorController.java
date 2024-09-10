@@ -25,7 +25,7 @@ public class SectorController {
     private final SectorMapper sectorMapper;
 
     @GetMapping
-    @Operation(summary = "Find all paginated sectors by parentId")
+    @Operation(summary = "Find all sectors by root parentId")
     public List<SectorDto> findAllByParentId() {
         log.info("REST request to findAll sectors");
         return sectorMapper.toDtos(sectorService.findAllByParent());
@@ -42,6 +42,7 @@ public class SectorController {
     @Operation(summary = "Delete an existing sector by id, deletes all relationships as well")
     public void deleteById(@PathVariable Long id) {
         log.info("REST request to delete sector by id: {}", id);
+        // TODO: remove the userService call from the controller
         userService.removeSectorFromAllUsers(id);
         sectorService.deleteById(id);
     }
