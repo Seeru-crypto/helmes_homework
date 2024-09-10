@@ -5,18 +5,20 @@ import demo.controller.dto.UserFilterDto;
 import demo.model.Sector;
 import demo.model.User;
 import demo.model.UserFilter;
-import demo.service.filter.DataTypes;
+import demo.service.filter.FieldType;
 import jakarta.persistence.EntityManager;
+import org.springframework.test.web.servlet.MvcResult;
 
+import java.io.UnsupportedEncodingException;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
 import static demo.service.filter.DateCriteria.AFTER;
-import static demo.service.filter.UserFieldNames.DOB;
-import static demo.service.filter.UserFieldNames.NAME;
 import static demo.service.filter.NumberCriteria.SMALLER_THAN;
 import static demo.service.filter.StringCriteria.CONTAINS;
+import static demo.service.filter.UserFieldNames.DOB;
+import static demo.service.filter.UserFieldNames.NAME;
 
 public class ContextIntegrationTest extends BaseIntegrationTest {
 
@@ -27,23 +29,20 @@ public class ContextIntegrationTest extends BaseIntegrationTest {
   }
 
   protected List<User> createDefaultUsers() {
-    if (!sectorExists(1L)) {
-      createFullSectorTree();
-    }
     List<User> users = new ArrayList<>();
-    users.add(createUser("qJohn Does", true, List.of(findSectorById(1L)), "johndoe1234@gmail.com", "+123 123456789", Instant.parse("1995-04-10T21:00:25.451157400Z")));
-    users.add(createUser("qJane Does", true, List.of(findSectorById(2L), findSectorById(11L)), "jane_smith123@example.com", "+372 1234567",Instant.parse("2000-04-10T21:00:25.451157400Z")));
-    users.add(createUser("qJack Doesn't", true, List.of(findSectorById(8L), findSectorById(11L), findSectorById(13L)), "bob.smith@company.co.uk", "+44 1234567890",Instant.parse("2005-04-10T21:00:25.451157400Z")));
-    users.add(createUser("qJames Memorial", true, List.of(findSectorById(1L), findSectorById(20L)), "mary.smith@email.com", "+1 1234567890",Instant.parse("2010-04-10T21:00:25.451157400Z")));
+    users.add(createUser("qJohn Does", true, List.of(findSectorById(1L)), "johndoe1234@gmail.com", "+123 123456789", Instant.parse("1995-04-10T21:00:25.451157400Z"), 140));
+    users.add(createUser("qJane Does", true, List.of(findSectorById(2L), findSectorById(11L)), "jane_smith123@example.com", "+372 1234567",Instant.parse("2000-04-10T21:00:25.451157400Z"), 150));
+    users.add(createUser("qJack Doesn't", true, List.of(findSectorById(8L), findSectorById(11L), findSectorById(13L)), "bob.smith@company.co.uk", "+44 1234567890",Instant.parse("2005-04-10T21:00:25.451157400Z"), 160));
+    users.add(createUser("qJames Memorial", true, List.of(findSectorById(1L), findSectorById(20L)), "mary.smith@email.com", "+1 1234567890",Instant.parse("2010-04-10T21:00:25.451157400Z"), 150));
     return users;
   }
 
   protected List<User> createUsersWithoutSectors() {
     List<User> users = new ArrayList<>();
-    users.add(createUser("qJohn Does", true, List.of(), "johndoe1234@gmail.com", "+123 123456789", Instant.parse("1995-04-10T21:00:25.451157400Z")));
-    users.add(createUser("qJane Does", true, List.of(), "jane_smith123@example.com", "+372 1234567",Instant.parse("2000-04-10T21:00:25.451157400Z")));
-    users.add(createUser("qJack Doesn't", true, List.of(), "bob.smith@company.co.uk", "+44 1234567890",Instant.parse("2005-04-10T21:00:25.451157400Z")));
-    users.add(createUser("qJames Memorial", true, List.of(), "mary.smith@email.com", "+1 1234567890",Instant.parse("2010-04-10T21:00:25.451157400Z")));
+    users.add(createUser("qJohn Does", true, List.of(), "johndoe1234@gmail.com", "+123 123456789", Instant.parse("1995-04-10T21:00:25.451157400Z"), 152));
+    users.add(createUser("qJane Does", true, List.of(), "jane_smith123@example.com", "+372 1234567",Instant.parse("2000-04-10T21:00:25.451157400Z"), 162));
+    users.add(createUser("qJack Doesn't", true, List.of(), "bob.smith@company.co.uk", "+44 1234567890",Instant.parse("2005-04-10T21:00:25.451157400Z"), 170));
+    users.add(createUser("qJames Memorial", true, List.of(), "mary.smith@email.com", "+1 1234567890",Instant.parse("2010-04-10T21:00:25.451157400Z"), 190));
     return users;
   }
 
@@ -136,14 +135,16 @@ public class ContextIntegrationTest extends BaseIntegrationTest {
     return sectorService.findById(id);
   }
 
-  protected User createUser(String name, boolean agreeToTerms, List<Sector> sectors, String email, String phoneNumber, Instant dob) {
+  protected User createUser(String name, boolean agreeToTerms, List<Sector> sectors, String email, String phoneNumber, Instant dob, int height) {
     return userService.save(new User()
             .setName(name)
             .setAgreeToTerms(agreeToTerms)
             .setEmail(email)
             .setPhoneNumber(phoneNumber)
             .setDob(dob)
-            .setSectors(sectors));
+            .setHeight(height)
+            .setSectors(sectors))
+            ;
   }
   protected User createUser(String name, boolean agreeToTerms, List<Sector> sectors) {
     return userService.save(new User()
@@ -154,13 +155,13 @@ public class ContextIntegrationTest extends BaseIntegrationTest {
 
   protected UserFilter createUserFilter(List<FilterDto> filters, String name, User user) {
     UserFilterDto filterDto = new UserFilterDto().setName(name).setFilters(filters);
-    return filterService.saveFilters(filterDto, user);
+    return filterService.saveFilters(filterDto, user.getId());
   }
 
   protected List<FilterDto> getFilterDtoList() {
-    FilterDto filter1 = new FilterDto().setCriteria(AFTER.getKood()).setValue(Instant.now().toString()).setType(DataTypes.DATE).setFieldName(DOB);
-    FilterDto filter2 = new FilterDto().setCriteria(CONTAINS.getKood()).setValue("value 2").setType(DataTypes.STRING).setFieldName(NAME);
-    FilterDto filter3 = new FilterDto().setCriteria(SMALLER_THAN.getKood()).setValue("3").setType(DataTypes.NUMBER).setFieldName(NAME);
+    FilterDto filter1 = new FilterDto().setCriteriaValue(AFTER.getCode()).setValue(Instant.now().toString()).setType(FieldType.DATE).setFieldName(DOB);
+    FilterDto filter2 = new FilterDto().setCriteriaValue(CONTAINS.getCode()).setValue("value 2").setType(FieldType.STRING).setFieldName(NAME);
+    FilterDto filter3 = new FilterDto().setCriteriaValue(SMALLER_THAN.getCode()).setValue("3").setType(FieldType.NUMBER).setFieldName(NAME);
     return List.of(filter2, filter1, filter3);
   }
 
@@ -171,5 +172,11 @@ public class ContextIntegrationTest extends BaseIntegrationTest {
   public static void persistCreatedEntities(EntityManager em) {
     createdEntities.forEach(em::persist);
     em.flush();
+  }
+
+  protected static void logTestResult (MvcResult result, byte[] bytes) throws UnsupportedEncodingException {
+    System.out.println("Test failed! Logging request and response details:");
+    System.out.println("Request Content: " + new String(bytes));
+    System.out.println("Response Content: " + result.getResponse().getContentAsString());
   }
 }

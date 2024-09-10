@@ -3,11 +3,7 @@ package demo.controller;
 import demo.controller.dto.SaveUserDto;
 import demo.controller.dto.UserDto;
 import demo.mapper.UserMapper;
-import demo.model.Sector;
 import demo.model.User;
-import demo.model.UserFilter;
-import demo.service.FilterService;
-import demo.service.SectorService;
 import demo.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
@@ -25,14 +21,13 @@ import java.util.UUID;
 import static org.springframework.http.ResponseEntity.created;
 
 @Slf4j
+@Valid
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(path = "/users")
 public class UserController {
   private final UserService userService;
-  private final SectorService sectorService;
   private final UserMapper userMapper;
-  private final FilterService filterService;
 
   @GetMapping
   @Operation(summary = "Get paginated list of all created users")
@@ -45,7 +40,7 @@ public class UserController {
 
   @PostMapping
   @Operation(summary = "save new user")
-  public ResponseEntity<UserDto> save(@Valid @RequestBody SaveUserDto dto) {
+  public ResponseEntity<UserDto> save(@RequestBody SaveUserDto dto) {
     log.info("REST request to save user: " + dto);
     User tempUser = userMapper.toEntity(dto);
     User createdUser = userService.save(tempUser);
@@ -54,10 +49,10 @@ public class UserController {
             .body(userMapper.toDto(createdUser));
   }
 
-  @PutMapping(path = "/{userId}")
+  @PutMapping("/{userId}")
   @Operation(summary = "Update user")
-  public ResponseEntity<UserDto> update(@Valid @RequestBody SaveUserDto dto, @PathVariable UUID userId) {
-    log.info("REST request to update user: " + dto);
+  public ResponseEntity<UserDto> update(@PathVariable UUID userId, @RequestBody UserDto dto) {
+    log.info("REST request to update user with id: {}; dto: {}", userId, dto);
     User updatedUser = userService.update(userMapper.toEntity(dto), userId);
     return ResponseEntity.ok(userMapper.toDto(updatedUser));
   }
@@ -73,18 +68,7 @@ public class UserController {
   @Operation(summary = "Get all users by sector id")
   public ResponseEntity<List<UserDto>> findAllBySector(@PathVariable Long sectorId) {
     log.info("REST request to get all users by sector: " + sectorId);
-    Sector existingSector = sectorService.findById(sectorId);
-    List<User> users = userService.findAllBySector(existingSector);
-    List<UserDto> dto = users.stream().map(userMapper::toDto).toList();
-    return ResponseEntity.ok(dto);
-  }
-
-  @GetMapping(path="filter/{userFilterId}")
-  @Operation(summary = "Get all users by filter id")
-  public ResponseEntity<List<UserDto>> findAllByUserFilter(@PathVariable Long userFilterId) {
-    log.info("REST request to get all users by userFilter: " + userFilterId);
-    UserFilter existingFilter = filterService.findById(userFilterId);
-    List<User> users = userService.findAllByUserFilter(existingFilter);
+    List<User> users = userService.findAllBySector(sectorId);
     List<UserDto> dto = users.stream().map(userMapper::toDto).toList();
     return ResponseEntity.ok(dto);
   }

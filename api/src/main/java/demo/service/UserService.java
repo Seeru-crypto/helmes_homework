@@ -1,6 +1,5 @@
 package demo.service;
 
-import demo.exception.BusinessException;
 import demo.exception.NotFoundException;
 import demo.model.Sector;
 import demo.model.User;
@@ -24,18 +23,17 @@ import java.util.UUID;
 public class UserService {
     private final UserRepository userRepository;
     private final ValidationService validationService;
+    private final SectorService sectorService;
     private final FilteringLogicService filteringLogicService;
 
     @Transactional
     public User save(User user) {
-        if (user.getId() != null && !userRepository.existsById(user.getId())) {
-            log.warn("User with given ID already exists: {}", user.getEmail());
-            throw new BusinessException("User with email already exists") {
-            };
-        }
-
         validationService.validateEntity(user, validationService.getUserValidator());
         return userRepository.save(user);
+    }
+
+    protected List<User> findAll() {
+        return userRepository.findAll();
     }
 
     public Page<User> findAll(Pageable pageable) {
@@ -74,15 +72,18 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
-    public void removeSectorFromAllUsers(Sector sector) {
+    public void removeSectorFromAllUsers(Long sectorId) {
+        Sector sector = sectorService.findById(sectorId);
+
         userRepository
                 .findAllBySectorsContains(sector)
                 .forEach(user ->
                         user.removeSector(sector));
     }
 
-    public List<User> findAllBySector(Sector existingSector) {
-        return userRepository.findAllBySectorsContains(existingSector);
+    public List<User> findAllBySector(Long sectorId) {
+        Sector sector = sectorService.findById(sectorId);
+        return userRepository.findAllBySectorsContains(sector);
     }
 
     public List<User> findAllByUserFilter(UserFilter existingFilter) {

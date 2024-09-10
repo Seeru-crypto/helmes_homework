@@ -10,15 +10,8 @@ import java.util.List;
 
 @Mapper(componentModel = "spring", uses = { SectorService.class})
 public interface SectorMapper {
+
     List<SectorDto> toDtos(List<Sector> sectors);
-
-    List<Sector> toEntity(List<SectorDto> dtos);
-
-    @Mapping(target = "createdBy", ignore = true)
-    @Mapping(target = "createdAt", ignore = true)
-    @Mapping(target = "modifiedBy", ignore = true)
-    @Mapping(target = "modifiedAt", ignore = true)
-    Sector toEntity (Long id);
 
     @Mapping(target = "createdBy", ignore = true)
     @Mapping(target = "createdAt", ignore = true)

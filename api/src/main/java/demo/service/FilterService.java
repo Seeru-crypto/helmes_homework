@@ -1,29 +1,22 @@
 package demo.service;
 
 import demo.controller.dto.FilterDto;
-import demo.controller.dto.FilterOptionsDto;
+import demo.controller.dto.FilterOptions;
 import demo.controller.dto.UserFilterDto;
 import demo.model.Filter;
 import demo.model.User;
 import demo.model.UserFilter;
+import demo.repository.FilterOptionsRepository;
 import demo.repository.FilterRepository;
 import demo.repository.UserFilterRepository;
-import demo.service.filter.DateCriteria;
-import demo.service.filter.StringCriteria;
-import demo.service.filter.UserFieldNames;
 import demo.service.validation.ValidationService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import static demo.service.filter.DataTypes.DATE;
-import static demo.service.filter.DataTypes.STRING;
-import static demo.service.filter.UserFieldNames.DOB;
-import static demo.service.filter.UserFieldNames.NAME;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -31,21 +24,13 @@ import static demo.service.filter.UserFieldNames.NAME;
 public class FilterService {
   private final UserFilterRepository userFilterRepository;
   private final FilterRepository filterRepository;
+  private final FilterOptionsRepository filterOptionsRepository;
   private final ValidationService validationService;
-
-  private static final FilterOptionsDto nameOption = new FilterOptionsDto()
-          .setFieldName(NAME)
-          .setAllowedValue(STRING)
-          .setCriteria(StringCriteria.getStringCriterias());
-
-  private static final FilterOptionsDto dateOptions = new FilterOptionsDto()
-          .setFieldName(DOB)
-          .setAllowedValue(DATE)
-          .setCriteria(DateCriteria.getDateCriterias());
+  private final UserService userService;
 
   @Transactional
-  public UserFilter saveFilters(UserFilterDto userFilter, User user) {
-    // validate User filter
+  public UserFilter saveFilters(UserFilterDto userFilter, UUID userId) {
+    User user = userService.findById(userId);
 
     validationService.validateEntity(userFilter, validationService.getUserFilterDtoValidator());
     var createdUserFilter = userFilterRepository.save(new UserFilter()
@@ -56,7 +41,7 @@ public class FilterService {
       validationService.validateEntity(filter, validationService.getFilterDtoValidator());
       // validate filter against dataMap
       var createdFilter = filterRepository.save(new Filter()
-              .setCriteria(filter.getCriteria())
+              .setCriteriaValue(filter.getCriteriaValue())
               .setUserFilterId(createdUserFilter.getId())
               .setValue(filter.getValue())
               .setFieldName(filter.getFieldName())
@@ -66,15 +51,12 @@ public class FilterService {
     return createdUserFilter;
   }
 
-  public List<FilterOptionsDto> findAllOptions() {
-    List<FilterOptionsDto> response = new ArrayList<>();
-    response.add(nameOption);
-    response.add(dateOptions);
-
-    return response;
+  public List<FilterOptions> findAllOptions() {
+    return filterOptionsRepository.findAll();
   }
 
-  public List<UserFilter> findByUser(User user) {
+  public List<UserFilter> findByUser(UUID userId) {
+    User user = userService.findById(userId);
     return userFilterRepository.findAllByUser(user);
   }
 

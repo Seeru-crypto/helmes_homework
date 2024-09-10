@@ -58,6 +58,11 @@ public class User extends AbstractAuditingEntity<UUID> {
     @Pattern(regexp = PHONE_NR_REGEX, message = "INVALID_USER_PHONE_NUMBER")
     private String phoneNumber;
 
+    @Column
+    @Min(value = 1L, message = "height exceeds minimum value")
+    @Max(value = 1000L, message = "height exceeds maximum value")
+    private Integer height;
+
     @ManyToMany(fetch = LAZY,
             cascade = MERGE)
     @JoinTable(

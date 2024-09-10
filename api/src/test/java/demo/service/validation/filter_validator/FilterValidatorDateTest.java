@@ -1,7 +1,7 @@
 package demo.service.validation.filter_validator;
 
 import demo.controller.dto.FilterDto;
-import demo.service.filter.DataTypes;
+import demo.service.filter.FieldType;
 import demo.service.filter.DateCriteria;
 import demo.service.filter.NumberCriteria;
 import demo.service.validation.ValidationResult;
@@ -35,8 +35,8 @@ class FilterValidatorDateTest {
     @Test
     void validateDateValues_shouldReturnTrue() {
         FilterDto filterDto = new FilterDto()
-                .setType(DataTypes.DATE)
-                .setCriteria(DateCriteria.BEFORE.getKood())
+                .setType(FieldType.DATE)
+                .setCriteriaValue(DateCriteria.BEFORE.getCode())
                 .setValue(Instant.now().toString());
         ValidationResult result = filterDtoValidator.validate(filterDto);
         assertTrue(result.isValid());
@@ -47,8 +47,8 @@ class FilterValidatorDateTest {
     @MethodSource("invalidDateCriteria")
     void validateDateValues_shouldReturnFalse(String criteria, FilterErrors error) {
         FilterDto filterDto = new FilterDto()
-                .setType(DataTypes.DATE)
-                .setCriteria(criteria)
+                .setType(FieldType.DATE)
+                .setCriteriaValue(criteria)
                 .setValue(Instant.now().toString());
         ValidationResult result = filterDtoValidator.validate(filterDto);
         assertFalse(result.isValid());
@@ -57,7 +57,7 @@ class FilterValidatorDateTest {
 
     private static Stream<Arguments> invalidDateCriteria() {
         return Stream.of(
-                Arguments.of(NumberCriteria.SMALLER_THAN.getKood(), INVALID_CRITERIA_ERROR),
+                Arguments.of(NumberCriteria.SMALLER_THAN.getCode(), INVALID_CRITERIA_ERROR),
                 Arguments.of("invalidCriteria", INVALID_CRITERIA_ERROR),
                 Arguments.of(null, INVALID_CRITERIA_ERROR)
 
@@ -68,8 +68,8 @@ class FilterValidatorDateTest {
     @MethodSource("invalidDateValues")
     void validateDateValues_shouldReturnFalse_whenValueIsNotValid(String value, FilterErrors error) {
         FilterDto filterDto = new FilterDto()
-                .setType(DataTypes.DATE)
-                .setCriteria(DateCriteria.BEFORE.getKood())
+                .setType(FieldType.DATE)
+                .setCriteriaValue(DateCriteria.BEFORE.getCode())
                 .setValue(value);
         ValidationResult result = filterDtoValidator.validate(filterDto);
         assertFalse(result.isValid());

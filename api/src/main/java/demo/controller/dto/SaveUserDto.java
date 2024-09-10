@@ -14,16 +14,18 @@ import java.util.List;
 @Setter
 @ToString
 public class SaveUserDto {
-// TODO: Hea tava on ikka panna max length´d, et DB´dei saa lõhki lasta
     @NotNull
+    @Size(max = 20)
     private String name;
 
+    @Size(max = 20)
     private String email;
 
+    @Size(max = 20)
     private String phoneNumber;
 
     @NotNull
-    @Size(min=1)
+    @Size(min=1, max = 10)
     private List<Long> sectorIds;
 
     @AssertTrue

@@ -30,9 +30,11 @@ public class UserDto {
 
     private Instant dob;
 
+    private int height;
+
     @AssertTrue
     private boolean agreeToTerms;
 
     @Size(min=1)
-    private List<String> sectors;
+    private List<String> sectorNames;
 }

@@ -1,23 +1,19 @@
 package demo.service.validation.filter_validator;
 
 import demo.controller.dto.FilterDto;
-import demo.service.filter.DataTypes;
+import demo.service.filter.FieldType;
 import demo.service.filter.DateCriteria;
 import demo.service.filter.NumberCriteria;
-import demo.service.filter.StringCriteria;
 import demo.service.validation.ValidationResult;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.MockitoAnnotations;
 
-import java.time.Instant;
 import java.util.stream.Stream;
 
 import static demo.service.validation.filter_validator.FilterErrors.INVALID_CRITERIA_ERROR;
-import static demo.service.validation.filter_validator.FilterErrors.INVALID_DATE_VALUE;
 import static demo.service.validation.filter_validator.FilterErrors.INVALID_NUMBER_VALUE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -38,8 +34,8 @@ class FilterValidatorNumericTest {
     @MethodSource("validNumericValues")
     void validateNumeric_shouldReturnTrue(String value) {
         FilterDto filterDto = new FilterDto()
-                .setType(DataTypes.NUMBER)
-                .setCriteria(NumberCriteria.SMALLER_THAN.getKood())
+                .setType(FieldType.NUMBER)
+                .setCriteriaValue(NumberCriteria.SMALLER_THAN.getCode())
                 .setValue(value);
         ValidationResult result = filterDtoValidator.validate(filterDto);
         assertTrue(result.isValid());
@@ -56,8 +52,8 @@ class FilterValidatorNumericTest {
     @MethodSource("invalidNumericCriteria")
     void validateNumeric_shouldReturnFalse_whenCriteriaInvalid(String criteria, FilterErrors error) {
         FilterDto filterDto = new FilterDto()
-                .setType(DataTypes.NUMBER)
-                .setCriteria(criteria)
+                .setType(FieldType.NUMBER)
+                .setCriteriaValue(criteria)
                 .setValue("2");
         ValidationResult result = filterDtoValidator.validate(filterDto);
         assertFalse(result.isValid());
@@ -66,7 +62,7 @@ class FilterValidatorNumericTest {
 
     private static Stream<Arguments> invalidNumericCriteria() {
         return Stream.of(
-                Arguments.of(DateCriteria.BEFORE.getKood(), INVALID_CRITERIA_ERROR),
+                Arguments.of(DateCriteria.BEFORE.getCode(), INVALID_CRITERIA_ERROR),
                 Arguments.of("invalidCriteria", INVALID_CRITERIA_ERROR)
 
         );
@@ -76,8 +72,8 @@ class FilterValidatorNumericTest {
     @MethodSource("invalidNumericValues")
     void validateNumeric_shouldReturnFalse_whenValueInvalid(String values, FilterErrors error) {
         FilterDto filterDto = new FilterDto()
-                .setType(DataTypes.NUMBER)
-                .setCriteria(NumberCriteria.SMALLER_THAN.getKood())
+                .setType(FieldType.NUMBER)
+                .setCriteriaValue(NumberCriteria.SMALLER_THAN.getCode())
                 .setValue(values);
         ValidationResult result = filterDtoValidator.validate(filterDto);
 

@@ -3,7 +3,34 @@ Connection: Keep-Alive
 User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.10)
 Accept-Encoding: br,deflate,gzip,x-gzip
 
-<> 2024-04-28T135512.200.json
+<> 2024-09-03T154404.200.json
+
+###
+
+GET http://localhost:8880/api/filters
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.10)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2024-09-03T153533.200.json
+
+###
+
+GET http://localhost:8880/api/filters
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.10)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2024-09-03T153523.200.json
+
+###
+
+GET http://localhost:8880/api/filters
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.10)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2024-09-03T153301.200.json
 
 ###
 
@@ -418,33 +445,6 @@ User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
 Accept-Encoding: br,deflate,gzip,x-gzip
 
 <> 2024-04-04T150547.200.json
-
-###
-
-GET http://localhost:8880/api/users?sortBy=id&pageNumber=0&pageSize=1000
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-<> 2024-04-04T150536.200.json
-
-###
-
-GET http://localhost:8880/api/users?sortBy=id&pageNumber=0&pageSize=1000
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-<> 2024-04-04T150452.200.json
-
-###
-
-GET http://localhost:8880/api/users?sortBy=id&pageNumber=0&pageSize=10
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-<> 2024-04-04T150445.200.json
 
 ###
 

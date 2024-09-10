@@ -1,7 +1,7 @@
 package demo.model;
 
 
-import demo.service.filter.DataTypes;
+import demo.service.filter.FieldType;
 import demo.service.filter.UserFieldNames;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -23,10 +23,11 @@ public class Filter extends AbstractAuditingEntity<Long> {
   @GeneratedValue(strategy = IDENTITY)
   private Long id;
 
-  private String criteria; // CONTAINS, DOES_NOT_CONTAIN
+  @Column(name = "criteria")
+  private String criteriaValue; // CONTAINS, DOES_NOT_CONTAIN
 
   @Enumerated(EnumType.STRING)
-  private DataTypes type; //   STRING, DATE, NUMBER
+  private FieldType type; //   STRING, DATE, NUMBER
 
   private String value; // searchCrietria a, 1, or date
 

@@ -11,10 +11,11 @@ public enum UserErrors implements ValidationErrors {
   ID_IS_NULL,
   TOS_NOT_ACCEPTED,
   USER_TOO_YOUNG,
-  NAME_DOESNT_CONTAIN_Q;
+  NAME_DOESNT_CONTAIN_Q,
+  ;
 
   @Override
-  public String getKood() {
+  public String getCode() {
     return this.name();
   }
   public static UserErrors getValue(String kood) { return UserErrors.valueOf(kood);}

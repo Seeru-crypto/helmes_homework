@@ -1,5 +1,6 @@
 package demo.service.filter;
 
+import java.util.Arrays;
 import java.util.List;
 
 public enum StringCriteria implements Filters {
@@ -8,20 +9,11 @@ public enum StringCriteria implements Filters {
     EQUALS;
 
     @Override
-    public String getKood() {
+    public String getCode() {
         return this.name();
     }
 
-    public static boolean isStringInEnumList(String string) {
-        for (StringCriteria value : StringCriteria.values()) {
-            if (value.name().equals(string.toUpperCase())) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public static List<Filters> getStringCriterias() {
-        return List.of(CONTAINS, EQUALS, DOES_NOT_CONTAIN);
+    public static List<String> getStringCriterias() {
+        return Arrays.stream(StringCriteria.values()).map(Enum::toString).toList();
     }
 }
