@@ -11,6 +11,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 import static jakarta.persistence.CascadeType.MERGE;
@@ -72,8 +73,11 @@ public class User extends AbstractAuditingEntity<UUID> {
     )
     private List<Sector> sectors = new ArrayList<>();
 
-    public void removeSector(Sector sector) {
-        this.sectors.remove(sector);
+    public void removeSector(Long sectorId) {
+        this.sectors
+                .stream()
+                .filter(sector -> Objects.equals(sector.getId(), sectorId))
+                .forEach(sector -> this.sectors.remove(sector));
     }
 
     public User setSectors(List<Sector> sectors) {

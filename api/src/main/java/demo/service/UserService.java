@@ -72,17 +72,14 @@ public class UserService {
     }
 
     public void removeSectorFromAllUsers(Long sectorId) {
-        Sector sector = sectorService.findById(sectorId);
-
         userRepository
-                .findAllBySectorsContains(sector)
+                .findAllBySectorsContains(sectorId)
                 .forEach(user ->
-                        user.removeSector(sector));
+                        user.removeSector(sectorId));
     }
 
     public List<User> findAllBySector(Long sectorId) {
-        Sector sector = sectorService.findById(sectorId);
-        return userRepository.findAllBySectorsContains(sector);
+        return userRepository.findAllBySectorsContains(sectorId);
     }
 
     public List<User> findAllByUserFilter(UserFilter existingFilter) {
