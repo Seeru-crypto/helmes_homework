@@ -62,8 +62,7 @@ public class FilterService {
   }
 
   public List<UserFilter> findByUser(UUID userId) {
-    User user = userService.findById(userId);
-    return userFilterRepository.findAllByUser(user);
+    return userFilterRepository.findAllByUser(userId);
   }
 
   public UserFilter findById(Long userFilterId) {

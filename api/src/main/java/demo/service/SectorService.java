@@ -24,11 +24,11 @@ public class SectorService {
     }
 
     @Transactional
-    public List<Sector> findAllByParent() {
+    public List<Sector> findAllByRootParent() {
         return sectorRepository.findAllByParentId(null);
     }
 
-    private void addChildren(Sector child) {
+    private void addChild(Sector child) {
         Sector parent = findById(child.getParentId());
         parent.addChild(child);
     }
@@ -40,7 +40,7 @@ public class SectorService {
                 .setValue(value)
                 .setParentId(parentId)
         );
-        if (parentId != null) addChildren(child);
+        if (parentId != null) addChild(child);
         return child;
     }
 

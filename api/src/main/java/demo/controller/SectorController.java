@@ -28,7 +28,7 @@ public class SectorController {
     @Operation(summary = "Find all sectors by root parentId")
     public List<SectorDto> findAllByParentId() {
         log.info("REST request to findAll sectors");
-        return sectorMapper.toDtos(sectorService.findAllByParent());
+        return sectorMapper.toDtos(sectorService.findAllByRootParent());
     }
 
     @GetMapping("/{id}")
