@@ -4,7 +4,7 @@ import demo.controller.dto.SaveUserDto;
 import demo.controller.dto.UserDto;
 import demo.model.Sector;
 import demo.model.User;
-import demo.service.SectorService;
+import demo.service.ISectorService;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
@@ -13,7 +13,7 @@ import org.springframework.util.CollectionUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-@Mapper(componentModel = "spring", uses = { SectorMapper.class, SectorService.class})
+@Mapper(componentModel = "spring", uses = { SectorMapper.class, ISectorService.class})
 public interface UserMapper {
 
     @Mapping(target = "createdBy", ignore = true)

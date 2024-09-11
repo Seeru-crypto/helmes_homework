@@ -3,8 +3,7 @@ package demo.controller;
 import demo.controller.dto.SectorDto;
 import demo.mapper.SectorMapper;
 import demo.model.Sector;
-import demo.service.SectorService;
-import demo.service.UserService;
+import demo.service.ISectorService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -20,8 +19,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping(path = "/sectors")
 public class SectorController {
-    private final SectorService sectorService;
-    private final UserService userService;
+    private final ISectorService sectorService;
     private final SectorMapper sectorMapper;
 
     @GetMapping
@@ -42,8 +40,6 @@ public class SectorController {
     @Operation(summary = "Delete an existing sector by id, deletes all relationships as well")
     public void deleteById(@PathVariable Long id) {
         log.info("REST request to delete sector by id: {}", id);
-        // TODO: remove the userService call from the controller
-        userService.removeSectorFromAllUsers(id);
         sectorService.deleteById(id);
     }
 

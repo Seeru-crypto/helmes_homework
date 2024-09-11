@@ -2,13 +2,13 @@ package demo.mapper;
 
 import demo.controller.dto.SectorDto;
 import demo.model.Sector;
-import demo.service.SectorService;
+import demo.service.ISectorService;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring", uses = { SectorService.class})
+@Mapper(componentModel = "spring", uses = { ISectorService.class})
 public interface SectorMapper {
 
     List<SectorDto> toDtos(List<Sector> sectors);

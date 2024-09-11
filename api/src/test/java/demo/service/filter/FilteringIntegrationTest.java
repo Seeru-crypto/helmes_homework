@@ -53,8 +53,8 @@ class FilteringIntegrationTest extends ContextIntegrationTest {
 
         var test_v2 = filteringLogicService.findAllByFilter(userFilter_v2, User.class);
         assertEquals(2, test_v2.size());
-        assertEquals("qJane Does", test_v2.get(0).getName());
-        assertEquals("qJack Doesn't", test_v2.get(1).getName());
+        assertEquals(USER_NAME_2, test_v2.get(0).getName());
+        assertEquals(USER_NAME_3, test_v2.get(1).getName());
     }
 
   @ParameterizedTest
@@ -72,7 +72,7 @@ class FilteringIntegrationTest extends ContextIntegrationTest {
             Arguments.of(StringCriteria.CONTAINS, "Does", 3),
             Arguments.of(StringCriteria.CONTAINS, "abcd", 0),
             Arguments.of(StringCriteria.DOES_NOT_CONTAIN, "Does", 1),
-            Arguments.of(StringCriteria.EQUALS, "qJack Doesn't", 1),
+            Arguments.of(StringCriteria.EQUALS, USER_NAME_3, 1),
             Arguments.of(StringCriteria.EQUALS, "qJack Doesn", 0)
     );
   }
@@ -85,8 +85,8 @@ class FilteringIntegrationTest extends ContextIntegrationTest {
 
         var test_v2 = filteringLogicService.findAllByFilter(userFilter_v2, User.class);
         assertEquals(2, test_v2.size());
-        assertEquals("qJohn Does", test_v2.get(0).getName());
-        assertEquals("qJack Doesn't", test_v2.get(1).getName());
+        assertEquals(USER_NAME_1, test_v2.get(0).getName());
+        assertEquals(USER_NAME_3, test_v2.get(1).getName());
     }
 
     @Test
@@ -96,8 +96,8 @@ class FilteringIntegrationTest extends ContextIntegrationTest {
 
         var test_v2 = filteringLogicService.findAllByFilter(userFilter_v2, User.class);
         assertEquals(2, test_v2.size());
-        assertEquals("qJack Doesn't", test_v2.get(0).getName());
-        assertEquals("qJames Memorial", test_v2.get(1).getName());
+        assertEquals(USER_NAME_3, test_v2.get(0).getName());
+        assertEquals(USER_NAME_4, test_v2.get(1).getName());
     }
 
     @Test
@@ -107,14 +107,14 @@ class FilteringIntegrationTest extends ContextIntegrationTest {
 
         var test_v2 = filteringLogicService.findAllByFilter(userFilter_v2, User.class);
         assertEquals(1, test_v2.size());
-        assertEquals("qJane Does", test_v2.get(0).getName());
+        assertEquals(USER_NAME_2, test_v2.get(0).getName());
         assertEquals(162, test_v2.get(0).getHeight());
     }
 
     @Test
     void filteringByNumber_smallerThan_shouldReturnList() {
-        User user1 = new User().setName("qJohn Does").setHeight(152);
-        User user2 = new User().setName("qJane Does").setHeight(162);
+        User user1 = new User().setName(USER_NAME_1).setHeight(152);
+        User user2 = new User().setName(USER_NAME_2).setHeight(162);
 
         FilterDto f1 = new FilterDto().setCriteriaValue(NumberCriteria.SMALLER_THAN.getCode()).setValue("168").setType(FieldType.NUMBER).setFieldName(HEIGHT);
         var userFilter_v2 = createUserFilter(List.of(f1), "user filter 1", mainUser);
@@ -131,8 +131,8 @@ class FilteringIntegrationTest extends ContextIntegrationTest {
 
     @Test
     void filteringByNumber_composite_shouldReturnList() {
-        User user1 = new User().setName("qJane Does").setHeight(162);
-        User user2 = new User().setName("qJack Doesn't").setHeight(170);
+        User user1 = new User().setName(USER_NAME_2).setHeight(162);
+        User user2 = new User().setName(USER_NAME_3).setHeight(170);
 
         FilterDto f1 = new FilterDto().setCriteriaValue(NumberCriteria.BIGGER_THAN.getCode()).setValue("161").setType(FieldType.NUMBER).setFieldName(HEIGHT);
         FilterDto f2 = new FilterDto().setCriteriaValue(NumberCriteria.SMALLER_THAN.getCode()).setValue("180").setType(FieldType.NUMBER).setFieldName(HEIGHT);

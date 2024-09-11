@@ -24,7 +24,6 @@ import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -61,7 +60,7 @@ class FilterIntegrationTest extends ContextIntegrationTest {
   @Test
   void findByUserId_ShouldReturnUserFilters() throws Exception {
     Sector sector = createSector("sector", null, 1);
-    User user = createUser("userq", true, List.of(sector));
+    User user = createUser(USER_NAME_1, true, List.of(sector));
 
     List<FilterDto> filterDtos = getFilterDtoList();
     createUserFilter(filterDtos, "new filter profile", user);
@@ -72,7 +71,7 @@ class FilterIntegrationTest extends ContextIntegrationTest {
             .setType(FieldType.STRING);
     createUserFilter(List.of(filter3), "second profile", user);
 
-    User hiddenUser = createUser("hidden_user_q", true, List.of(sector));
+    User hiddenUser = createUser(USER_NAME_3, true, List.of(sector));
     FilterDto filter4 = new FilterDto()
             .setCriteriaValue(NumberCriteria.BIGGER_THAN.getCode())
             .setValue("2")

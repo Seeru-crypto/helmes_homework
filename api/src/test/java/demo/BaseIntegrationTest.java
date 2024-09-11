@@ -7,9 +7,7 @@ import demo.controller.dto.SectorDto;
 import demo.controller.dto.UserDto;
 import demo.controller.dto.UserFilterDto;
 import demo.mapper.SectorMapper;
-import demo.service.FilterService;
-import demo.service.SectorService;
-import demo.service.UserService;
+import demo.service.*;
 import demo.service.filter.FilteringLogicService;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
@@ -46,13 +44,13 @@ public abstract class BaseIntegrationTest {
     private WebApplicationContext webApplicationContext;
 
     @Autowired
-    protected UserService userService;
+    protected IUserService userServiceImpl;
 
     @Autowired
     protected FilterService filterService;
 
     @Autowired
-    protected SectorService sectorService;
+    protected ISectorService sectorServiceImpl;
 
     @Autowired
     protected SectorMapper sectorMapper;

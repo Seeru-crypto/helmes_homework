@@ -1,5 +1,18 @@
 # Helmes homework
 
+## Description
+In general the original task of helmes_homework was to create a user registration service (UI + API).
+I decided to use it as a foundation and add the following features.
+
+### User filters
+Users can create custom filters and view other users.
+The filter A can be, users that are higher than 160cm and dob before 9.11.2001 (the specific criteria can be chained together)
+And filter B can be users which name contains "ohn". Filters A and B are user specific and displayed as such.
+
+### Custom validation
+In addition, on Jakarta validation, I wanted to test and implement a custom validation method, which is easier to 
+upkeep. 
+
 ## Setup via docker
 - navigate to /api
 - Build gradle project with either gradle build or gradle assemble
@@ -17,7 +30,7 @@ If it occurs just reload the browser.
 - front-end: decided to use next.js with axios for HTTP requests and zustand for a lightweight state managment and ant UI library
 - reverse-proxy: A simple ngnix reverse-proxy, which proxys all /api requests to the back-end, while forwarding all next.js API calls to back-end as well
 
-## Task
+## Task (original helmes homework)
 1. Correct all the deficiencies in index.html (located in root folder)
 
 2. "Sectors" selectbox:
@@ -29,39 +42,3 @@ If it occurs just reload the browser.
    3.2. Store all input data to the database (Name, Sectors, Agree to terms)
    3.3. Refill the form using stored data
    3.4. Allow the user to edit his/her own data during the session
-
-## TODO
-- [x] Add full CRUD functionality for user
-- [x] Add email and phone numbers to users
-- [ ] add proper automatic docker functionality
-- [ ] Fix cors config in java/demo/ApiApplication.java
-- [x] Add functionality to add/ change and remove sectors
-- [ ] Add new page with table, where user can see all registered users and their sectors
-- [ ] Add dynamic filter for that table
-- [ ] Implementeeri DFS ja BFS otsingu algoritmid
-
-
-
-## Küsimmused Tõnnule
-- Dockerfile setup, kus teeks gradle build + run
-- Kuidas saaks valideerimise optimiseerida UserService.java
-- Kuidas näeks välja nested filter arhidektuur? Kus iga kasutaja saab salvestada endale filtri profiilid. Profiil A´l on ainult string filter või profiil C´l on 2 stringi ja üks DOB
-  - String contains & not contain
-  - integer bigger than, smaller than
-  - dob before and after
-- Kas PhoneNumberValidatorTest puhul saab ValueSource´i inputi muuta muutujaks (näeb ilusam välja)
-
-
-## Project structure
-│   │       ├───config                                                  
-│   │       ├───controller                                              
-│   │       │   └───dto                         // DTO models                        
-│   │       ├───exception
-│   │       ├───mapper                          // Mapstruct mappers
-│   │       ├───model
-│   │       ├───repository
-│   │       └───service
-│   │           └───validation                  // Validators used for business logic validation 
-│   │               ├───pageable_validator
-│   │               ├───sector_validator
-│   │               └───user_validator

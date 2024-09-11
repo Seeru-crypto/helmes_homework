@@ -101,7 +101,7 @@ class SectorIntegrationTest extends ContextIntegrationTest {
     void remove_shouldRemoveSector_fromUser_sectorTable() throws Exception {
         createFullSectorTree();
         List<Sector> list = List.of(findSectorById(1L), findSectorById(4L), findSectorById(6L));
-        createUser("userq1", true, list);
+        createUser(USER_NAME_2, true, list);
 
         // assert user has 3 sectors connected
         mockMvc.perform(get("/users")
@@ -198,7 +198,7 @@ class SectorIntegrationTest extends ContextIntegrationTest {
         createFullSectorTree();
         var initialSectorNames = List.of("Manufacturing", "Moulding", "Translation services");
 
-        List<Sector> output = sectorService.findByNames(initialSectorNames);
+        List<Sector> output = sectorServiceImpl.findByNames(initialSectorNames);
         assertEquals(3, output.size());
         assertTrue(output.stream().allMatch((sector -> initialSectorNames.contains(sector.getName())
         )));

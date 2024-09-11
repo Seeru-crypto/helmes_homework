@@ -1,15 +1,12 @@
 package demo;
 
-import com.jayway.jsonpath.JsonPath;
 import demo.controller.dto.SaveUserDto;
 import demo.controller.dto.UserDto;
 import demo.model.Sector;
 import demo.model.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MvcResult;
 
-import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.UUID;
 
@@ -28,8 +25,8 @@ class UserIntegrationTest extends ContextIntegrationTest {
     void findAll_shouldReturnPaginatedUsers() throws Exception {
         Sector sector_a = createSector("sector_a", null, 1);
         Sector sector_b = createSector("sector_b", sector_a.getId(), 2);
-        createUser("user_a_q", true, List.of(sector_a));
-        createUser("user_b_q", true, List.of(sector_a, sector_b));
+        createUser(USER_NAME_2, true, List.of(sector_a));
+        createUser(USER_NAME_1, true, List.of(sector_a, sector_b));
 
         mockMvc.perform(get("/users")
                         .param("page", "0")
@@ -38,7 +35,7 @@ class UserIntegrationTest extends ContextIntegrationTest {
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(jsonPath("$.content.length()").value(1))
-                .andExpect(jsonPath("$.content[0].name").value("user_a_q"))
+                .andExpect(jsonPath("$.content[0].name").value(USER_NAME_2))
                 .andExpect(jsonPath("$.content[0].agreeToTerms").value(true))
                 .andExpect(jsonPath("$.content[0].sectorNames.length()").value(1))
                 .andExpect(jsonPath("$.content[0].sectorNames[0]").value("sector_a"))
@@ -51,7 +48,7 @@ class UserIntegrationTest extends ContextIntegrationTest {
                         .param("size", "10"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content.length()").value(2))
-                .andExpect(jsonPath("$.content[1].name").value("user_a_q"))
+                .andExpect(jsonPath("$.content[1].name").value(USER_NAME_2))
                 .andExpect(jsonPath("$.content[1].agreeToTerms").value(true))
                 .andExpect(jsonPath("$.content[1].sectorNames.length()").value(1))
                 .andExpect(jsonPath("$.pageable.pageNumber").value(0))
@@ -65,27 +62,21 @@ class UserIntegrationTest extends ContextIntegrationTest {
 
         SaveUserDto dto = new SaveUserDto()
                 .setSectorIds(List.of(1L, 2L))
-                .setName("newquser")
-                .setEmail("tere@gmail.com")
-                .setPhoneNumber("+372 1234567")
+                .setName(USER_NAME_1)
+                .setEmail(USER_EMAIL_1)
+                .setPhoneNumber(USER_PHONE_NUMBER_1)
                 .setAgreeToTerms(true);
         byte[] bytes = getBytes(dto);
-        MvcResult result = mockMvc.perform(post("/users")
+        mockMvc.perform(post("/users")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(bytes))
-                .andReturn();
-
-        try {
-            assertStatusCode(result, 201);
-            assertJsonField(result, "$.name", "newquser");
-            assertJsonField(result, "$.agreeToTerms", true);
-            assertJsonField(result, "$.phoneNumber", "+372 1234567");
-            assertJsonField(result, "$.email", "tere@gmail.com");
-            assertJsonField(result, "$.sectorNames.length()", 2);
-        } catch (AssertionError e) {
-            logTestResult(result, bytes);
-            throw e;
-        }
+                .andExpect(status().isCreated())
+                .andDo(print())
+                .andExpect(jsonPath("$.name").value(USER_NAME_1))
+                .andExpect(jsonPath("$.agreeToTerms").value(true))
+                .andExpect(jsonPath("$.phoneNumber").value(USER_PHONE_NUMBER_1))
+                .andExpect(jsonPath("$.email").value(USER_EMAIL_1))
+                .andExpect(jsonPath("$.sectorNames.length()").value(2));
     }
 
     @Test
@@ -95,7 +86,7 @@ class UserIntegrationTest extends ContextIntegrationTest {
 
         SaveUserDto dto = new SaveUserDto()
                 .setSectorIds(List.of(1L, 2L))
-                .setName("Aasdasdas")
+                .setName("abc")
                 .setAgreeToTerms(true);
 
         byte[] bytes = getBytes(dto);
@@ -110,11 +101,11 @@ class UserIntegrationTest extends ContextIntegrationTest {
     void save_shouldThrowError_ifNameExists() throws Exception {
         Sector sector_a = createSector("sector_a", null, 1);
         Sector sector_b = createSector("sector_b", sector_a.getId(), 2);
-        createUser("user_a_q", true, List.of(sector_a, sector_b));
+        createUser(USER_NAME_3, true, List.of(sector_a, sector_b));
 
         SaveUserDto dto = new SaveUserDto()
                 .setSectorIds(List.of(sector_a.getId(), sector_b.getId()))
-                .setName("user_a_q")
+                .setName(USER_NAME_3)
                 .setAgreeToTerms(true);
 
         byte[] bytes = getBytes(dto);
@@ -129,11 +120,11 @@ class UserIntegrationTest extends ContextIntegrationTest {
     void save_shouldThrowError_ifIdExists() throws Exception {
         Sector sector_a = createSector("sector_a", null, 1);
         Sector sector_b = createSector("sector_b", sector_a.getId(), 2);
-        createUser("user_a_q", true, List.of(sector_a, sector_b));
+        createUser(USER_NAME_4, true, List.of(sector_a, sector_b));
 
         SaveUserDto dto = new SaveUserDto()
                 .setSectorIds(List.of(sector_a.getId(), sector_b.getId()))
-                .setName("user_a_q")
+                .setName(USER_NAME_4)
                 .setAgreeToTerms(true);
 
         byte[] bytes = getBytes(dto);
@@ -159,31 +150,15 @@ class UserIntegrationTest extends ContextIntegrationTest {
         byte[] bytes = getBytes(dto);
 
         var url = "/users/" + createdUser.getId();
-        MvcResult result = mockMvc.perform(put(url)
+        mockMvc.perform(put(url)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(bytes))
-                .andDo(print())
-                .andReturn();
-
-        try {
-            assertStatusCode(result, 200);
-            assertJsonField(result, "$.name", updatedName);
-            assertJsonField(result, "$.agreeToTerms", true);
-            assertJsonField(result, "$.id", createdUser.getId().toString());
-            assertJsonField(result, "$.sectorNames.length()", 1);
-        } catch (AssertionError e) {
-            logTestResult(result, bytes);
-            throw e;
-        }
-    }
-
-    private void assertStatusCode(MvcResult result, int expectedStatus) throws UnsupportedEncodingException {
-        assertEquals(expectedStatus, result.getResponse().getStatus(), "Unexpected status code");
-    }
-
-    private void assertJsonField(MvcResult result, String jsonPath, Object expectedValue) throws UnsupportedEncodingException {
-        Object actualValue = JsonPath.read(result.getResponse().getContentAsString(), jsonPath);
-        assertEquals(expectedValue, actualValue, "Unexpected value for JSON path: " + jsonPath);
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").value(updatedName))
+                .andExpect(jsonPath("$.agreeToTerms").value(true))
+                .andExpect(jsonPath("$.id").value(createdUser.getId().toString()))
+                .andExpect(jsonPath("$.sectorNames.length()").value(1))
+        ;
     }
 
     @Test
@@ -204,7 +179,7 @@ class UserIntegrationTest extends ContextIntegrationTest {
     @Test
     void delete_shouldDeleteUser_byId() throws Exception {
         Sector sector_a = createSector("sector_a", null, 1);
-        User existingUser = createUser("user_a_q", true, List.of(sector_a));
+        User existingUser = createUser(USER_NAME_1, true, List.of(sector_a));
 
         mockMvc.perform(delete(String.format("/users/%s", existingUser.getId())))
                 .andExpect(status().isOk())

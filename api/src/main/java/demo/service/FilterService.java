@@ -28,7 +28,7 @@ public class FilterService {
   private final FilterRepository filterRepository;
   private final FilterOptionsRepository filterOptionsRepository;
   private final ValidationService validationService;
-  private final UserService userService;
+  private final IUserService userService;
   private final UserFilterMapper userFilterMapper;
   private final FilterMapper filterMapper;
 

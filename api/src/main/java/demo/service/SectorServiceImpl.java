@@ -14,9 +14,10 @@ import java.util.List;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class SectorService {
+public class SectorServiceImpl implements ISectorService {
     private final SectorRepository sectorRepository;
     private final ValidationService validationService;
+    private final IUserService userService;
 
     public Sector save(Sector sector) {
         validationService.validateEntity(sector, validationService.getSectorValidators());
@@ -52,11 +53,14 @@ public class SectorService {
         });
     }
 
+    @Override
     public List<Sector> findByIds(List<Long> ids) {
         return sectorRepository.findByIdIn(ids);
     }
 
     public void deleteById(Long id) {
+        userService.removeSectorFromAllUsers(id);
+
         Sector sector = findById(id);
         // update existing parent-child connections
         updateParentChildConnections(sector);

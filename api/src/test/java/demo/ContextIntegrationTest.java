@@ -7,9 +7,7 @@ import demo.model.User;
 import demo.model.UserFilter;
 import demo.service.filter.FieldType;
 import jakarta.persistence.EntityManager;
-import org.springframework.test.web.servlet.MvcResult;
 
-import java.io.UnsupportedEncodingException;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,26 +21,40 @@ import static demo.service.filter.UserFieldNames.NAME;
 public class ContextIntegrationTest extends BaseIntegrationTest {
 
   private static final List<Object> createdEntities = new ArrayList<>();
+  public static final String USER_NAME_1 = "qJohn Does";
+  public static final String USER_NAME_2 = "qJane Does";
+  public static final String USER_NAME_3 = "qJack Doesn't";
+  public static final String USER_NAME_4 = "qJames Memorial";
+
+  public static final String USER_EMAIL_1 = "johndoe1234@gmail.com";
+  public static final String USER_EMAIL_2 = "jane_smith123@example.com";
+  public static final String USER_EMAIL_3 = "bob.smith@company.co.uk";
+  public static final String USER_EMAIL_4 = "mary.smith@email.com";
+
+  public static final String USER_PHONE_NUMBER_1 = "+123 123456789";
+  public static final String USER_PHONE_NUMBER_2 = "+372 1234567";
+  public static final String USER_PHONE_NUMBER_3 = "+44 1234567890";
+  public static final String USER_PHONE_NUMBER_4 = "+1 1234567890";
 
   protected Sector createSector(String name, Long parentId, int value) {
-    return sectorService.save(parentId, name, value);
+    return sectorServiceImpl.save(parentId, name, value);
   }
 
   protected List<User> createDefaultUsers() {
     List<User> users = new ArrayList<>();
-    users.add(createUser("qJohn Does", true, List.of(findSectorById(1L)), "johndoe1234@gmail.com", "+123 123456789", Instant.parse("1995-04-10T21:00:25.451157400Z"), 140));
-    users.add(createUser("qJane Does", true, List.of(findSectorById(2L), findSectorById(11L)), "jane_smith123@example.com", "+372 1234567",Instant.parse("2000-04-10T21:00:25.451157400Z"), 150));
-    users.add(createUser("qJack Doesn't", true, List.of(findSectorById(8L), findSectorById(11L), findSectorById(13L)), "bob.smith@company.co.uk", "+44 1234567890",Instant.parse("2005-04-10T21:00:25.451157400Z"), 160));
-    users.add(createUser("qJames Memorial", true, List.of(findSectorById(1L), findSectorById(20L)), "mary.smith@email.com", "+1 1234567890",Instant.parse("2010-04-10T21:00:25.451157400Z"), 150));
+    users.add(createUser(USER_NAME_1, true, List.of(findSectorById(1L)), USER_EMAIL_1, USER_PHONE_NUMBER_1, Instant.parse("1995-04-10T21:00:25.451157400Z"), 140));
+    users.add(createUser(USER_NAME_2, true, List.of(findSectorById(2L), findSectorById(11L)), USER_EMAIL_2, USER_PHONE_NUMBER_2,Instant.parse("2000-04-10T21:00:25.451157400Z"), 150));
+    users.add(createUser(USER_NAME_3, true, List.of(findSectorById(8L), findSectorById(11L), findSectorById(13L)), USER_EMAIL_3, USER_PHONE_NUMBER_3,Instant.parse("2005-04-10T21:00:25.451157400Z"), 160));
+    users.add(createUser(USER_NAME_4, true, List.of(findSectorById(1L), findSectorById(20L)), USER_EMAIL_4, USER_PHONE_NUMBER_4,Instant.parse("2010-04-10T21:00:25.451157400Z"), 150));
     return users;
   }
 
   protected List<User> createUsersWithoutSectors() {
     List<User> users = new ArrayList<>();
-    users.add(createUser("qJohn Does", true, List.of(), "johndoe1234@gmail.com", "+123 123456789", Instant.parse("1995-04-10T21:00:25.451157400Z"), 152));
-    users.add(createUser("qJane Does", true, List.of(), "jane_smith123@example.com", "+372 1234567",Instant.parse("2000-04-10T21:00:25.451157400Z"), 162));
-    users.add(createUser("qJack Doesn't", true, List.of(), "bob.smith@company.co.uk", "+44 1234567890",Instant.parse("2005-04-10T21:00:25.451157400Z"), 170));
-    users.add(createUser("qJames Memorial", true, List.of(), "mary.smith@email.com", "+1 1234567890",Instant.parse("2010-04-10T21:00:25.451157400Z"), 190));
+    users.add(createUser(USER_NAME_1, true, List.of(), USER_EMAIL_1, USER_PHONE_NUMBER_1, Instant.parse("1995-04-10T21:00:25.451157400Z"), 152));
+    users.add(createUser(USER_NAME_2, true, List.of(), USER_EMAIL_2, USER_PHONE_NUMBER_2,Instant.parse("2000-04-10T21:00:25.451157400Z"), 162));
+    users.add(createUser(USER_NAME_3, true, List.of(), USER_EMAIL_3, USER_PHONE_NUMBER_3,Instant.parse("2005-04-10T21:00:25.451157400Z"), 170));
+    users.add(createUser(USER_NAME_4, true, List.of(), USER_EMAIL_4, USER_PHONE_NUMBER_4,Instant.parse("2010-04-10T21:00:25.451157400Z"), 190));
     return users;
   }
 
@@ -132,11 +144,11 @@ public class ContextIntegrationTest extends BaseIntegrationTest {
   }
 
   protected Sector findSectorById(Long id) {
-    return sectorService.findById(id);
+    return sectorServiceImpl.findById(id);
   }
 
   protected User createUser(String name, boolean agreeToTerms, List<Sector> sectors, String email, String phoneNumber, Instant dob, int height) {
-    return userService.save(new User()
+    return userServiceImpl.save(new User()
             .setName(name)
             .setAgreeToTerms(agreeToTerms)
             .setEmail(email)
@@ -147,7 +159,7 @@ public class ContextIntegrationTest extends BaseIntegrationTest {
             ;
   }
   protected User createUser(String name, boolean agreeToTerms, List<Sector> sectors) {
-    return userService.save(new User()
+    return userServiceImpl.save(new User()
             .setName(name)
             .setAgreeToTerms(agreeToTerms)
             .setSectors(sectors));
@@ -172,11 +184,5 @@ public class ContextIntegrationTest extends BaseIntegrationTest {
   public static void persistCreatedEntities(EntityManager em) {
     createdEntities.forEach(em::persist);
     em.flush();
-  }
-
-  protected static void logTestResult (MvcResult result, byte[] bytes) throws UnsupportedEncodingException {
-    System.out.println("Test failed! Logging request and response details:");
-    System.out.println("Request Content: " + new String(bytes));
-    System.out.println("Response Content: " + result.getResponse().getContentAsString());
   }
 }

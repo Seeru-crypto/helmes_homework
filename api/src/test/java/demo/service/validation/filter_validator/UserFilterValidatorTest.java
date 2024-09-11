@@ -9,6 +9,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.MockitoAnnotations;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -43,13 +44,6 @@ class UserFilterValidatorTest {
     }
 
     private static List<FilterDto> getMaxElements() {
-        return List.of(
-                new FilterDto(),
-                new FilterDto(),
-                new FilterDto(),
-                new FilterDto(),
-                new FilterDto(),
-                new FilterDto()
-        );
+        return Collections.nCopies(6, new FilterDto());
     }
 }

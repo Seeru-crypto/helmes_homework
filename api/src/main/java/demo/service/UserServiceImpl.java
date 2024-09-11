@@ -1,7 +1,6 @@
 package demo.service;
 
 import demo.exception.NotFoundException;
-import demo.model.Sector;
 import demo.model.User;
 import demo.model.UserFilter;
 import demo.repository.UserRepository;
@@ -20,12 +19,12 @@ import java.util.UUID;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class UserService {
+public class UserServiceImpl implements IUserService {
     private final UserRepository userRepository;
     private final ValidationService validationService;
-    private final SectorService sectorService;
     private final FilteringLogicService filteringLogicService;
 
+    @Override
     @Transactional
     public User save(User user) {
         validationService.validateEntity(user, validationService.getUserValidator());
@@ -36,11 +35,13 @@ public class UserService {
         return userRepository.findAll();
     }
 
+    @Override
     public Page<User> findAll(Pageable pageable) {
         validationService.validateEntity(pageable, validationService.getPageableValidator());
         return userRepository.findAll(pageable);
     }
 
+    @Override
     public User findById(UUID id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> {
@@ -50,6 +51,7 @@ public class UserService {
                 });
     }
 
+    @Override
     @Transactional
     public User update(User entity, UUID userId) {
         User existingUser = findById(userId);
@@ -62,6 +64,7 @@ public class UserService {
                 .setSectors(entity.getSectors());
     }
 
+    @Override
     public void delete(UUID id) {
         if (!userRepository.existsById(id)) {
             log.warn("User not found: {}", id);
@@ -71,6 +74,7 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
+    @Override
     public void removeSectorFromAllUsers(Long sectorId) {
         userRepository
                 .findAllBySectorsContains(sectorId)
@@ -78,6 +82,7 @@ public class UserService {
                         user.removeSector(sectorId));
     }
 
+    @Override
     public List<User> findAllBySector(Long sectorId) {
         return userRepository.findAllBySectorsContains(sectorId);
     }
