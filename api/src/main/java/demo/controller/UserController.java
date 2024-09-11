@@ -26,14 +26,14 @@ import static org.springframework.http.ResponseEntity.created;
 @RequiredArgsConstructor
 @RequestMapping(path = "/users")
 public class UserController {
-  private final IUserService IUserService;
+  private final IUserService userService;
   private final UserMapper userMapper;
 
   @GetMapping
   @Operation(summary = "Get paginated list of all created users")
   public ResponseEntity<Page<UserDto>> findAll(Pageable pageable) {
     log.info("REST to find all users: " + pageable);
-    Page<User> users = IUserService.findAll(pageable);
+    Page<User> users = userService.findAll(pageable);
     Page<UserDto> dto = users.map(userMapper::toDto);
     return ResponseEntity.ok(dto);
   }
@@ -43,7 +43,7 @@ public class UserController {
   public ResponseEntity<UserDto> save(@RequestBody SaveUserDto dto) {
     log.info("REST request to save user: " + dto);
     User tempUser = userMapper.toEntity(dto);
-    User createdUser = IUserService.save(tempUser);
+    User createdUser = userService.save(tempUser);
     return created(URI.create("/api/users/%s"
             .formatted(createdUser.getId())))
             .body(userMapper.toDto(createdUser));
@@ -53,7 +53,7 @@ public class UserController {
   @Operation(summary = "Update user")
   public ResponseEntity<UserDto> update(@PathVariable UUID userId, @RequestBody UserDto dto) {
     log.info("REST request to update user with id: {}; dto: {}", userId, dto);
-    User updatedUser = IUserService.update(userMapper.toEntity(dto), userId);
+    User updatedUser = userService.update(userMapper.toEntity(dto), userId);
     return ResponseEntity.ok(userMapper.toDto(updatedUser));
   }
 
@@ -61,14 +61,14 @@ public class UserController {
   @Operation(summary = "Delete an existing user by user id")
   public void delete(@PathVariable UUID userId) {
     log.info("REST request to delete user: " + userId);
-    IUserService.delete(userId);
+    userService.delete(userId);
   }
 
   @GetMapping(path="sector/{sectorId}")
   @Operation(summary = "Get all users by sector id")
   public ResponseEntity<List<UserDto>> findAllBySector(@PathVariable Long sectorId) {
     log.info("REST request to get all users by sector: " + sectorId);
-    List<User> users = IUserService.findAllBySector(sectorId);
+    List<User> users = userService.findAllBySector(sectorId);
     List<UserDto> dto = users.stream().map(userMapper::toDto).toList();
     return ResponseEntity.ok(dto);
   }

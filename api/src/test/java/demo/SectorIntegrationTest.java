@@ -182,8 +182,7 @@ class SectorIntegrationTest extends ContextIntegrationTest {
 
         SectorDto sectorDto = new SectorDto().setName("pere").setParentId(null).setValue(2).setId(existingSector.getId());
         byte[] bytes = getBytes(sectorDto);
-        var url = "/sectors/" + existingSector.getId();
-        mockMvc.perform(put(url)
+        mockMvc.perform(put("/sectors/{id}", existingSector.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(bytes))
                 .andExpect(status().isOk())

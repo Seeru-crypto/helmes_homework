@@ -15,7 +15,6 @@ import static demo.service.validation.user_validator.UserErrors.NAME_NOT_UNIQUE;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -33,7 +32,6 @@ class UserIntegrationTest extends ContextIntegrationTest {
                         .param("sort", "name,asc")
                         .param("size", "1"))
                 .andExpect(status().isOk())
-                .andDo(print())
                 .andExpect(jsonPath("$.content.length()").value(1))
                 .andExpect(jsonPath("$.content[0].name").value(USER_NAME_2))
                 .andExpect(jsonPath("$.content[0].agreeToTerms").value(true))
@@ -71,7 +69,6 @@ class UserIntegrationTest extends ContextIntegrationTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(bytes))
                 .andExpect(status().isCreated())
-                .andDo(print())
                 .andExpect(jsonPath("$.name").value(USER_NAME_1))
                 .andExpect(jsonPath("$.agreeToTerms").value(true))
                 .andExpect(jsonPath("$.phoneNumber").value(USER_PHONE_NUMBER_1))
@@ -149,8 +146,7 @@ class UserIntegrationTest extends ContextIntegrationTest {
                 .setAgreeToTerms(true);
         byte[] bytes = getBytes(dto);
 
-        var url = "/users/" + createdUser.getId();
-        mockMvc.perform(put(url)
+        mockMvc.perform(put("/users/{id}", createdUser.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(bytes))
                 .andExpect(status().isOk())
@@ -181,7 +177,7 @@ class UserIntegrationTest extends ContextIntegrationTest {
         Sector sector_a = createSector("sector_a", null, 1);
         User existingUser = createUser(USER_NAME_1, true, List.of(sector_a));
 
-        mockMvc.perform(delete(String.format("/users/%s", existingUser.getId())))
+        mockMvc.perform(delete("/users/{id}", existingUser.getId()))
                 .andExpect(status().isOk())
         ;
         List<User> existingUsers = findAll(User.class);
@@ -190,9 +186,8 @@ class UserIntegrationTest extends ContextIntegrationTest {
 
     @Test
     void delete_shouldThrowError_ifUserDoesNotExist() throws Exception {
-        mockMvc.perform(delete(String.format("/users/%s", UUID.randomUUID())))
-                .andExpect(status().isNotFound())
-                .andDo(print());
+        mockMvc.perform(delete("/users/{id}", UUID.randomUUID()))
+                .andExpect(status().isNotFound());
     }
 
     @Test
@@ -202,7 +197,6 @@ class UserIntegrationTest extends ContextIntegrationTest {
 
         mockMvc.perform(get("/users/sector/1"))
                 .andExpect(status().isOk())
-                .andDo(print())
                 .andExpect(jsonPath("$.length()").value(2))
                 .andExpect(jsonPath("$[0].name").value(users.get(0).getName()))
                 .andExpect(jsonPath("$[0].sectorNames.length()").value(users.get(0).getSectors().size()))

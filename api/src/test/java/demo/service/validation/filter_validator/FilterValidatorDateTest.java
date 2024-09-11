@@ -1,8 +1,8 @@
 package demo.service.validation.filter_validator;
 
 import demo.controller.dto.FilterDto;
-import demo.service.filter.FieldType;
 import demo.service.filter.DateCriteria;
+import demo.service.filter.FieldType;
 import demo.service.filter.NumberCriteria;
 import demo.service.validation.ValidationResult;
 import org.junit.jupiter.api.BeforeEach;
@@ -10,17 +10,13 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.mockito.MockitoAnnotations;
 
 import java.time.Instant;
 import java.util.stream.Stream;
 
 import static demo.service.validation.filter_validator.FilterErrors.INVALID_CRITERIA_ERROR;
 import static demo.service.validation.filter_validator.FilterErrors.INVALID_DATE_VALUE;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class FilterValidatorDateTest {
 
@@ -28,7 +24,6 @@ class FilterValidatorDateTest {
 
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.openMocks(this);
         filterDtoValidator = new FilterDtoValidator();
     }
 

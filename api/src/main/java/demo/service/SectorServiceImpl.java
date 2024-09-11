@@ -29,11 +29,6 @@ public class SectorServiceImpl implements ISectorService {
         return sectorRepository.findAllByParentId(null);
     }
 
-    private void addChild(Sector child) {
-        Sector parent = findById(child.getParentId());
-        parent.addChild(child);
-    }
-
     @Transactional
     public Sector save(Long parentId, String name, int value) {
         Sector child = sectorRepository.save(new Sector()
@@ -43,6 +38,11 @@ public class SectorServiceImpl implements ISectorService {
         );
         if (parentId != null) addChild(child);
         return child;
+    }
+
+    private void addChild(Sector child) {
+        Sector parent = findById(child.getParentId());
+        parent.addChild(child);
     }
 
     public Sector findById(Long id) {

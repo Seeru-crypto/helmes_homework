@@ -38,7 +38,7 @@ class FilterIntegrationTest extends ContextIntegrationTest {
     UserFilterDto requestDto = new UserFilterDto().setName("hello world").setFilters(filterDtos);
     byte[] bytes = getBytes(requestDto);
 
-    mockMvc.perform(post(String.format("/filters/%s", users.get(0).getId()))
+    mockMvc.perform(post("/filters/{id}",users.get(0).getId() )
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(bytes))
             .andExpect(status().isOk())
@@ -85,8 +85,7 @@ class FilterIntegrationTest extends ContextIntegrationTest {
     List<User> existingUsers = findAll(User.class);
     assertEquals(2, existingUsers.size());
 
-    String path = String.format("/filters/%s", user.getId());
-    mockMvc.perform(get(path)
+    mockMvc.perform(get("/filters/{id}", user.getId())
                     .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.length()").value(2))
