@@ -36,7 +36,6 @@ import static demo.ContextIntegrationTest.clear;
 @SpringBootTest(classes = ApiApplication.class)
 @AutoConfigureMockMvc
 public abstract class BaseIntegrationTest {
-    //TODO: Mockito
     @Autowired
     protected ObjectMapper objectMapper;
 

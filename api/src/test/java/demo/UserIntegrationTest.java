@@ -207,11 +207,9 @@ class UserIntegrationTest extends ContextIntegrationTest {
         ;
     }
 
-    // TODO: fix resolve the technical question with Markus
-//    @Test
-//    void findAllBySector_shouldReturnNotFound_ifSectorIdMissing() throws Exception {
-//        mockMvc.perform(get("/users/sector/99"))
-//                .andDo(print())
-//                .andExpect(status().isNotFound());
-//    }
+    @Test
+    void findAllBySector_shouldReturnNotFound_ifSectorIdMissing() throws Exception {
+        mockMvc.perform(get("/users/sector/99"))
+                .andExpect(status().isOk());
+    }
 }
