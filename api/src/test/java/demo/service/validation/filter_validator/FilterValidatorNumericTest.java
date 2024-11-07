@@ -26,7 +26,6 @@ class FilterValidatorNumericTest {
 
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.openMocks(this);
         filterDtoValidator = new FilterDtoValidator();
     }
 

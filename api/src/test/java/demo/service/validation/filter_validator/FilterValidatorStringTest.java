@@ -24,7 +24,6 @@ class FilterValidatorStringTest {
 
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.openMocks(this);
         filterDtoValidator = new FilterDtoValidator();
     }
 

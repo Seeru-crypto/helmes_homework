@@ -24,7 +24,6 @@ class UserFilterValidatorTest {
 
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.openMocks(this);
         userFilterDtoValidator = new UserFilterDtoValidator();
     }
 
