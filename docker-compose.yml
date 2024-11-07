@@ -2,6 +2,7 @@ version: '3.7'
 services:
   db:
     image: postgres:14.1
+    restart: unless-stopped
     container_name: db
     environment:
       - POSTGRES_USER=root
@@ -31,7 +32,7 @@ services:
     build:
       context: ./ui
       dockerfile: ./docker/Dockerfile
-    restart: always
+    restart: unless-stopped
     container_name: ui
     depends_on:
       - db

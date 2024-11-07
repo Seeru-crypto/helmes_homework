@@ -1,8 +1,9 @@
 package demo.repository;
 
-import demo.model.Sector;
 import demo.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -13,6 +14,7 @@ public interface UserRepository extends JpaRepository<User, UUID> {
 
     boolean existsByName (String name);
 
-    List<User> findAllBySectorsContains(Sector sector);
+    @Query("SELECT u FROM User u JOIN u.sectors s WHERE s.id = :sectorId")
+    List<User> findAllBySectorsContains(@Param("sectorId") Long sectorId);
 
 }

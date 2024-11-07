@@ -1,39 +1,60 @@
 package demo;
 
+import demo.controller.dto.FilterDto;
+import demo.controller.dto.UserFilterDto;
 import demo.model.Sector;
 import demo.model.User;
+import demo.model.UserFilter;
+import demo.service.filter.FieldType;
 import jakarta.persistence.EntityManager;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+
+import static demo.service.filter.DateCriteria.AFTER;
+import static demo.service.filter.NumberCriteria.SMALLER_THAN;
+import static demo.service.filter.StringCriteria.CONTAINS;
+import static demo.service.filter.UserFieldNames.DOB;
+import static demo.service.filter.UserFieldNames.NAME;
 
 public class ContextIntegrationTest extends BaseIntegrationTest {
 
   private static final List<Object> createdEntities = new ArrayList<>();
+  public static final String USER_NAME_1 = "qJohn Does";
+  public static final String USER_NAME_2 = "qJane Does";
+  public static final String USER_NAME_3 = "qJack Doesn't";
+  public static final String USER_NAME_4 = "qJames Memorial";
+
+  public static final String USER_EMAIL_1 = "johndoe1234@gmail.com";
+  public static final String USER_EMAIL_2 = "jane_smith123@example.com";
+  public static final String USER_EMAIL_3 = "bob.smith@company.co.uk";
+  public static final String USER_EMAIL_4 = "mary.smith@email.com";
+
+  public static final String USER_PHONE_NUMBER_1 = "+123 123456789";
+  public static final String USER_PHONE_NUMBER_2 = "+372 1234567";
+  public static final String USER_PHONE_NUMBER_3 = "+44 1234567890";
+  public static final String USER_PHONE_NUMBER_4 = "+1 1234567890";
 
   protected Sector createSector(String name, Long parentId, int value) {
-    return sectorService.save(parentId, name, value);
-  }
-
-  protected Instant getInstantFromString(String dateString) {
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-    LocalDateTime localDateTime = LocalDateTime.parse(dateString, formatter);
-    return localDateTime.toInstant(ZoneOffset.UTC);
+    return sectorServiceImpl.save(parentId, name, value);
   }
 
   protected List<User> createDefaultUsers() {
-    if (!sectorExists(1L)) {
-      createFullSectorTree();
-    }
     List<User> users = new ArrayList<>();
-    users.add(createUser("qJohn Does", true, List.of(findSectorById(1L)), "johndoe1234@gmail.com", "+123 123456789",getInstantFromString("1985-07-15 12:30:00")));
-    users.add(createUser("qJane Does", true, List.of(findSectorById(2L), findSectorById(11L)), "jane_smith123@example.com", "+372 1234567",getInstantFromString("1990-04-28 08:15:00")));
-    users.add(createUser("qJack Doesn't", true, List.of(findSectorById(8L), findSectorById(11L), findSectorById(13L)), "bob.smith@company.co.uk", "+44 1234567890",getInstantFromString("1995-10-10 17:45:00")));
-    users.add(createUser("qJames Memorial", true, List.of(findSectorById(1L), findSectorById(20L)), "mary.smith@email.com", "+1 1234567890",getInstantFromString("1998-12-01 20:00:00")));
+    users.add(createUser(USER_NAME_1, true, List.of(findSectorById(1L)), USER_EMAIL_1, USER_PHONE_NUMBER_1, Instant.parse("1995-04-10T21:00:25.451157400Z"), 140));
+    users.add(createUser(USER_NAME_2, true, List.of(findSectorById(2L), findSectorById(11L)), USER_EMAIL_2, USER_PHONE_NUMBER_2,Instant.parse("2000-04-10T21:00:25.451157400Z"), 150));
+    users.add(createUser(USER_NAME_3, true, List.of(findSectorById(8L), findSectorById(11L), findSectorById(13L)), USER_EMAIL_3, USER_PHONE_NUMBER_3,Instant.parse("2005-04-10T21:00:25.451157400Z"), 160));
+    users.add(createUser(USER_NAME_4, true, List.of(findSectorById(1L), findSectorById(20L)), USER_EMAIL_4, USER_PHONE_NUMBER_4,Instant.parse("2010-04-10T21:00:25.451157400Z"), 150));
+    return users;
+  }
+
+  protected List<User> createUsersWithoutSectors() {
+    List<User> users = new ArrayList<>();
+    users.add(createUser(USER_NAME_1, true, List.of(), USER_EMAIL_1, USER_PHONE_NUMBER_1, Instant.parse("1995-04-10T21:00:25.451157400Z"), 152));
+    users.add(createUser(USER_NAME_2, true, List.of(), USER_EMAIL_2, USER_PHONE_NUMBER_2,Instant.parse("2000-04-10T21:00:25.451157400Z"), 162));
+    users.add(createUser(USER_NAME_3, true, List.of(), USER_EMAIL_3, USER_PHONE_NUMBER_3,Instant.parse("2005-04-10T21:00:25.451157400Z"), 170));
+    users.add(createUser(USER_NAME_4, true, List.of(), USER_EMAIL_4, USER_PHONE_NUMBER_4,Instant.parse("2010-04-10T21:00:25.451157400Z"), 190));
     return users;
   }
 
@@ -123,23 +144,37 @@ public class ContextIntegrationTest extends BaseIntegrationTest {
   }
 
   protected Sector findSectorById(Long id) {
-    return sectorService.findById(id);
+    return sectorServiceImpl.findById(id);
   }
 
-  protected User createUser(String name, boolean agreeToTerms, List<Sector> sectors, String email, String phoneNumber, Instant dob) {
-    return userService.save(new User()
+  protected User createUser(String name, boolean agreeToTerms, List<Sector> sectors, String email, String phoneNumber, Instant dob, int height) {
+    return userServiceImpl.save(new User()
             .setName(name)
             .setAgreeToTerms(agreeToTerms)
             .setEmail(email)
             .setPhoneNumber(phoneNumber)
             .setDob(dob)
-            .setSectors(sectors));
+            .setHeight(height)
+            .setSectors(sectors))
+            ;
   }
   protected User createUser(String name, boolean agreeToTerms, List<Sector> sectors) {
-    return userService.save(new User()
+    return userServiceImpl.save(new User()
             .setName(name)
             .setAgreeToTerms(agreeToTerms)
             .setSectors(sectors));
+  }
+
+  protected UserFilter createUserFilter(List<FilterDto> filters, String name, User user) {
+    UserFilterDto filterDto = new UserFilterDto().setName(name).setFilters(filters);
+    return filterService.saveFilters(filterDto, user.getId());
+  }
+
+  protected List<FilterDto> getFilterDtoList() {
+    FilterDto filter1 = new FilterDto().setCriteriaValue(AFTER.getCode()).setValue(Instant.now().toString()).setType(FieldType.DATE).setFieldName(DOB);
+    FilterDto filter2 = new FilterDto().setCriteriaValue(CONTAINS.getCode()).setValue("value 2").setType(FieldType.STRING).setFieldName(NAME);
+    FilterDto filter3 = new FilterDto().setCriteriaValue(SMALLER_THAN.getCode()).setValue("3").setType(FieldType.NUMBER).setFieldName(NAME);
+    return List.of(filter2, filter1, filter3);
   }
 
   public static void clear() {

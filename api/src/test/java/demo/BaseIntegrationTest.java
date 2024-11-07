@@ -4,8 +4,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import demo.controller.dto.SaveUserDto;
 import demo.controller.dto.SectorDto;
-import demo.service.SectorService;
-import demo.service.UserService;
+import demo.controller.dto.UserDto;
+import demo.controller.dto.UserFilterDto;
+import demo.mapper.SectorMapper;
+import demo.service.*;
+import demo.service.filter.FilteringLogicService;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaBuilder;
@@ -33,7 +36,6 @@ import static demo.ContextIntegrationTest.clear;
 @SpringBootTest(classes = ApiApplication.class)
 @AutoConfigureMockMvc
 public abstract class BaseIntegrationTest {
-    //TODO: Mockito
     @Autowired
     protected ObjectMapper objectMapper;
 
@@ -41,10 +43,19 @@ public abstract class BaseIntegrationTest {
     private WebApplicationContext webApplicationContext;
 
     @Autowired
-    protected UserService userService;
+    protected IUserService userServiceImpl;
 
     @Autowired
-    protected SectorService sectorService;
+    protected FilterService filterService;
+
+    @Autowired
+    protected ISectorService sectorServiceImpl;
+
+    @Autowired
+    protected SectorMapper sectorMapper;
+
+    @Autowired
+    protected FilteringLogicService filteringLogicService;
 
     @Autowired
     protected MockMvc mockMvc;
@@ -61,6 +72,14 @@ public abstract class BaseIntegrationTest {
         return allQuery.getResultList();
     }
     protected byte[] getBytes( SaveUserDto dto ) throws JsonProcessingException {
+        return objectMapper.writeValueAsBytes(dto);
+    }
+
+    protected byte[] getBytes( UserDto dto ) throws JsonProcessingException {
+        return objectMapper.writeValueAsBytes(dto);
+    }
+
+    protected byte[] getBytes( UserFilterDto dto ) throws JsonProcessingException {
         return objectMapper.writeValueAsBytes(dto);
     }
 

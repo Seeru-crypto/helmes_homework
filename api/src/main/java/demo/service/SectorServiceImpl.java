@@ -14,11 +14,10 @@ import java.util.List;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class SectorService {
+public class SectorServiceImpl implements ISectorService {
     private final SectorRepository sectorRepository;
-
-    private final UserService userService;
     private final ValidationService validationService;
+    private final IUserService userService;
 
     public Sector save(Sector sector) {
         validationService.validateEntity(sector, validationService.getSectorValidators());
@@ -26,12 +25,8 @@ public class SectorService {
     }
 
     @Transactional
-    public List<Sector> findAll() {
+    public List<Sector> findAllByRootParent() {
         return sectorRepository.findAllByParentId(null);
-    }
-    private void addChildren(Sector child) {
-        Sector parent = findById(child.getParentId());
-        parent.addChild(child);
     }
 
     @Transactional
@@ -41,8 +36,13 @@ public class SectorService {
                 .setValue(value)
                 .setParentId(parentId)
         );
-        if (parentId != null) addChildren(child);
+        if (parentId != null) addChild(child);
         return child;
+    }
+
+    private void addChild(Sector child) {
+        Sector parent = findById(child.getParentId());
+        parent.addChild(child);
     }
 
     public Sector findById(Long id) {
@@ -53,13 +53,16 @@ public class SectorService {
         });
     }
 
+    @Override
+    public List<Sector> findByIds(List<Long> ids) {
+        return sectorRepository.findByIdIn(ids);
+    }
+
     public void deleteById(Long id) {
+        userService.removeSectorFromAllUsers(id);
+
         Sector sector = findById(id);
         // update existing parent-child connections
-
-        // remove from user
-        userService.removeSectorFromAllUsers(sector);
-
         updateParentChildConnections(sector);
         // delete the sector
         sector.removeAllChildren();
@@ -75,9 +78,19 @@ public class SectorService {
         });
     }
 
-    public Sector update(Sector entity) {
+    public Sector update(Sector entity, Long sectorId) {
         // for now we only update the sector name
         // moving a child from parent_A to parent_B is not allowed
-        return findById(entity.getId()).setName(entity.getName());
+        if (!sectorRepository.existsById(sectorId)) {
+            log.warn("Sector not found: {}", sectorId);
+            throw new NotFoundException("Sector not found") {
+            };
+        }
+        return findById(sectorId)
+                .setName(entity.getName());
+    }
+
+    public List<Sector> findByNames(List<String> names) {
+        return sectorRepository.findAllByNameIn(names);
     }
 }

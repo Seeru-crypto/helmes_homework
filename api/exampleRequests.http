@@ -34,3 +34,7 @@ Content-Type: application/json
   "sectorIds":[15, 70],
   "agreeToTerms":true
 }
+
+
+###____________________________ FILTERS
+GET localhost:8880/api/filters

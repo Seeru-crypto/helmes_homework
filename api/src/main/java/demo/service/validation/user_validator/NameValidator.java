@@ -27,15 +27,22 @@ public class NameValidator implements Validator<User> {
   public ValidationResult validate(User data) {
     ValidationResult result = new ValidationResult();
     if (!(USER_MIN_NAME_LENGTH <= data.getName().length() && data.getName().length() < USER_MAX_NAME_LENGTH)) {
-      return result.setValid(false).setMessage(INCORRECT_LENGTH);
+      return result.setValid(false)
+              .setMessage(INCORRECT_LENGTH)
+              .setFailedField(data.getName());
     }
 
-    if (!(data.getName().contains("q"))) {
-      return result.setValid(false).setMessage(NAME_DOESNT_CONTAIN_Q);
+    // TODO: PUT endpoint results in unhandled error
+    if (!(data.getName().toLowerCase().contains("q"))) {
+      return result.setValid(false)
+              .setMessage(NAME_DOESNT_CONTAIN_Q)
+              .setFailedField(data.getName());
     }
 
     if (!isNameUnique(data.getName())) {
-      return result.setValid(false).setMessage(NAME_NOT_UNIQUE);
+      return result.setValid(false)
+              .setMessage(NAME_NOT_UNIQUE)
+              .setFailedField(data.getName());
     }
     return result.setValid(true);
   }

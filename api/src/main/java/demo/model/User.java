@@ -2,12 +2,16 @@ package demo.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 import static jakarta.persistence.CascadeType.MERGE;
@@ -55,6 +59,11 @@ public class User extends AbstractAuditingEntity<UUID> {
     @Pattern(regexp = PHONE_NR_REGEX, message = "INVALID_USER_PHONE_NUMBER")
     private String phoneNumber;
 
+    @Column
+    @Min(value = 1L, message = "height exceeds minimum value")
+    @Max(value = 1000L, message = "height exceeds maximum value")
+    private Integer height;
+
     @ManyToMany(fetch = LAZY,
             cascade = MERGE)
     @JoinTable(
@@ -64,8 +73,11 @@ public class User extends AbstractAuditingEntity<UUID> {
     )
     private List<Sector> sectors = new ArrayList<>();
 
-    public void removeSector(Sector sector) {
-        this.sectors.remove(sector);
+    public void removeSector(Long sectorId) {
+        this.sectors
+                .stream()
+                .filter(sector -> Objects.equals(sector.getId(), sectorId))
+                .forEach(sector -> this.sectors.remove(sector));
     }
 
     public User setSectors(List<Sector> sectors) {

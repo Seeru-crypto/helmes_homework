@@ -1,9 +1,10 @@
 package demo.service;
 
 import demo.exception.NotFoundException;
-import demo.model.Sector;
 import demo.model.User;
+import demo.model.UserFilter;
 import demo.repository.UserRepository;
+import demo.service.filter.FilteringLogicService;
 import demo.service.validation.ValidationService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -18,21 +19,29 @@ import java.util.UUID;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class UserService {
+public class UserServiceImpl implements IUserService {
     private final UserRepository userRepository;
     private final ValidationService validationService;
+    private final FilteringLogicService filteringLogicService;
 
+    @Override
     @Transactional
     public User save(User user) {
         validationService.validateEntity(user, validationService.getUserValidator());
         return userRepository.save(user);
     }
 
+    protected List<User> findAll() {
+        return userRepository.findAll();
+    }
+
+    @Override
     public Page<User> findAll(Pageable pageable) {
         validationService.validateEntity(pageable, validationService.getPageableValidator());
         return userRepository.findAll(pageable);
     }
 
+    @Override
     public User findById(UUID id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> {
@@ -42,6 +51,7 @@ public class UserService {
                 });
     }
 
+    @Override
     @Transactional
     public User update(User entity, UUID userId) {
         User existingUser = findById(userId);
@@ -54,6 +64,7 @@ public class UserService {
                 .setSectors(entity.getSectors());
     }
 
+    @Override
     public void delete(UUID id) {
         if (!userRepository.existsById(id)) {
             log.warn("User not found: {}", id);
@@ -63,14 +74,20 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
-    public void removeSectorFromAllUsers(Sector sector) {
+    @Override
+    public void removeSectorFromAllUsers(Long sectorId) {
         userRepository
-                .findAllBySectorsContains(sector)
+                .findAllBySectorsContains(sectorId)
                 .forEach(user ->
-                        user.removeSector(sector));
+                        user.removeSector(sectorId));
     }
 
-    public List<User> findAllBySector(Sector existingSector) {
-        return userRepository.findAllBySectorsContains(existingSector);
+    @Override
+    public List<User> findAllBySector(Long sectorId) {
+        return userRepository.findAllBySectorsContains(sectorId);
+    }
+
+    public List<User> findAllByUserFilter(UserFilter existingFilter) {
+        return filteringLogicService.findAllByFilter(existingFilter, User.class);
     }
 }
